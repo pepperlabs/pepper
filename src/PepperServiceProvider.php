@@ -22,8 +22,7 @@ class PepperServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/pepper.php', 'pepper');
-        // $this->app->register('Rebing\GraphQL\GraphQLServiceProvider');
-        // $loader = \Illuminate\Foundation\AliasLoader::getInstance();
-        // $loader->alias('GraphQL', 'Rebing\GraphQL\Support\Facades\GraphQL');
+
+        $this->app->register(\Rebing\GraphQL\GraphQLServiceProvider::class);
     }
 }

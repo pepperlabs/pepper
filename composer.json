@@ -14,14 +14,20 @@
   "require": {
     "rebing/graphql-laravel": "^5.1"
   },
+  "autoload": {
+    "psr-4": {
+      "Amirmasoud\\Pepper\\": "src"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
   "extra": {
     "laravel": {
       "providers": [
+        "Rebing\\GraphQL\\GraphQLServiceProvider",
         "Amirmasoud\\Pepper\\PepperServiceProvider"
-      ],
-      "aliases": {
-        "Pepper": "Amirmasoud\\Pepper\\Support\\Facades\\Pepper"
-      }
+      ]
     }
   },
   "minimum-stability": "dev",
