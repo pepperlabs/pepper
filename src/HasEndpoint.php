@@ -8,6 +8,8 @@ interface HasEndpoint
 
     public function endpointAttributes(): array;
 
+    public function endpointRelations(): array;
+
     // public function toArray(): array;
 
     // public function collection(): array;
