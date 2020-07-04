@@ -1,17 +1,17 @@
 {
-    "name": "terracotta/pepper",
-    "description": "Pepper is An easy API for Laravel",
-    "homepage": "https://github.com/amirmasoud/pepper",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Amirmasoud Sheydaei",
-            "email": "amirmasoud.sheydaei@gmail.com",
-            "homepage": "https://amirmasoud.me",
-            "role": "Developer"
-        }
-    ],
-    "require": {},
-    "minimum-stability": "dev",
-    "prefer-stable": true
+  "name": "amirmasoud/pepper",
+  "description": "Pepper is An easy API for Laravel",
+  "homepage": "https://github.com/amirmasoud/pepper",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Amirmasoud Sheydaei",
+      "email": "amirmasoud.sheydaei@gmail.com",
+      "homepage": "https://amirmasoud.me",
+      "role": "Developer"
+    }
+  ],
+  "require": {},
+  "minimum-stability": "dev",
+  "prefer-stable": true
 }

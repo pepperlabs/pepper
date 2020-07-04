@@ -1,6 +1,6 @@
 <?php
 
-namespace TerraCotta\Pepper;
+namespace Amirmasoud\Pepper;
 
 use Illuminate\Support\ServiceProvider;
 
