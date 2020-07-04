@@ -6,9 +6,11 @@ interface HasEndpoint
 {
     public function HasEndpoint(): bool;
 
-    public function endpointAttributes(): array;
+    public function endpointFields(): array;
 
     public function endpointRelations(): array;
+
+    public function guessFieldType(string $field): string;
 
     // public function toArray(): array;
 

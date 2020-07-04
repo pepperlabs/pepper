@@ -9,7 +9,7 @@ trait InteractsWithEndpoint
         return $this->endpoint ?? true;
     }
 
-    public function endpointAttributes(): array
+    public function endpointFields(): array
     {
         $exposedAttributes = $this->exposedAttributes ?? $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
         $hiddenAttributes = $this->hiddenAttributes ?? [];
@@ -32,5 +32,10 @@ trait InteractsWithEndpoint
         $exposedRelations = $this->exposedRelations ?? $relations;
         $hiddenRelations = $this->hiddenRelations ?? [];
         return array_values(array_diff($exposedRelations, $hiddenRelations));
+    }
+
+    public function guessFieldType(string $field): string
+    {
+        return 'string';
     }
 }
