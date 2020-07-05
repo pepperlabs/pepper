@@ -12,6 +12,7 @@
     }
   ],
   "require": {
+    "doctrine/dbal": "^2.10",
     "rebing/graphql-laravel": "^5.1"
   },
   "autoload": {

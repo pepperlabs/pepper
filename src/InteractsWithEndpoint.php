@@ -2,6 +2,8 @@
 
 namespace Amirmasoud\Pepper;
 
+use Illuminate\Support\Facades\DB;
+
 trait InteractsWithEndpoint
 {
     public function HasEndpoint(): bool
@@ -36,6 +38,6 @@ trait InteractsWithEndpoint
 
     public function guessFieldType(string $field): string
     {
-        return 'string';
+        return DB::getSchemaBuilder()->getColumnType($this->getTable(), $field);
     }
 }
