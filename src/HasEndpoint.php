@@ -14,6 +14,8 @@ interface HasEndpoint
 
     public function getFields(): array;
 
+    public static function typeName(): string;
+
     // public function toArray(): array;
 
     // public function collection(): array;

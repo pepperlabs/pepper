@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Illuminate\Support\Facades\DB;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Support\Str;
 
 trait InteractsWithEndpoint
 {
@@ -56,12 +57,12 @@ trait InteractsWithEndpoint
         $model = $model ?? $this;
 
         $fields = [];
-        foreach ($this->endpointFields() as $field) {
-            $fields[$field] = [
-                'name' => $field,
-                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($field))
-            ];
-        }
+        // foreach ($this->endpointFields() as $field) {
+        //     $fields[$field] = [
+        //         'name' => $field,
+        //         'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($field))
+        //     ];
+        // }
 
         // @TODO
         // foreach ($this->endpointRelations() as $relation) {
@@ -76,5 +77,10 @@ trait InteractsWithEndpoint
         //     }
         // }
         return $fields;
+    }
+
+    public static function typeName(): string
+    {
+        return str_replace('-', ' ', Str::of(get_called_class())->afterLast('\\')->kebab()->plural());
     }
 }
