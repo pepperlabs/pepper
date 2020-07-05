@@ -12,6 +12,8 @@ interface HasEndpoint
 
     public function guessFieldType(string $field): string;
 
+    public function getFields(): array;
+
     // public function toArray(): array;
 
     // public function collection(): array;

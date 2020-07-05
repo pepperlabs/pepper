@@ -2,7 +2,10 @@
 
 namespace Amirmasoud\Pepper;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Illuminate\Support\Facades\DB;
+use GraphQL\Type\Definition\Type;
 
 trait InteractsWithEndpoint
 {
@@ -38,6 +41,40 @@ trait InteractsWithEndpoint
 
     public function guessFieldType(string $field): string
     {
-        return DB::getSchemaBuilder()->getColumnType($this->getTable(), $field);
+        $type = DB::getSchemaBuilder()->getColumnType($this->getTable(), $field);
+
+        // @todo add other types
+        if ($type == 'integer') {
+            return 'int';
+        } else {
+            return 'string';
+        }
+    }
+
+    public function getFields($model = null): array
+    {
+        $model = $model ?? $this;
+
+        $fields = [];
+        foreach ($this->endpointFields() as $field) {
+            $fields[$field] = [
+                'name' => $field,
+                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($field))
+            ];
+        }
+
+        // @TODO
+        // foreach ($this->endpointRelations() as $relation) {
+        //     $reflector = new \ReflectionClass($model);
+        //     $relationType = $reflector->getMethod($relation)->getReturnType();
+        //     $fields[$field] = [];
+        //     if ($relationType instanceof HasMany) {
+        //         $fields[$field]['type'] = Type::listOf(GraphQL::type('book'));
+        //         $fields[$field]['resolve'] = function ($root, $args) use ($relation) {
+        //             return $root->{$relation};
+        //         };
+        //     }
+        // }
+        return $fields;
     }
 }
