@@ -30,7 +30,6 @@ class ResourceQuery extends Query implements ArrayAccess
 
     public function type(): Type
     {
-        // return Type::int();
         return Type::listOf(GraphQL::type('user'));
 
         // return Type::listOf(GraphQL::type(([$this->model, 'typeName'])));
@@ -81,6 +80,6 @@ class ResourceQuery extends Query implements ArrayAccess
         if (is_null(self::$instance)) {
             self::$instance = new self($model);
         }
-        return self::$instance;
+        return self::$instance->toType();
     }
 }
