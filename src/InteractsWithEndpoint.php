@@ -57,12 +57,12 @@ trait InteractsWithEndpoint
         $model = $model ?? $this;
 
         $fields = [];
-        // foreach ($this->endpointFields() as $field) {
-        //     $fields[$field] = [
-        //         'name' => $field,
-        //         'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($field))
-        //     ];
-        // }
+        foreach ($this->endpointFields() as $field) {
+            $fields[$field] = [
+                'name' => $field,
+                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($field))
+            ];
+        }
 
         // @TODO
         // foreach ($this->endpointRelations() as $relation) {

@@ -30,7 +30,9 @@ class ResourceQuery extends Query implements ArrayAccess
 
     public function type(): Type
     {
-        return Type::listOf(GraphQL::type('user'));
+        // return GraphQL::int();
+        // dd(GraphQL::int());
+        return dd(Type::listOf(GraphQL::type('user-sample')));
 
         // return Type::listOf(GraphQL::type(([$this->model, 'typeName'])));
     }
