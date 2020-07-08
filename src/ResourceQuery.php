@@ -17,6 +17,8 @@ class ResourceQuery extends Query implements ArrayAccess
 {
     protected $model;
 
+    private static $instance;
+
     protected $attributes = [
         'name' => 'Users query',
     ];
@@ -72,5 +74,13 @@ class ResourceQuery extends Query implements ArrayAccess
     public function toArray(): array
     {
         return $this->getAttributes();
+    }
+
+    public static function getInstance($model)
+    {
+        if (is_null(self::$instance)) {
+            self::$instance = new self($model);
+        }
+        return self::$instance;
     }
 }
