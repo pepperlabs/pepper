@@ -3,6 +3,7 @@
 namespace Amirmasoud\Pepper;
 
 use Illuminate\Support\ServiceProvider;
+use Amirmasoud\Pepper\Commands\MetadataCommand;
 
 class PepperServiceProvider extends ServiceProvider
 {
@@ -24,5 +25,13 @@ class PepperServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/pepper.php', 'pepper');
 
         $this->app->register(\Rebing\GraphQL\GraphQLServiceProvider::class);
+
+        $this->app->bind('command.pepper:queries', MetadataCommand::class);
+
+        $this->commands([
+            'command.pepper:queries',
+        ]);
+
+        $this->app->singleton(ConsoleOutput::class);
     }
 }

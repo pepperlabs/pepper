@@ -17,23 +17,15 @@ class ResourceQueryCreator
     protected $files;
 
     /**
-     * The custom app stubs directory.
-     *
-     * @var string
-     */
-    protected $customStubPath;
-
-    /**
      * Create a new resource query creator instance.
      *
      * @param  \Illuminate\Filesystem\Filesystem  $files
      * @param  string  $customStubPath
      * @return void
      */
-    public function __construct(Filesystem $files, $customStubPath)
+    public function __construct(Filesystem $files)
     {
         $this->files = $files;
-        $this->customStubPath = $customStubPath;
     }
 
     /**
@@ -44,12 +36,10 @@ class ResourceQueryCreator
      * @param  string|null  $class
      * @param  bool  $create
      * @return string
-     *
-     * @throws \Exception
      */
     public function create($name, $path, $class = null, $create = false)
     {
-        // @todo Delete previous resource query
+        $this->resetResourceQueryClass($name, $path);
 
         $stub = $this->getStub($class, $create);
 
@@ -70,80 +60,49 @@ class ResourceQueryCreator
      *
      * @throws \InvalidArgumentException
      */
-    protected function ensureMigrationDoesntAlreadyExist($name, $migrationPath = null)
+    protected function resetResourceQueryClass($name, $resourceQueryPath = null)
     {
-        if (!empty($migrationPath)) {
-            $migrationFiles = $this->files->glob($migrationPath . '/*.php');
+        if (!empty($resourceQueryPath)) {
+            $resourceQueriesPaths = $this->files->glob($resourceQueryPath . '/*.php');
 
-            foreach ($migrationFiles as $migrationFile) {
-                $this->files->requireOnce($migrationFile);
+            foreach ($resourceQueriesPaths as $resourceQueryFile) {
+                $this->files->requireOnce($resourceQueryFile);
+                if (class_exists($this->getClassName($name))) {
+                    $this->files->delete($resourceQueryFile);
+                }
             }
-        }
-
-        if (class_exists($className = $this->getClassName($name))) {
-            throw new InvalidArgumentException("A {$className} class already exists.");
         }
     }
 
     /**
-     * Get the migration stub file.
+     * Get the resource query stub file.
      *
-     * @param  string|null  $table
-     * @param  bool  $create
      * @return string
      */
-    protected function getStub($table, $create)
+    protected function getStub()
     {
-        if (is_null($table)) {
-            $stub = $this->files->exists($customPath = $this->customStubPath . '/migration.stub')
-                ? $customPath
-                : $this->stubPath() . '/migration.stub';
-        } elseif ($create) {
-            $stub = $this->files->exists($customPath = $this->customStubPath . '/migration.create.stub')
-                ? $customPath
-                : $this->stubPath() . '/migration.create.stub';
-        }
-        else {
-            $stub = $this->files->exists($customPath = $this->customStubPath . '/migration.update.stub')
-                ? $customPath
-                : $this->stubPath() . '/migration.update.stub';
-        }
+        $stub = $this->stubPath() . '/query.stub';
 
         return $this->files->get($stub);
     }
 
     /**
-     * Populate the place-holders in the migration stub.
+     * Populate the place-holders in the resource query stub.
      *
      * @param  string  $name
+     * @param  string|null  $value
      * @param  string  $stub
-     * @param  string|null  $table
      * @return string
      */
-    protected function populateStub($name, $stub, $table)
+    protected function populateStub($name, $value, $stub)
     {
-        $stub = str_replace(
-            ['DummyClass', '{{ class }}', '{{class}}'],
-            $this->getClassName($name),
-            $stub
-        );
-
-        // Here we will replace the table place-holders with the table specified by
-        // the developer, which is useful for quickly creating a tables creation
-        // or update migration from the console instead of typing it manually.
-        if (!is_null($table)) {
-            $stub = str_replace(
-                ['DummyTable', '{{ table }}', '{{table}}'],
-                $table,
-                $stub
-            );
-        }
+        $stub = str_replace("{{ $name }}", $value, $stub);
 
         return $stub;
     }
 
     /**
-     * Get the class name of a migration name.
+     * Get the class name of a resource query name.
      *
      * @param  string  $name
      * @return string
@@ -154,7 +113,7 @@ class ResourceQueryCreator
     }
 
     /**
-     * Get the full path to the migration.
+     * Get the full path to the resource query.
      *
      * @param  string  $name
      * @param  string  $path
@@ -162,41 +121,7 @@ class ResourceQueryCreator
      */
     protected function getPath($name, $path)
     {
-        return $path . '/' . $this->getDatePrefix() . '_' . $name . '.php';
-    }
-
-    /**
-     * Fire the registered post create hooks.
-     *
-     * @param  string|null  $table
-     * @return void
-     */
-    protected function firePostCreateHooks($table)
-    {
-        foreach ($this->postCreate as $callback) {
-            $callback($table);
-        }
-    }
-
-    /**
-     * Register a post migration create hook.
-     *
-     * @param  \Closure  $callback
-     * @return void
-     */
-    public function afterCreate(Closure $callback)
-    {
-        $this->postCreate[] = $callback;
-    }
-
-    /**
-     * Get the date prefix for the migration.
-     *
-     * @return string
-     */
-    protected function getDatePrefix()
-    {
-        return date('Y_m_d_His');
+        return $path . '/' . $name . '.php';
     }
 
     /**
