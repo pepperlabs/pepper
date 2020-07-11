@@ -18,16 +18,6 @@ class PepperServiceProvider extends ServiceProvider
         ]);
 
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/', 'pepper');
-
-        $queries = [];
-        $namespace = 'App\GraphQL\Queries\Pepper';
-        foreach (glob(app_path() . '/GraphQL/Queries/Pepper/*Query.php') as $path) {
-            $class = $namespace . '\\' . str_replace(glob(app_path() . '/GraphQL/Queries/Pepper/'), '', $path);
-            $class = preg_replace('/.php$/', '', $class);
-            $queries[(new $class)->getAttributes()['name']] = $path;
-        }
-        app('config')->set('graphql.schemas.default.query', array_merge($queries, config('graphql.schemas.default.query')));
-        // dd(config('graphql'));
     }
 
     public function register()
@@ -43,5 +33,8 @@ class PepperServiceProvider extends ServiceProvider
         ]);
 
         $this->app->singleton(ConsoleOutput::class);
+
+        $this->app['router']->middleware('RegisterGraphQLQueries', RegisterGraphQLQueries::class);
+        // $this->app['router']->pushMiddlewareToGroup('web', RegisterGraphQLQueries::class);
     }
 }
