@@ -1,0 +1,35 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\GraphQL\Queries;
+
+use Rebing\GraphQL\Support\Facades\GraphQL;
+use GraphQL\Type\Definition\ResolveInfo;
+use Rebing\GraphQL\Support\SelectFields;
+use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Query;
+use Closure;
+
+class {{ class }} extends Query
+{
+    protected $attributes = [
+        'name' => {{ name }},
+        'description' => {{ description }}
+    ];
+
+    public function type(): Type
+    {
+        return {{ type }};
+    }
+
+    public function args(): array
+    {
+        return {{ args }};
+    }
+
+    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
+    {
+        {{ resolve }}
+    }
+}
