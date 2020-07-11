@@ -16,7 +16,6 @@ class MetadataCommand extends BaseCommand
     public function handle()
     {
         $fs = new Filesystem();
-        $stubs = $fs->files(__DIR__ . '/../stubs');
         $rq = new ResourceQueryCreator($fs);
         $rq->create('UserQuery', 'users', 'User query description', 'Type::listOf(GraphQL::type(\'user\'))', '[]', 'return \App\User::all();');
     }

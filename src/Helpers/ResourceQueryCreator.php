@@ -28,7 +28,7 @@ class ResourceQueryCreator
     public function __construct(Filesystem $files)
     {
         $this->files = $files;
-        $this->path = app_path('GraphQL/Queries');
+        $this->path = app_path('GraphQL/Queries/Pepper');
     }
 
     /**
