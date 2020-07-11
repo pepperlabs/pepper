@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * CHANGES TO THIS FILE WILL BE OVERWRITTEN. THIS FILE IS FOR YOUR REFERENCE.
+ */
+
 declare(strict_types=1);
 
 namespace App\GraphQL\Queries;
@@ -14,8 +18,8 @@ use Closure;
 class {{ class }} extends Query
 {
     protected $attributes = [
-        'name' => {{ name }},
-        'description' => {{ description }}
+        'name' => '{{ name }}',
+        'description' => '{{ description }}'
     ];
 
     public function type(): Type

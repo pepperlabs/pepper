@@ -2,6 +2,9 @@
 
 namespace Amirmasoud\Pepper\Commands;
 
+use Amirmasoud\Pepper\Helpers\ResourceQueryCreator;
+use Illuminate\Filesystem\Filesystem;
+
 class MetadataCommand extends BaseCommand
 {
     /** @var string */
@@ -12,5 +15,9 @@ class MetadataCommand extends BaseCommand
 
     public function handle()
     {
+        $fs = new Filesystem();
+        $stubs = $fs->files(__DIR__ . '/../stubs');
+        $rq = new ResourceQueryCreator($fs);
+        $rq->create('UserQuery', 'users', 'User query description', 'Type::listOf(GraphQL::type(\'user\'))', '[]', 'return \App\User::all();');
     }
 }

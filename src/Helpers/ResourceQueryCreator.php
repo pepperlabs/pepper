@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Database\Migrations;
+namespace Amirmasoud\Pepper\Helpers;
 
 use Closure;
 use Illuminate\Filesystem\Filesystem;
@@ -16,6 +16,8 @@ class ResourceQueryCreator
      */
     protected $files;
 
+    protected $path;
+
     /**
      * Create a new resource query creator instance.
      *
@@ -26,6 +28,7 @@ class ResourceQueryCreator
     public function __construct(Filesystem $files)
     {
         $this->files = $files;
+        $this->path = app_path('GraphQL/Queries');
     }
 
     /**
@@ -37,18 +40,27 @@ class ResourceQueryCreator
      * @param  bool  $create
      * @return string
      */
-    public function create($name, $path, $class = null, $create = false)
+    public function create($class, $name, $description, $type, $args, $resolve)
     {
-        $this->resetResourceQueryClass($name, $path);
+        $this->resetResourceQueryClass($class, $this->path);
 
-        $stub = $this->getStub($class, $create);
+        $stub = $this->getStub();
 
-        $this->files->put(
-            $path = $this->getPath($name, $path),
-            $this->populateStub($name, $stub, $class)
+        $this->files->ensureDirectoryExists($this->path);
+
+        $stub = $this->populateStub('class', $class, $stub);
+        $stub = $this->populateStub('name', $name, $stub);
+        $stub = $this->populateStub('description', $description, $stub);
+        $stub = $this->populateStub('type', $type, $stub);
+        $stub = $this->populateStub('args', $args, $stub);
+        $stub = $this->populateStub('resolve', $resolve, $stub);
+
+        $this->files->replace(
+            $class = $this->getPath($class, $this->path),
+            $stub
         );
 
-        return $path;
+        return $class;
     }
 
     /**
@@ -131,7 +143,7 @@ class ResourceQueryCreator
      */
     public function stubPath()
     {
-        return __DIR__ . '/stubs';
+        return __DIR__ . '/../stubs';
     }
 
     /**
