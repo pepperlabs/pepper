@@ -18,10 +18,6 @@ class PepperServiceProvider extends ServiceProvider
         ]);
 
         $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/', 'pepper');
-
-        $this->app->call(function () {
-            RegisterGraphQLQueries::init();
-        });
     }
 
     public function register()
@@ -38,7 +34,11 @@ class PepperServiceProvider extends ServiceProvider
 
         $this->app->singleton(ConsoleOutput::class);
 
-        // $this->app['router']->middleware('RegisterGraphQLQueries', RegisterGraphQLQueries::class);
-        // $this->app['router']->pushMiddlewareToGroup('web', RegisterGraphQLQueries::class);
+        $fl = new FileLoader(config('graphql'));
+        dd($fl->save('graphql.php'));
+
+        $this->app->call(function () {
+            RegisterGraphQLQueries::init();
+        });
     }
 }
