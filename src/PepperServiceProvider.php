@@ -3,7 +3,8 @@
 namespace Amirmasoud\Pepper;
 
 use Illuminate\Support\ServiceProvider;
-use Amirmasoud\Pepper\Commands\MetadataCommand;
+use Amirmasoud\Pepper\Commands\QueryCommand;
+use Amirmasoud\Pepper\Commands\TypeCommand;
 
 class PepperServiceProvider extends ServiceProvider
 {
@@ -26,19 +27,19 @@ class PepperServiceProvider extends ServiceProvider
 
         $this->app->register(\Rebing\GraphQL\GraphQLServiceProvider::class);
 
-        $this->app->bind('command.pepper:queries', MetadataCommand::class);
+        $this->app->bind('command.pepper:queries', QueryCommand::class);
+        $this->app->bind('command.pepper:types', TypeCommand::class);
 
         $this->commands([
             'command.pepper:queries',
+            'command.pepper:types',
         ]);
 
         $this->app->singleton(ConsoleOutput::class);
 
-        $fl = new FileLoader(config('graphql'));
-        dd($fl->save('graphql.php'));
-
-        $this->app->call(function () {
-            RegisterGraphQLQueries::init();
-        });
+        // $this->app->call(function () {
+        //     RegisterGraphQLTypes::init();
+        //     // RegisterGraphQLQueries::init();
+        // });
     }
 }

@@ -16,6 +16,5 @@ class RegisterGraphQLQueries
             $queries[(new $class)->getAttributes()['name']] = $class;
         }
         app('config')->set('graphql.schemas.default.query', array_merge($queries, config('graphql.schemas.default.query')));
-        // dd(config('graphql.schemas.default.query'));
     }
 }
