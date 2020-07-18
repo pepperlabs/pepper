@@ -40,7 +40,7 @@ class ResourceTypeCreator
      * @param  bool  $create
      * @return string
      */
-    public function create($class, $name, $description)
+    public function create($class, $name, $description, $model)
     {
         $this->resetResourceTypeClass($class, $this->path);
 
@@ -51,6 +51,7 @@ class ResourceTypeCreator
         $stub = $this->populateStub('class', $class, $stub);
         $stub = $this->populateStub('name', $name, $stub);
         $stub = $this->populateStub('description', $description, $stub);
+        $stub = $this->populateStub('model', $model, $stub);
 
         $this->files->replace(
             $class = $this->getPath($class, $this->path),

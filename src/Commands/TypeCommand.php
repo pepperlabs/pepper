@@ -18,6 +18,8 @@ class TypeCommand extends BaseCommand
     {
         $fs = new Filesystem();
         $rq = new ResourceTypeCreator($fs);
-        $rq->create('UserType', 'user', 'User query description');
+        foreach (config('pepper.models', []) as $model) {
+            $rq->create('UserType', 'user', 'User query description', $model);
+        }
     }
 }

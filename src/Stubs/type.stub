@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Types\Pepper;
 
-use GraphQL\Type\Definition\Type;
+use App;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class {{ class }} extends GraphQLType
@@ -14,13 +14,15 @@ class {{ class }} extends GraphQLType
         'description' => '{{ description }}'
     ];
 
+    protected $modelInstance;
+
+    public function __construct()
+    {
+        $this->modelInstance = new {{ model }};
+    }
+
     public function fields(): array
     {
-        return [
-            'id' => [
-                'type' => Type::nonNull(Type::string()),
-                'description' => 'The id of the user',
-            ]
-        ];
+        return $this->modelInstance->getFields();
     }
 }
