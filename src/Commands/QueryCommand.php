@@ -2,6 +2,7 @@
 
 namespace Amirmasoud\Pepper\Commands;
 
+use App;
 use Amirmasoud\Pepper\Helpers\ResourceQueryCreator;
 use Illuminate\Filesystem\Filesystem;
 
@@ -17,6 +18,9 @@ class QueryCommand extends BaseCommand
     {
         $fs = new Filesystem();
         $rq = new ResourceQueryCreator($fs);
-        $rq->create('UsersQuery', 'users', 'User query description', 'Type::listOf(GraphQL::type(\'user\'))', '[]', 'return \App\User::all();');
+        foreach (config('pepper.models', []) as $model) {
+            $modelInstance = new $model;
+            $rq->create($modelInstance->getQueryName() . 'Query', $modelInstance->getQueryName(), $modelInstance->getQueryDescription(), $model);
+        }
     }
 }

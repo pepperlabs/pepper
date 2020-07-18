@@ -91,6 +91,31 @@ trait InteractsWithEndpoint
 
     public function getDescription(): string
     {
-        return $this->description ?? Str::of($this->typeName())->singular()->studly() . ' Description.';
+        return $this->description ?? Str::of($this->typeName())->singular()->studly() . ' description.';
+    }
+
+    public function getQueryName(): string
+    {
+        return $this->queryName ?? Str::of($this->typeName())->studly();
+    }
+
+    public function getQueryDescription(): string
+    {
+        return $this->queryDescription ?? Str::of($this->typeName())->studly() . ' query description.';
+    }
+
+    public function queryResolve()
+    {
+        return $this->all();
+    }
+
+    public function queryArgs()
+    {
+        return [];
+    }
+
+    public function queryType()
+    {
+        return Type::listOf(GraphQL::type($this->getName()));
     }
 }

@@ -16,6 +16,16 @@ interface HasEndpoint
 
     public function typeName(): string;
 
+    public function getName(): string;
+
+    public function getDescription(): string;
+
+    public function getQueryName(): string;
+
+    public function getQueryDescription(): string;
+
+    // public function resolve();
+
     // public function toArray(): array;
 
     // public function collection(): array;

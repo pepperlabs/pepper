@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace App\GraphQL\Queries\Pepper;
 
+use App;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\SelectFields;
@@ -22,18 +23,25 @@ class {{ class }} extends Query
         'description' => '{{ description }}'
     ];
 
+    protected $modelInstance;
+
+    public function __construct()
+    {
+        $this->modelInstance = new {{ model }};
+    }
+
     public function type(): Type
     {
-        return {{ type }};
+        return $this->modelInstance->queryType();
     }
 
     public function args(): array
     {
-        return {{ args }};
+        return $this->modelInstance->queryArgs();
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        {{ resolve }}
+        return $this->modelInstance->queryResolve();
     }
 }

@@ -40,7 +40,7 @@ class ResourceQueryCreator
      * @param  bool  $create
      * @return string
      */
-    public function create($class, $name, $description, $type, $args, $resolve)
+    public function create($class, $name, $description, $model)
     {
         $this->resetResourceQueryClass($class, $this->path);
 
@@ -51,9 +51,7 @@ class ResourceQueryCreator
         $stub = $this->populateStub('class', $class, $stub);
         $stub = $this->populateStub('name', $name, $stub);
         $stub = $this->populateStub('description', $description, $stub);
-        $stub = $this->populateStub('type', $type, $stub);
-        $stub = $this->populateStub('args', $args, $stub);
-        $stub = $this->populateStub('resolve', $resolve, $stub);
+        $stub = $this->populateStub('model', $model, $stub);
 
         $this->files->replace(
             $class = $this->getPath($class, $this->path),
