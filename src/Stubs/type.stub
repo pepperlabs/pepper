@@ -10,8 +10,11 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 class {{ class }} extends GraphQLType
 {
     protected $attributes = [
-        'name' => '{{ name }}',
-        'description' => '{{ description }}'
+        // Overwritten in constructor
+        'name' => '',
+
+        // Overwritten in constructor
+        'description' => ''
     ];
 
     protected $modelInstance;
@@ -19,6 +22,8 @@ class {{ class }} extends GraphQLType
     public function __construct()
     {
         $this->modelInstance = new {{ model }};
+        $this->attributes['name'] = $this->modelInstance->getName();
+        $this->attributes['description'] = $this->modelInstance->getDescription();
     }
 
     public function fields(): array

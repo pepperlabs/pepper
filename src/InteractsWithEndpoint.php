@@ -79,8 +79,18 @@ trait InteractsWithEndpoint
         return $fields;
     }
 
-    public static function typeName(): string
+    public function typeName(): string
     {
         return str_replace('-', ' ', Str::of(get_called_class())->afterLast('\\')->kebab()->plural());
+    }
+
+    public function getName(): string
+    {
+        return $this->name ?? Str::of($this->typeName())->singular()->studly();
+    }
+
+    public function getDescription(): string
+    {
+        return $this->description ?? Str::of($this->typeName())->singular()->studly() . ' Description.';
     }
 }
