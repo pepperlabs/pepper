@@ -20,7 +20,7 @@ class TypeCommand extends BaseCommand
         $rq = new ResourceTypeCreator($fs);
         foreach (config('pepper.models', []) as $model) {
             $modelInstance = new $model;
-            $rq->create($modelInstance->getName() . 'Type', $modelInstance->getName(), $modelInstance->getDescription(), $model);
+            $rq->create($modelInstance->getTypeName() . 'Type', $modelInstance->getTypeName(), $modelInstance->getDescription(), $model);
         }
     }
 }

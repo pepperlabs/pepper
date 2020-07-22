@@ -10,7 +10,7 @@ use Illuminate\Support\Str;
 
 trait InteractsWithEndpoint
 {
-    public function HasEndpoint(): bool
+    public function hasEndpoint(): bool
     {
         return $this->endpoint ?? true;
     }
@@ -24,6 +24,7 @@ trait InteractsWithEndpoint
 
     public function endpointRelations(): array
     {
+        $relations = [];
         // @TODO refactor to method
         $reflector = new \ReflectionClass($this);
         foreach ($reflector->getMethods() as $reflectionMethod) {
@@ -64,18 +65,18 @@ trait InteractsWithEndpoint
             ];
         }
 
-        // @TODO
-        // foreach ($this->endpointRelations() as $relation) {
-        //     $reflector = new \ReflectionClass($model);
-        //     $relationType = $reflector->getMethod($relation)->getReturnType();
-        //     $fields[$field] = [];
-        //     if ($relationType instanceof HasMany) {
-        //         $fields[$field]['type'] = Type::listOf(GraphQL::type('book'));
-        //         $fields[$field]['resolve'] = function ($root, $args) use ($relation) {
-        //             return $root->{$relation};
-        //         };
-        //     }
-        // }
+        foreach ($this->endpointRelations() as $relation) {
+            $reflector = new \ReflectionClass($model);
+            $relationType = $reflector->getMethod($relation)->getReturnType();
+            $fields[$field] = [];
+            if ($relationType->getName() === HasMany::class) {
+                $fields[$field]['type'] = Type::listOf(GraphQL::type($this->getTypeName()));
+                $fields[$field]['resolve'] = function ($root, $args) use ($relation) {
+                    return $root->{$relation};
+                };
+                dd($field);
+            }
+        }
         return $fields;
     }
 
@@ -84,14 +85,14 @@ trait InteractsWithEndpoint
         return str_replace('-', ' ', Str::of(get_called_class())->afterLast('\\')->kebab()->plural());
     }
 
-    public function getName(): string
+    public function getTypeName(): string
     {
-        return $this->name ?? Str::of($this->typeName())->singular()->studly();
+        return Str::of($this->typeName())->singular()->studly();
     }
 
     public function getDescription(): string
     {
-        return $this->description ?? Str::of($this->typeName())->singular()->studly() . ' description.';
+        return Str::of($this->typeName())->singular()->studly() . ' description.';
     }
 
     public function getQueryName(): string
@@ -116,6 +117,6 @@ trait InteractsWithEndpoint
 
     public function queryType()
     {
-        return Type::listOf(GraphQL::type($this->getName()));
+        return Type::listOf(GraphQL::type($this->getTypeName()));
     }
 }
