@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Illuminate\Support\Facades\DB;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
 
 trait InteractsWithEndpoint
@@ -52,16 +53,21 @@ trait InteractsWithEndpoint
         $fields = [];
         foreach ($relations as $relation) {
             $reflector = new \ReflectionClass($model);
-            $relationType = $reflector->getMethod($relation)->getReturnType();
-            if ($relationType->getName() === HasMany::class) {
-                $fields[$relation] = [
-                    'name' => $relation,
-                    'type' => Type::listOf(GraphQL::type($this->getTypeName())),
-                    'resolve' => function ($root, $args) use ($relation) {
-                        return $root->{$relation};
-                    }
-                ];
+            $relationType = $reflector->getMethod($relation)->getReturnType()->getName();
+            $type = '';
+            if ($relationType === BelongsTo::class) {
+                $type = GraphQL::type($this->getTypeName());
+            } elseif ($relationType === HasMany::class) {
+                $type = Type::listOf(GraphQL::type($this->getTypeName()));
             }
+
+            $fields[$relation] = [
+                'name' => $relation,
+                'type' => $type,
+                'resolve' => function ($root, $args) use ($relation) {
+                    return $root->{$relation};
+                }
+            ];
         }
         return $fields;
     }
