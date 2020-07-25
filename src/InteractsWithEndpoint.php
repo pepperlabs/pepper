@@ -8,6 +8,8 @@ use Illuminate\Support\Facades\DB;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
+use GraphQL\Type\Definition\ResolveInfo;
+use Closure;
 
 trait InteractsWithEndpoint
 {
@@ -86,33 +88,7 @@ trait InteractsWithEndpoint
 
     public function getFields($model = null): array
     {
-        $model = $model ?? $this;
-
-        // $fields = [];
-        // foreach ($this->endpointFields() as $field) {
-        //     $fields[$field] = [
-        //         'name' => $field,
-        //         'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($field))
-        //     ];
-        // }
-
-        // foreach ($this->endpointRelations() as $relation) {
-        //     $reflector = new \ReflectionClass($model);
-        //     $relationType = $reflector->getMethod($relation)->getReturnType();
-        //     $fields[$field] = [];
-        //     if ($relationType->getName() === HasMany::class) {
-        //         $fields[$relation] = [
-        //             'name' => $relation,
-        //             'type' => Type::listOf(GraphQL::type($this->getTypeName())),
-        //             'resolve' => function ($root, $args) use ($relation) {
-        //                 return $root->{$relation};
-        //             }
-        //         ];
-        //     }
-        // }
-
-        return array_merge($this->endpointFields(), $this->endpointRelations($model));
-        // return $fields;
+        return array_merge($this->endpointFields(), $this->endpointRelations($model ?? $this));
     }
 
     public function typeName(): string
@@ -140,14 +116,40 @@ trait InteractsWithEndpoint
         return $this->queryDescription ?? Str::of($this->typeName())->studly() . ' query description.';
     }
 
-    public function queryResolve()
+    public function queryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return $this->all();
+        return $this
+            ->when(isset($args['where']), function ($query) use (&$args) {
+                print_r($args);
+                die();
+                return $query->limit($args['limit']);
+            })
+            ->when(isset($args['limit']), function ($query) use (&$args) {
+                return $query->limit($args['limit']);
+            })
+            ->when(isset($args['offset']), function ($query) use (&$args) {
+                return $query->offset($args['offset']);
+            })
+            ->when(isset($args['skip']), function ($query) use (&$args) {
+                return $query->skip($args['skip']);
+            })
+            ->when(isset($args['take']), function ($query) use (&$args) {
+                return $query->take($args['take']);
+            })->get();
     }
 
     public function queryArgs()
     {
-        return [];
+        return [
+            // Condition
+            'where' => ['type' => GraphQL::type('ConditionInput')],
+
+            // Paginate
+            'limit' => ['name' => 'limit', 'type' => Type::int()],
+            'offset' => ['name' => 'offset', 'type' => Type::int()],
+            'skip' => ['name' => 'skip', 'type' => Type::int()],
+            'take' => ['name' => 'take', 'type' => Type::int()],
+        ];
     }
 
     public function queryType()
