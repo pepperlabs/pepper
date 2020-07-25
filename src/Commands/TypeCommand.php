@@ -2,8 +2,10 @@
 
 namespace Amirmasoud\Pepper\Commands;
 
+use Amirmasoud\Pepper\HasEndpoint;
 use Amirmasoud\Pepper\Helpers\ResourceQueryCreator;
 use Amirmasoud\Pepper\Helpers\ResourceTypeCreator;
+use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Filesystem\Filesystem;
 
 class TypeCommand extends BaseCommand
@@ -18,9 +20,13 @@ class TypeCommand extends BaseCommand
     {
         $fs = new Filesystem();
         $rq = new ResourceTypeCreator($fs);
-        foreach (config('pepper.models', []) as $model) {
-            $modelInstance = new $model;
-            $rq->create($modelInstance->getTypeName() . 'Type', $modelInstance->getTypeName(), $modelInstance->getDescription(), $model);
+
+        $classes = ClassFinder::getClassesInNamespace(config('pepper.namespace'));
+        foreach ($classes as $model) {
+            if (isset(class_implements($model)[HasEndpoint::class])) {
+                $modelInstance = new $model;
+                $rq->create($modelInstance->getTypeName() . 'Type', $modelInstance->getTypeName(), $modelInstance->getDescription(), $model);
+            }
         }
     }
 }
