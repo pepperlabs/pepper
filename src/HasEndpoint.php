@@ -23,7 +23,7 @@ interface HasEndpoint
      *
      * @return array
      */
-    public function endpointRelations(): array;
+    public function endpointRelations($model): array;
 
     /**
      * Guess type of the field.

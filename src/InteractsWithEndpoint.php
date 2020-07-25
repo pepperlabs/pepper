@@ -19,10 +19,19 @@ trait InteractsWithEndpoint
     {
         $exposedAttributes = $this->exposedAttributes ?? $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
         $hiddenAttributes = $this->hiddenAttributes ?? [];
-        return array_values(array_diff($exposedAttributes, $hiddenAttributes));
+        $attributes = array_values(array_diff($exposedAttributes, $hiddenAttributes));
+
+        $fields = [];
+        foreach ($attributes as $attribute) {
+            $fields[$attribute] = [
+                'name' => $attribute,
+                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($attribute))
+            ];
+        }
+        return $fields;
     }
 
-    public function endpointRelations(): array
+    public function endpointRelations($model): array
     {
         $relations = [];
         // @TODO refactor to method
@@ -38,7 +47,23 @@ trait InteractsWithEndpoint
 
         $exposedRelations = $this->exposedRelations ?? $relations;
         $hiddenRelations = $this->hiddenRelations ?? [];
-        return array_values(array_diff($exposedRelations, $hiddenRelations));
+        $relations = array_values(array_diff($exposedRelations, $hiddenRelations));
+
+        $fields = [];
+        foreach ($relations as $relation) {
+            $reflector = new \ReflectionClass($model);
+            $relationType = $reflector->getMethod($relation)->getReturnType();
+            if ($relationType->getName() === HasMany::class) {
+                $fields[$relation] = [
+                    'name' => $relation,
+                    'type' => Type::listOf(GraphQL::type($this->getTypeName())),
+                    'resolve' => function ($root, $args) use ($relation) {
+                        return $root->{$relation};
+                    }
+                ];
+            }
+        }
+        return $fields;
     }
 
     public function guessFieldType(string $field): string
@@ -57,27 +82,31 @@ trait InteractsWithEndpoint
     {
         $model = $model ?? $this;
 
-        $fields = [];
-        foreach ($this->endpointFields() as $field) {
-            $fields[$field] = [
-                'name' => $field,
-                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($field))
-            ];
-        }
+        // $fields = [];
+        // foreach ($this->endpointFields() as $field) {
+        //     $fields[$field] = [
+        //         'name' => $field,
+        //         'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($field))
+        //     ];
+        // }
 
-        foreach ($this->endpointRelations() as $relation) {
-            $reflector = new \ReflectionClass($model);
-            $relationType = $reflector->getMethod($relation)->getReturnType();
-            $fields[$field] = [];
-            if ($relationType->getName() === HasMany::class) {
-                $fields[$field]['type'] = Type::listOf(GraphQL::type($this->getTypeName()));
-                $fields[$field]['resolve'] = function ($root, $args) use ($relation) {
-                    return $root->{$relation};
-                };
-                dd($field);
-            }
-        }
-        return $fields;
+        // foreach ($this->endpointRelations() as $relation) {
+        //     $reflector = new \ReflectionClass($model);
+        //     $relationType = $reflector->getMethod($relation)->getReturnType();
+        //     $fields[$field] = [];
+        //     if ($relationType->getName() === HasMany::class) {
+        //         $fields[$relation] = [
+        //             'name' => $relation,
+        //             'type' => Type::listOf(GraphQL::type($this->getTypeName())),
+        //             'resolve' => function ($root, $args) use ($relation) {
+        //                 return $root->{$relation};
+        //             }
+        //         ];
+        //     }
+        // }
+
+        return array_merge($this->endpointFields(), $this->endpointRelations($model));
+        // return $fields;
     }
 
     public function typeName(): string
