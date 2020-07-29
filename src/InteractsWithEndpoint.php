@@ -91,6 +91,24 @@ trait InteractsWithEndpoint
         return array_merge($this->endpointFields(), $this->endpointRelations($model ?? $this));
     }
 
+    public function getInputFields(): array
+    {
+        $exposedAttributes = $this->exposedAttributes ?? $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+        $hiddenAttributes = $this->hiddenAttributes ?? [];
+        $attributes = array_values(array_diff($exposedAttributes, $hiddenAttributes));
+
+        $fields = [];
+        foreach ($attributes as $attribute) {
+            $fields[$attribute] = [
+                'name' => $attribute,
+                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($attribute))
+                // 'type' => call_user_func('\App\GraphQL\Inputs\ConditionInput::class')
+            ];
+        }
+
+        return $fields;
+    }
+
     public function typeName(): string
     {
         return str_replace('-', ' ', Str::of(get_called_class())->afterLast('\\')->kebab()->plural());

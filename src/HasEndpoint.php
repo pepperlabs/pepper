@@ -44,4 +44,6 @@ interface HasEndpoint
     public function getQueryName(): string;
 
     public function getQueryDescription(): string;
+
+    public function getInputFields(): array;
 }

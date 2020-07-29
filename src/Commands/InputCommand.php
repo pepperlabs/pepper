@@ -10,21 +10,21 @@ use Illuminate\Filesystem\Filesystem;
 class InputCommand extends BaseCommand
 {
     /** @var string */
-    protected $signature = 'pepper:types';
+    protected $signature = 'pepper:inputs';
 
     /** @var string */
-    protected $description = 'Generate GraphQL types.';
+    protected $description = 'Generate GraphQL inputs.';
 
     public function handle()
     {
         $fs = new Filesystem();
-        $rq = new ResourceTypeCreator($fs);
+        $rq = new ResourceInputCreator($fs);
 
         $classes = ClassFinder::getClassesInNamespace(config('pepper.namespace'));
         foreach ($classes as $model) {
             if (isset(class_implements($model)[HasEndpoint::class])) {
                 $modelInstance = new $model;
-                $rq->create($modelInstance->getTypeName() . 'Type', $modelInstance->getTypeName(), $modelInstance->getDescription(), $model);
+                $rq->create($modelInstance->getTypeName() . 'Input', $modelInstance->getTypeName(), $modelInstance->getDescription(), $model);
             }
         }
     }

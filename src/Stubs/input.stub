@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Inputs;
+namespace App\GraphQL\Inputs\Pepper;
 
+use App;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\InputType;
 
 class {{ class }} extends InputType
 {
     protected $attributes = [
-        'name' => '{{ name }}',
+        'name' => '{{ name }}Input',
         'description' => '{{ description }}'
     ];
 
