@@ -1,0 +1,29 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\GraphQL\Inputs;
+
+use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\InputType;
+
+class {{ class }} extends InputType
+{
+    protected $attributes = [
+        'name' => '{{ name }}',
+        'description' => '{{ description }}'
+    ];
+
+    protected $modelInstance;
+
+    public function __construct()
+    {
+        $this->modelInstance = new {{ model }};
+    }
+
+
+    public function fields(): array
+    {
+        return $this->modelInstance->getInputFields();
+    }
+}
