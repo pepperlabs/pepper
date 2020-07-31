@@ -101,8 +101,9 @@ trait InteractsWithEndpoint
         foreach ($attributes as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($attribute))
-                // 'type' => call_user_func('\App\GraphQL\Inputs\ConditionInput::class')
+
+                // User conditional input for correct type
+                'type' => GraphQL::type('ConditionInput')
             ];
         }
 
@@ -138,9 +139,87 @@ trait InteractsWithEndpoint
     {
         return $this
             ->when(isset($args['where']), function ($query) use (&$args) {
-                print_r($args);
-                die();
-                return $query->limit($args['limit']);
+                foreach ($args['where'] as $field => $criteria) {
+                    foreach ($criteria as $operation => $value) {
+                        switch ($operation) {
+                            case '_eq':
+                                $query = $query->where($field, '=', $value);
+                                break;
+
+                            case '_neq':
+                                $query = $query->where($field, '!=', $value);
+                                break;
+
+                            case '_gt':
+                                $query = $query->where($field, '>', $value);
+                                break;
+
+                            case '_lt':
+                                $query = $query->where($field, '<', $value);
+                                break;
+
+                            case '_gte':
+                                $query = $query->where($field, '>=', $value);
+                                break;
+
+                            case '_lte':
+                                $query = $query->where($field, '<=', $value);
+                                break;
+
+                            case '_in':
+                                $query = $query->whereIn($field, $value);
+                                break;
+
+                            case '_nin':
+                                $query = $query->whereNotIn($field, $value);
+                                break;
+
+                            case '_like':
+                                $query = $query->where($field, 'like', $value);
+                                break;
+
+                            case '_nlike':
+                                $query = $query->where($field, 'not like', $value);
+                                break;
+
+                            case '_ilike':
+                                $query = $query->where($field, 'ilike', $value);
+                                break;
+
+                            case '_nilike':
+                                $query = $query->where($field, 'not ilike', $value);
+                                break;
+
+                            case '_is_null':
+                                $query = $value ? $query->whereNull($field) : $query->whereNotNull($field);
+                                break;
+
+                            case '_date':
+                                $query = $query->whereDate($field, $value);
+                                break;
+
+                            case '_month':
+                                $query = $query->whereMonth($field, $value);
+                                break;
+
+                            case '_day':
+                                $query = $query->whereDay($field, $value);
+                                break;
+
+                            case '_year':
+                                $query = $query->whereYear($field, $value);
+                                break;
+
+                            case '_time':
+                                $query = $query->whereTime($field, $value);
+                                break;
+
+                            default:
+                                break;
+                        }
+                    }
+                }
+                return $query;
             })
             ->when(isset($args['limit']), function ($query) use (&$args) {
                 return $query->limit($args['limit']);
@@ -158,9 +237,13 @@ trait InteractsWithEndpoint
 
     public function queryArgs()
     {
+        // print_r($this);
+        // die();
         return [
             // Condition
-            'where' => ['type' => GraphQL::type('ConditionInput')],
+            'where' => ['type' => GraphQL::type('UserInput')],
+
+            'distinct' => ['name' => 'distinct', 'type' => Type::boolean()],
 
             // Paginate
             'limit' => ['name' => 'limit', 'type' => Type::int()],
