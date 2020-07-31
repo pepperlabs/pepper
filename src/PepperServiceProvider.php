@@ -37,7 +37,5 @@ class PepperServiceProvider extends ServiceProvider
             'command.pepper:types',
             'command.pepper:inputs',
         ]);
-
-        $this->app->singleton(ConsoleOutput::class);
     }
 }

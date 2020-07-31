@@ -2,12 +2,9 @@
 
 namespace Amirmasoud\Pepper\Helpers;
 
-use Amirmasoud\Pepper\Support\ConfigWriter;
-use Amirmasoud\Pepper\Support\FileWriter;
-use Closure;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Illuminate\Support\Str;
 
 class ResourceQueryCreator
 {

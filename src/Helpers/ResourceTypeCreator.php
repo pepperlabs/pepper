@@ -2,10 +2,9 @@
 
 namespace Amirmasoud\Pepper\Helpers;
 
-use Closure;
 use Illuminate\Filesystem\Filesystem;
-use Illuminate\Support\Str;
 use InvalidArgumentException;
+use Illuminate\Support\Str;
 
 class ResourceTypeCreator
 {
