@@ -23,7 +23,7 @@ class TypeCommand extends BaseCommand
 
         $classes = ClassFinder::getClassesInNamespace(config('pepper.namespace'));
         foreach ($classes as $model) {
-            if (isset(class_implements($model)[HasEndpoint::class])) {
+            if (isset(class_implements($model)[HasEndpoint::class]) || array_key_exists(HasEndpoint::class, class_implements($model))) {
                 $modelInstance = new $model;
                 $rq->create($modelInstance->getTypeName() . 'Type', $modelInstance->getTypeName(), $modelInstance->getDescription(), $model);
             }

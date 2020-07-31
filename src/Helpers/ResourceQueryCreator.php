@@ -2,6 +2,8 @@
 
 namespace Amirmasoud\Pepper\Helpers;
 
+use Amirmasoud\Pepper\Support\ConfigWriter;
+use Amirmasoud\Pepper\Support\FileWriter;
 use Closure;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Support\Str;
@@ -57,6 +59,30 @@ class ResourceQueryCreator
             $class = $this->getPath($class, $this->path),
             $stub
         );
+
+        $config_file = config_path('graphql.php');
+        // dd($name, 'App\GraphQL\Queries\Pepper\\' . $name . 'Query::class');
+        if (file_exists($config_file)) {
+            if (is_null(config('graphql.schemas.default.query.' . $name))) {
+                // file_get_contents($config_file);
+                // "'query' => [\n'$name' => 'App\GraphQL\Queries\Pepper\\' . $name . 'Query::class',",
+                // dd(eval("return " . config('graphql')));
+                $pattern = "/(\s*\'schemas\'\s*=>\s*\[\s*\'default\'\s*=>\s*\[\s*\'query\'\s*=>\s*\[\s*)/";
+                $class = strval('App\GraphQL\Queries\Pepper\\' . $name . 'Query::class');
+                $update = preg_replace($pattern, "$0 '$name' => $class,\n                ", file_get_contents($config_file));
+                file_put_contents($config_file, $update);
+                // Config not found, so we add one
+                // $update = array_merge(config('graphql.schemas.default.query'), [$name => 'App\GraphQL\Queries\Pepper\\' . $name . 'Query::class']);
+                // // array_replace()
+                // $writer = new FileWriter(new Filesystem(), config_path());
+                // // "$name, 'App\GraphQL\Queries\Pepper\\' . $name . 'Query::class'"
+                // $update = array_merge(config('graphql.schemas.default.query'), [$name => 'App\GraphQL\Queries\Pepper\\' . $name . 'Query::class']);
+                // $writer->write('schemas', [], 'graphql');
+                // dd($writer);
+            } else {
+                // Config found so we won't do anything.
+            }
+        }
 
         return $class;
     }

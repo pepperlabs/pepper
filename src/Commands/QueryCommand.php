@@ -2,6 +2,7 @@
 
 namespace Amirmasoud\Pepper\Commands;
 
+use Amirmasoud\Pepper\HasEndpoint;
 use App;
 use Amirmasoud\Pepper\Helpers\ResourceQueryCreator;
 use Illuminate\Filesystem\Filesystem;
@@ -21,7 +22,7 @@ class QueryCommand extends BaseCommand
         $rq = new ResourceQueryCreator($fs);
         $classes = ClassFinder::getClassesInNamespace(config('pepper.namespace'));
         foreach ($classes as $model) {
-            if (isset(class_implements($model)[HasEndpoint::class])) {
+            if (isset(class_implements($model)[HasEndpoint::class]) || array_key_exists(HasEndpoint::class, class_implements($model))) {
                 $modelInstance = new $model;
                 $rq->create($modelInstance->getQueryName() . 'Query', $modelInstance->getQueryName(), $modelInstance->getQueryDescription(), $model);
             }
