@@ -2,32 +2,23 @@
 
 namespace Amirmasoud\Pepper\Helpers;
 
-use Illuminate\Filesystem\Filesystem;
-use InvalidArgumentException;
-use Illuminate\Support\Str;
-
-class ResourceTypeCreator
+class ResourceTypeCreator extends ResourceCreator
 {
-    /**
-     * The filesystem instance.
-     *
-     * @var \Illuminate\Filesystem\Filesystem
-     */
-    protected $files;
-
     protected $path;
+    protected $stub;
 
     /**
-     * Create a new resource type creator instance.
+     * Create a new resource query creator instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
      * @param  string  $customStubPath
      * @return void
      */
-    public function __construct(Filesystem $files)
+    public function __construct()
     {
-        $this->files = $files;
+        Parent::__construct();
+
         $this->path = app_path('GraphQL/Types/Pepper');
+        $this->stub = '/type.stub';
     }
 
     /**
@@ -41,7 +32,7 @@ class ResourceTypeCreator
      */
     public function create($class, $name, $description, $model)
     {
-        $this->resetResourceTypeClass($class, $this->path);
+        $this->resetResourceClass($class, $this->path);
 
         $stub = $this->getStub();
 
@@ -57,109 +48,18 @@ class ResourceTypeCreator
             $stub
         );
 
-        $config_file = config_path('graphql.php');
-        if (file_exists($config_file)) {
-            if (is_null(config('graphql.types.' . $name))) {
-                $pattern = "/([^\/]{2,}(\s*\'types\'\s*=>\s*\[\s*))/";
-                $class = strval('App\GraphQL\Types\Pepper\\' . $name . 'Type::class');
-                $update = preg_replace($pattern, "$0 '$name' => $class,\n        ", file_get_contents($config_file));
-                file_put_contents($config_file, $update);
-            }
-        }
+        $this->updateConfig($name);
 
         return $class;
     }
 
-    /**
-     * Ensure that a migration with the given name doesn't already exist.
-     *
-     * @param  string  $name
-     * @param  string  $migrationPath
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
-    protected function resetResourceTypeClass($name, $resourceTypePath = null)
+    protected function updateConfig($name)
     {
-        if (!empty($resourceTypePath)) {
-            $resourceTypesPaths = $this->files->glob($resourceTypePath . '/*.php');
-
-            foreach ($resourceTypesPaths as $resourceTypeFile) {
-                $this->files->requireOnce($resourceTypeFile);
-                if (class_exists($this->getClassName($name))) {
-                    $this->files->delete($resourceTypeFile);
-                }
-            }
+        if ($this->configKeyExists('graphql.types.' . $name)) {
+            $pattern = "/([^\/]{2,}(\s*\'types\'\s*=>\s*\[\s*))/";
+            $class = strval('App\GraphQL\Types\Pepper\\' . $name . 'Type::class');
+            $update = preg_replace($pattern, "$0 '$name' => $class,\n        ", file_get_contents($this->config));
+            file_put_contents($this->config, $update);
         }
-    }
-
-    /**
-     * Get the resource type stub file.
-     *
-     * @return string
-     */
-    protected function getStub()
-    {
-        $stub = $this->stubPath() . '/type.stub';
-
-        return $this->files->get($stub);
-    }
-
-    /**
-     * Populate the place-holders in the resource type stub.
-     *
-     * @param  string  $name
-     * @param  string|null  $value
-     * @param  string  $stub
-     * @return string
-     */
-    protected function populateStub($name, $value, $stub)
-    {
-        $stub = str_replace("{{ $name }}", $value, $stub);
-
-        return $stub;
-    }
-
-    /**
-     * Get the class name of a resource type name.
-     *
-     * @param  string  $name
-     * @return string
-     */
-    protected function getClassName($name)
-    {
-        return Str::studly($name);
-    }
-
-    /**
-     * Get the full path to the resource type.
-     *
-     * @param  string  $name
-     * @param  string  $path
-     * @return string
-     */
-    protected function getPath($name, $path)
-    {
-        return $path . '/' . $name . '.php';
-    }
-
-    /**
-     * Get the path to the stubs.
-     *
-     * @return string
-     */
-    public function stubPath()
-    {
-        return __DIR__ . '/../stubs';
-    }
-
-    /**
-     * Get the filesystem instance.
-     *
-     * @return \Illuminate\Filesystem\Filesystem
-     */
-    public function getFilesystem()
-    {
-        return $this->files;
     }
 }
