@@ -110,6 +110,23 @@ trait InteractsWithEndpoint
         return $fields;
     }
 
+    public function getOrderFields(): array
+    {
+        $exposedAttributes = $this->exposedAttributes ?? $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
+        $hiddenAttributes = $this->hiddenAttributes ?? [];
+        $attributes = array_values(array_diff($exposedAttributes, $hiddenAttributes));
+
+        $fields = [];
+        foreach ($attributes as $attribute) {
+            $fields[$attribute] = [
+                'name' => $attribute,
+                'type' => GraphQL::type('OrderByEnum')
+            ];
+        }
+
+        return $fields;
+    }
+
     public function typeName(): string
     {
         return str_replace('-', ' ', Str::of(get_called_class())->afterLast('\\')->kebab()->plural());
@@ -232,6 +249,11 @@ trait InteractsWithEndpoint
             })
             ->when(isset($args['take']), function ($query) use (&$args) {
                 return $query->take($args['take']);
+            })->when(isset($args['order_by']), function ($query) use (&$args) {
+                foreach ($args['order_by'] as $column => $direction) {
+                    $query = $query->orderBy($column, $direction);
+                }
+                return $query;
             })->get();
     }
 
@@ -244,6 +266,9 @@ trait InteractsWithEndpoint
             'where' => ['type' => GraphQL::type('UserInput')],
 
             'distinct' => ['name' => 'distinct', 'type' => Type::boolean()],
+
+            // Order
+            'order_by' => ['type' => GraphQL::type('UserOrder')],
 
             // Paginate
             'limit' => ['name' => 'limit', 'type' => Type::int()],
