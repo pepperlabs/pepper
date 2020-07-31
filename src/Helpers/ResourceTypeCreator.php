@@ -58,6 +58,16 @@ class ResourceTypeCreator
             $stub
         );
 
+        $config_file = config_path('graphql.php');
+        if (file_exists($config_file)) {
+            if (is_null(config('graphql.types.' . $name))) {
+                $pattern = "/([^\/]{2,}(\s*\'types\'\s*=>\s*\[\s*))/";
+                $class = strval('App\GraphQL\Types\Pepper\\' . $name . 'Type::class');
+                $update = preg_replace($pattern, "$0 '$name' => $class,\n        ", file_get_contents($config_file));
+                file_put_contents($config_file, $update);
+            }
+        }
+
         return $class;
     }
 

@@ -259,8 +259,6 @@ trait InteractsWithEndpoint
 
     public function queryArgs()
     {
-        // print_r($this);
-        // die();
         return [
             // Condition
             'where' => ['type' => GraphQL::type('UserInput')],
