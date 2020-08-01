@@ -101,8 +101,6 @@ trait InteractsWithEndpoint
         foreach ($attributes as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-
-                // User conditional input for correct type
                 'type' => GraphQL::type('ConditionInput')
             ];
         }

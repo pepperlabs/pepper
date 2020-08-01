@@ -4,66 +4,67 @@ declare(strict_types=1);
 
 namespace Amirmasoud\Pepper\GraphQL;
 
+use App\GraphQL\Unions\AnyUnion;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\InputType;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class ConditionInput extends InputType
 {
     protected $attributes = [
         'name' => 'ConditionInput',
-        'description' => 'An example input',
+        'description' => 'Available conditions',
     ];
 
     public function fields(): array
     {
         return [
-            // generate this file
             '_eq' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => 'A test field',
             ],
             '_neq' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_gt' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_lt' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_gte' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_lte' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_in' => [
-                'type' => Type::listOf(Type::int()),
+                'type' => Type::listOf(GraphQL::type('AnyScalar')),
                 'description' => '...',
             ],
             '_nin' => [
-                'type' => Type::listOf(Type::int()),
+                'type' => Type::listOf(GraphQL::type('AnyScalar')),
                 'description' => '...',
             ],
             '_like' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_nlike' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_ilike' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_nilike' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => '...',
             ],
             '_is_null' => [
@@ -71,23 +72,23 @@ class ConditionInput extends InputType
                 'description' => 'Checking for null values',
             ],
             '_date' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => 'Checking for date values',
             ],
             '_month' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => 'Checking for month values',
             ],
             '_day' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => 'Checking for day values',
             ],
             '_year' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => 'Checking for year values',
             ],
             '_time' => [
-                'type' => Type::string(),
+                'type' => GraphQL::type('AnyScalar'),
                 'description' => 'Checking for time values',
             ]
         ];
