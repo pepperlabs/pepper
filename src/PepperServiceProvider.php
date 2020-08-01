@@ -6,6 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Amirmasoud\Pepper\Commands\TypeCommand;
 use Amirmasoud\Pepper\Commands\QueryCommand;
 use Amirmasoud\Pepper\Commands\InputCommand;
+use Amirmasoud\Pepper\Commands\OrderCommand;
 
 class PepperServiceProvider extends ServiceProvider
 {
@@ -31,11 +32,13 @@ class PepperServiceProvider extends ServiceProvider
         $this->app->bind('command.pepper:queries', QueryCommand::class);
         $this->app->bind('command.pepper:types', TypeCommand::class);
         $this->app->bind('command.pepper:inputs', InputCommand::class);
+        $this->app->bind('command.pepper:orders', OrderCommand::class);
 
         $this->commands([
             'command.pepper:queries',
             'command.pepper:types',
             'command.pepper:inputs',
+            'command.pepper:orders',
         ]);
     }
 }

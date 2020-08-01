@@ -2,7 +2,7 @@
 
 namespace Amirmasoud\Pepper\Helpers;
 
-class ResourceInputCreator extends ResourceCreator
+class ResourceOrderCreator extends ResourceCreator
 {
     protected $path;
     protected $stub;
@@ -55,10 +55,10 @@ class ResourceInputCreator extends ResourceCreator
 
     protected function updateConfig($name)
     {
-        $name = strval($name . 'Input');
+        $name = strval($name . 'Order');
         if ($this->configKeyExists('graphql.types.' . $name)) {
             $pattern = "/([^\/]{2,}(\s*\'types\'\s*=>\s*\[\s*))/";
-            $class = strval('App\GraphQL\Inputs\Pepper\\' . $name . 'Input::class');
+            $class = strval('App\GraphQL\Inputs\Pepper\\' . $name . 'Order::class');
             $update = preg_replace($pattern, "$0 '$name' => $class,\n        ", file_get_contents($this->config));
             file_put_contents($this->config, $update);
         }
