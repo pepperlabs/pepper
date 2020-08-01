@@ -261,7 +261,7 @@ trait InteractsWithEndpoint
     {
         return [
             // Condition
-            'where' => ['type' => GraphQL::type('UserInput')],
+            'where' => ['type' => GraphQL::type($this->getTypeName() . 'Input')],
 
             'distinct' => ['name' => 'distinct', 'type' => Type::boolean()],
 
