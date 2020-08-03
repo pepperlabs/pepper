@@ -4,7 +4,9 @@ namespace Pepper;
 
 use ReflectionClass;
 
+use Rebing\GraphQL\Support\Facades\GraphQL as GraphQLBase;
 use Illuminate\Support\Facades\DB;
+use GraphQL\Type\Definition\Type;
 
 abstract class GraphQL
 {
@@ -24,7 +26,7 @@ abstract class GraphQL
      */
     private function getClassName(): string
     {
-        return (new ReflectionClass($this))->getShortName();
+        return class_basename($this);
     }
 
     /**
@@ -71,24 +73,31 @@ abstract class GraphQL
     }
 
     /**
-     * Get exposed fields.
+     * Get exposed GraphQL fields.
      *
      * @return array
      */
-    public function exposedFields(): array
+    public function getExposed(): array
     {
         if (property_exists($this, 'exposed')) {
             return $this->exposed;
         } else {
             $model = $this->newModel();
             $table = $model->getTable();
-            return $model->getConnection()
+            $columns = $model->getConnection()
                 ->getSchemaBuilder()
                 ->getColumnListing($table);
+            $relations = $this->getRelations();
+            return array_merge($columns, $relations);
         }
     }
 
-    public function coveredFields(): array
+    /**
+     * Get covered GraphQL fields.
+     *
+     * @return array
+     */
+    public function getCovered(): array
     {
         return property_exists($this, 'covered')
             ? $this->covered
@@ -100,9 +109,9 @@ abstract class GraphQL
      *
      * @return array
      */
-    public function fields(): array
+    public function getFields(): array
     {
-        return array_values(array_diff($this->exposedFields(), $this->coveredFields()));
+        return array_values(array_diff($this->getExposed(), $this->getCovered()));
     }
 
     /**
@@ -114,7 +123,7 @@ abstract class GraphQL
     {
         $fields = [];
 
-        foreach ($this->fields() as $attribute) {
+        foreach ($this->getFields() as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
                 'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($attribute))
@@ -210,31 +219,30 @@ abstract class GraphQL
         return $this->$method($field);
     }
 
-    public function endpointRelations(): array
+    public function getRelations(): array
     {
         $relations = [];
+        $supported = ['HasOne', 'HasMany', 'BelongsTo', 'BelongsToMany', 'MorphToMany', 'MorphTo'];
         foreach ($this->getModelMethods() as $method) {
-            $returnType = $method->getReturnType();
-            if ($returnType) {
-                if (in_array(class_basename($returnType->getName()), config('pepper.relations'))) {
-                    $relations[] = $method->name;
-                }
+            $type = $method->getReturnType();
+            if ($type && in_array(class_basename($type->getName()), $supported)) {
+                $relations[] = $method->name;
             }
         }
+        return $relations;
+    }
 
-        $exposedRelations = $this->exposedRelations ?? $relations;
-        $hiddenRelations = $this->hiddenRelations ?? [];
-        $relations = array_values(array_diff($exposedRelations, $hiddenRelations));
-
+    public function graphQLRelations(): array
+    {
         $fields = [];
-        foreach ($relations as $relation) {
-            $reflector = new \ReflectionClass($model);
-            $relationType = $reflector->getMethod($relation)->getReturnType()->getName();
+        foreach ($this->exposedRelations() as $relation) {
+            $model = $this->newModelReflection();
+            $relationType = $model->getMethod($relation)->getReturnType()->getName();
             $type = '';
             if ($relationType === BelongsTo::class) {
-                $type = GraphQL::type($this->getTypeName());
+                $type = GraphQLBase::type($this->getTypeName());
             } elseif ($relationType === HasMany::class) {
-                $type = Type::listOf(GraphQL::type($this->getTypeName()));
+                $type = Type::listOf(GraphQLBase::type($this->getTypeName()));
             }
 
             $fields[$relation] = [
@@ -247,5 +255,17 @@ abstract class GraphQL
         }
 
         return $fields;
+    }
+
+    /**
+     * Get array of exposed relations.
+     *
+     * @return array
+     */
+    private function exposedRelations(): array
+    {
+        $excluded = array_diff($this->getRelations(), $this->getCovered());
+        $included = array_intersect($excluded, $this->getExposed());
+        return array_values($included);
     }
 }
