@@ -18,11 +18,16 @@ trait InteractsWithEndpoint
         return $this->endpoint ?? true;
     }
 
-    public function endpointFields(): array
+    public function rawAttributes()
     {
         $exposedAttributes = $this->exposedAttributes ?? $this->getConnection()->getSchemaBuilder()->getColumnListing($this->getTable());
         $hiddenAttributes = $this->hiddenAttributes ?? [];
-        $attributes = array_values(array_diff($exposedAttributes, $hiddenAttributes));
+        return array_values(array_diff($exposedAttributes, $hiddenAttributes));
+    }
+
+    public function endpointFields(): array
+    {
+        $attributes = $this->rawAttributes();
 
         $fields = [];
         foreach ($attributes as $attribute) {

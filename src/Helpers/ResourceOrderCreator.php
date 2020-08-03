@@ -57,7 +57,7 @@ class ResourceOrderCreator extends ResourceCreator
     {
         $name = strval($name . 'Order');
         if ($this->configKeyExists('graphql.types.' . $name)) {
-            $pattern = "/([^\/]{2,}(\s*\'types\'\s*=>\s*\[\s*))/";
+            $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
             $class = strval('App\GraphQL\Inputs\Pepper\\' . $name . '::class');
             $update = preg_replace($pattern, "$0 '$name' => $class,\n        ", file_get_contents($this->config));
             file_put_contents($this->config, $update);

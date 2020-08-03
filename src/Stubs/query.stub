@@ -23,25 +23,25 @@ class {{ class }} extends Query
         'description' => '{{ description }}'
     ];
 
-    protected $modelInstance;
+    protected $instance;
 
     public function __construct()
     {
-        $this->modelInstance = new {{ model }};
+        $this->instance = new {{ model }};
     }
 
     public function type(): Type
     {
-        return $this->modelInstance->queryType();
+        return $this->instance->queryType();
     }
 
     public function args(): array
     {
-        return $this->modelInstance->queryArgs();
+        return $this->instance->queryArgs();
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return $this->modelInstance->queryResolve($root, $args, $context, $resolveInfo, $getSelectFields);
+        return $this->instance->queryResolve($root, $args, $context, $resolveInfo, $getSelectFields);
     }
 }

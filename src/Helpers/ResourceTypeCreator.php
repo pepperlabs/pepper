@@ -56,7 +56,7 @@ class ResourceTypeCreator extends ResourceCreator
     protected function updateConfig($name)
     {
         if ($this->configKeyExists('graphql.types.' . $name)) {
-            $pattern = "/([^\/]{2,}(\s*\'types\'\s*=>\s*\[\s*))/";
+            $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
             $class = strval('App\GraphQL\Types\Pepper\\' . $name . 'Type::class');
             $update = preg_replace($pattern, "$0 '$name' => $class,\n        ", file_get_contents($this->config));
             file_put_contents($this->config, $update);

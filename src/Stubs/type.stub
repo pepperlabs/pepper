@@ -14,15 +14,15 @@ class {{ class }} extends GraphQLType
         'description' => '{{ description }}'
     ];
 
-    protected $modelInstance;
+    protected $instance;
 
     public function __construct()
     {
-        $this->modelInstance = new {{ model }};
+        $this->instance = new {{ model }};
     }
 
     public function fields(): array
     {
-        return $this->modelInstance->getFields();
+        return $this->instance->getFields();
     }
 }

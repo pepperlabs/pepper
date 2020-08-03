@@ -57,7 +57,7 @@ class ResourceQueryCreator extends ResourceCreator
     {
         if ($this->configKeyExists('graphql.schemas.default.query.' . $name)) {
             $class = strval('App\GraphQL\Queries\Pepper\\' . $name . 'Query::class');
-            $pattern = "/(\s*\'schemas\'\s*=>\s*\[\s*\'default\'\s*=>\s*\[\s*\'query\'\s*=>\s*\[\s*)/";
+            $pattern = '/\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*/';
             $replace = "$0 '$name' => $class,\n                ";
             $update = preg_replace($pattern, $replace, file_get_contents($this->config));
             file_put_contents($this->config, $update);

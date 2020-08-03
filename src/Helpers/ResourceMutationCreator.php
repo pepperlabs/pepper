@@ -2,13 +2,13 @@
 
 namespace Amirmasoud\Pepper\Helpers;
 
-class ResourceInputCreator extends ResourceCreator
+class ResourceMutationCreator extends ResourceCreator
 {
     protected $path;
     protected $stub;
 
     /**
-     * Create a new resource query creator instance.
+     * Create a new resource mutation creator instance.
      *
      * @param  string  $customStubPath
      * @return void
@@ -17,8 +17,8 @@ class ResourceInputCreator extends ResourceCreator
     {
         Parent::__construct();
 
-        $this->path = app_path('GraphQL/Inputs/Pepper');
-        $this->stub = '/input.stub';
+        $this->path = app_path('GraphQL/Mutations/Pepper');
+        $this->stub = '/mutation.stub';
     }
 
     /**
@@ -55,11 +55,11 @@ class ResourceInputCreator extends ResourceCreator
 
     protected function updateConfig($name)
     {
-        $name = strval($name . 'Input');
-        if ($this->configKeyExists('graphql.types.' . $name)) {
-            $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
-            $class = strval('App\GraphQL\Inputs\Pepper\\' . $name . '::class');
-            $update = preg_replace($pattern, "$0 '$name' => $class,\n        ", file_get_contents($this->config));
+        if ($this->configKeyExists('graphql.schemas.default.mutation.' . $name)) {
+            $class = strval('App\GraphQL\Mutations\Pepper\\' . $name . 'Mutation::class');
+            $pattern = '/(\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*[^"]+?(?=["\']mutation["\'])["\']mutation["\']\s*=>\s*\[\s*)/';
+            $replace = "$0 '$name' => $class,\n                ";
+            $update = preg_replace($pattern, $replace, file_get_contents($this->config));
             file_put_contents($this->config, $update);
         }
     }
