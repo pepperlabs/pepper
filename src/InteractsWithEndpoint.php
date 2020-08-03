@@ -1,14 +1,14 @@
 <?php
 
-namespace Amirmasoud\Pepper;
+namespace Pepper;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use GraphQL\Type\Definition\ResolveInfo;
 use Illuminate\Support\Facades\DB;
 use GraphQL\Type\Definition\Type;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Str;
-use GraphQL\Type\Definition\ResolveInfo;
 use Closure;
 
 trait InteractsWithEndpoint
@@ -30,12 +30,14 @@ trait InteractsWithEndpoint
         $attributes = $this->rawAttributes();
 
         $fields = [];
+
         foreach ($attributes as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
                 'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($attribute))
             ];
         }
+
         return $fields;
     }
 
@@ -76,8 +78,34 @@ trait InteractsWithEndpoint
                 }
             ];
         }
+
+        foreach (['count', 'sum', 'avg', 'max', 'min'] as $aggregator) {
+            // foreach ($this->rawAttributes() as $attribute) {
+            //     $fields[$attribute . '_aggregate'] = [
+            //         'name' => $relation,
+            //         'type' => $type,
+            //         'resolve' => function ($root, $args) use ($relation) {
+            //             return $root->{$relation};
+            //         }
+            //     ];
+
+            //     if (method_exists($this, $attribute . '_aggregate')) {
+            //     }
+            // }
+            // $fields[$relation] = [
+            //     'name' => 'aggregate',
+            //     'type' => \Rebing\GraphQL\Support\Facades\GraphQL::type('Aggregate'),
+            //     'resolve' => function ($root, $args) use ($relation) {
+            //         return $root->pepperAggregate();
+            //     }
+            // ];
+        }
         return $fields;
     }
+
+    // public function pepperAggregate()
+    // {
+    // }
 
     public function guessFieldType(string $field): string
     {

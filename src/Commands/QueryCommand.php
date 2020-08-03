@@ -1,10 +1,10 @@
 <?php
 
-namespace Amirmasoud\Pepper\Commands;
+namespace Pepper\Commands;
 
-use Amirmasoud\Pepper\HasEndpoint;
+use Pepper\HasEndpoint;
 use App;
-use Amirmasoud\Pepper\Helpers\ResourceQueryCreator;
+use Pepper\Helpers\ResourceQueryCreator;
 use Illuminate\Filesystem\Filesystem;
 use HaydenPierce\ClassFinder\ClassFinder;
 

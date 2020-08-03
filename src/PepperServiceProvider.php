@@ -1,13 +1,13 @@
 <?php
 
-namespace Amirmasoud\Pepper;
+namespace Pepper;
 
 use Illuminate\Support\ServiceProvider;
-use Amirmasoud\Pepper\Commands\TypeCommand;
-use Amirmasoud\Pepper\Commands\QueryCommand;
-use Amirmasoud\Pepper\Commands\InputCommand;
-use Amirmasoud\Pepper\Commands\OrderCommand;
-use Amirmasoud\Pepper\Commands\MutationCommand;
+use Pepper\Commands\TypeCommand;
+use Pepper\Commands\QueryCommand;
+use Pepper\Commands\InputCommand;
+use Pepper\Commands\OrderCommand;
+use Pepper\Commands\MutationCommand;
 
 class PepperServiceProvider extends ServiceProvider
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace Amirmasoud\Pepper\Commands;
+namespace Pepper\Commands;
 
-use Amirmasoud\Pepper\HasEndpoint;
-use Amirmasoud\Pepper\Helpers\ResourceInputCreator;
+use Pepper\HasEndpoint;
+use Pepper\Helpers\ResourceInputCreator;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Filesystem\Filesystem;
 

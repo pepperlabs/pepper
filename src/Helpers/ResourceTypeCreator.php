@@ -1,6 +1,6 @@
 <?php
 
-namespace Amirmasoud\Pepper\Helpers;
+namespace Pepper\Helpers;
 
 class ResourceTypeCreator extends ResourceCreator
 {

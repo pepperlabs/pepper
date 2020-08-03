@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Amirmasoud\Pepper\GraphQL;
+namespace Pepper\GraphQL;
 
 use App\GraphQL\Unions\AnyUnion;
 use GraphQL\Type\Definition\Type;

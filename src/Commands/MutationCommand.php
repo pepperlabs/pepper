@@ -1,10 +1,10 @@
 <?php
 
-namespace Amirmasoud\Pepper\Commands;
+namespace Pepper\Commands;
 
-use Amirmasoud\Pepper\HasEndpoint;
+use Pepper\HasEndpoint;
 use App;
-use Amirmasoud\Pepper\Helpers\ResourceMutationCreator;
+use Pepper\Helpers\ResourceMutationCreator;
 use Illuminate\Filesystem\Filesystem;
 use HaydenPierce\ClassFinder\ClassFinder;
 
