@@ -17,13 +17,6 @@ abstract class ResourceCreator
 
     protected $config;
 
-    /**
-     * Create a new resource query creator instance.
-     *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  string  $customStubPath
-     * @return void
-     */
     public function __construct()
     {
         $this->files = new Filesystem;
@@ -37,15 +30,6 @@ abstract class ResourceCreator
         return file_exists($this->config) && is_null(config($key));
     }
 
-    /**
-     * Ensure that a migration with the given name doesn't already exist.
-     *
-     * @param  string  $name
-     * @param  string  $migrationPath
-     * @return void
-     *
-     * @throws \InvalidArgumentException
-     */
     protected function resetResourceClass($name, $resourcePath = null)
     {
         if (!empty($resourcePath)) {

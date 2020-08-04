@@ -1,0 +1,9 @@
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+
+class {{ class }} extends GraphQL
+{
+}

@@ -4,26 +4,18 @@ namespace Pepper;
 
 use ReflectionClass;
 
-use Rebing\GraphQL\Support\Facades\GraphQL as GraphQLBase;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Pepper\Helpers\GraphQLMutation;
 use Illuminate\Support\Facades\DB;
-use GraphQL\Type\Definition\Type;
+use Pepper\Helpers\GraphQLQuery;
+use Pepper\Helpers\GraphQLInput;
+use Pepper\Helpers\GraphQLOrder;
+use Pepper\Helpers\GraphQLType;
 use Illuminate\Support\Str;
 
 abstract class GraphQL
 {
+    use GraphQLType, GraphQLQuery, GraphQLInput, GraphQLOrder, GraphQLMutation;
+
     /** @var object */
     // protected $model;
 
@@ -89,9 +81,10 @@ abstract class GraphQL
     /**
      * Get exposed GraphQL fields.
      *
+     * @param  bool $withRelations whether include relation or not
      * @return array
      */
-    public function getExposed(): array
+    public function getExposed(bool $withRelations = true): array
     {
         if (property_exists($this, 'exposed')) {
             return $this->exposed;
@@ -101,7 +94,7 @@ abstract class GraphQL
             $columns = $model->getConnection()
                 ->getSchemaBuilder()
                 ->getColumnListing($table);
-            $relations = $this->getRelations();
+            $relations = $withRelations ? $this->getRelations() : [];
             return array_merge($columns, $relations);
         }
     }
@@ -121,30 +114,12 @@ abstract class GraphQL
     /**
      * List of model fields.
      *
+     * @param  bool $withRelations
      * @return array
      */
-    public function getFields(): array
+    public function getFields(bool $withRelations = true): array
     {
-        return array_values(array_diff($this->getExposed(), $this->getCovered()));
-    }
-
-    /**
-     * Generate GraphQL fields with field types.
-     *
-     * @return array
-     */
-    public function graphQLFields(): array
-    {
-        $fields = [];
-
-        foreach ($this->getFields() as $attribute) {
-            $fields[$attribute] = [
-                'name' => $attribute,
-                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($attribute))
-            ];
-        }
-
-        return $fields;
+        return array_values(array_diff($this->getExposed($withRelations), $this->getCovered()));
     }
 
     /**
@@ -233,6 +208,11 @@ abstract class GraphQL
         return $this->$method($field);
     }
 
+    /**
+     * List of available relations in the model.
+     *
+     * @return array
+     */
     public function getRelations(): array
     {
         $relations = [];
@@ -248,49 +228,6 @@ abstract class GraphQL
             }
         }
         return $relations;
-    }
-
-    public function graphQLRelations(): array
-    {
-        $fields = [];
-        foreach ($this->exposedRelations() as $relation) {
-            $model = $this->newModelReflection();
-            $relationType = $model->getMethod($relation)->getReturnType()->getName();
-            $type = '';
-            if ($relationType === BelongsTo::class) {
-                $type = GraphQLBase::type($this->getTypeName());
-            } elseif (in_array($relationType, [
-                BelongsToMany::class,
-                HasMany::class,
-                HasManyThrough::class,
-                HasOne::class,
-                HasOneOrMany::class,
-                HasOneThrough::class,
-                MorphMany::class,
-                MorphOne::class,
-                MorphOneOrMany::class,
-                MorphPivot::class,
-                MorphTo::class,
-                MorphToMany::class
-            ])) {
-                $type = Type::listOf(GraphQLBase::type($this->getTypeName()));
-            }
-
-            $fields[$relation] = [
-                'name' => $relation,
-                'type' => $type,
-                'resolve' => function ($root, $args) use ($relation) {
-                    $method = 'set' . Str::of($relation)->studly() . 'Relation';
-                    if (method_exists($this, $method)) {
-                        $this->$method($root, $args);
-                    } else {
-                        return $root->$relation();
-                    }
-                }
-            ];
-        }
-
-        return $fields;
     }
 
     /**
@@ -316,132 +253,7 @@ abstract class GraphQL
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName());
         } else {
-            return Str::of($this->getClassName())->lower();
-        }
-    }
-
-    /**
-     * Get GraphQL Type name.
-     *
-     * @return string
-     */
-    public function getTypeName(): string
-    {
-        $method = 'setTypeName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName();
-        }
-    }
-
-    /**
-     * Get GraphQL Query name.
-     *
-     * @return string
-     */
-    public function getQueryName(): string
-    {
-        $method = 'setQueryName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName();
-        }
-    }
-
-    /**
-     * Get GraphQL Input name.
-     *
-     * @return string
-     */
-    public function getInputName(): string
-    {
-        $method = 'setInputName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName() . 'Input';
-        }
-    }
-
-    /**
-     * Get GraphQL Order name.
-     *
-     * @return string
-     */
-    public function getOrderName(): string
-    {
-        $method = 'setOrderName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName() . 'Order';
-        }
-    }
-
-    /**
-     * Get GraphQL Mutation name.
-     *
-     * @return string
-     */
-    public function getMutationName(): string
-    {
-        $method = 'setMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName();
-        }
-    }
-
-    public function getTypeDescription(): string
-    {
-        $method = 'setTypeDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName() . ' type description.';
-        }
-    }
-
-    public function getQueryDescription(): string
-    {
-        $method = 'setQueryDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName() . ' query description.';
-        }
-    }
-
-    public function getInputDescription(): string
-    {
-        $method = 'setInputDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName() . ' input description.';
-        }
-    }
-
-    public function getOrderDescription(): string
-    {
-        $method = 'setOrderDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName() . ' order description.';
-        }
-    }
-
-    public function getMutationDescription(): string
-    {
-        $method = 'setMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName() . ' mutation description.';
+            return Str::of($this->getClassName())->studly();
         }
     }
 }

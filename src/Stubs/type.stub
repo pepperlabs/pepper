@@ -10,7 +10,7 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 class {{ class }} extends GraphQLType
 {
     protected $attributes = [
-        'name' => '{{ name }}',
+        'name' => '{{ name }}Type',
         'description' => '{{ description }}'
     ];
 
@@ -23,6 +23,6 @@ class {{ class }} extends GraphQLType
 
     public function fields(): array
     {
-        return $this->instance->getFields();
+        return $this->instance->getTypeFields();
     }
 }

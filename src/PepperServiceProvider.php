@@ -8,6 +8,7 @@ use Pepper\Commands\QueryCommand;
 use Pepper\Commands\InputCommand;
 use Pepper\Commands\OrderCommand;
 use Pepper\Commands\MutationCommand;
+use Pepper\Commands\AddCommand;
 
 class PepperServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,7 @@ class PepperServiceProvider extends ServiceProvider
         $this->app->bind('command.pepper:inputs', InputCommand::class);
         $this->app->bind('command.pepper:orders', OrderCommand::class);
         $this->app->bind('command.pepper:mutations', MutationCommand::class);
+        $this->app->bind('command.pepper:add', AddCommand::class);
 
         $this->commands([
             'command.pepper:queries',
@@ -42,6 +44,7 @@ class PepperServiceProvider extends ServiceProvider
             'command.pepper:inputs',
             'command.pepper:orders',
             'command.pepper:mutations',
+            'command.pepper:add',
         ]);
     }
 }

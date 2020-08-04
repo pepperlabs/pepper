@@ -1,25 +1,19 @@
 <?php
 
-/**
- * CHANGES TO THIS FILE WILL BE OVERWRITTEN. THIS FILE IS FOR YOUR REFERENCE.
- */
-
 declare(strict_types=1);
 
 namespace App\GraphQL\Queries\Pepper;
 
-use App;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\ResolveInfo;
-use Rebing\GraphQL\Support\SelectFields;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Query;
 use Closure;
+use App;
 
 class {{ class }} extends Query
 {
     protected $attributes = [
-        'name' => '{{ name }}',
+        'name' => '{{ name }}Query',
         'description' => '{{ description }}'
     ];
 
@@ -32,16 +26,16 @@ class {{ class }} extends Query
 
     public function type(): Type
     {
-        return $this->instance->queryType();
+        return $this->instance->getQueryType();
     }
 
     public function args(): array
     {
-        return $this->instance->queryArgs();
+        return $this->instance->getQueryArgs();
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return $this->instance->queryResolve($root, $args, $context, $resolveInfo, $getSelectFields);
+        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace Pepper;
+namespace Pepper\Concerns;
 
 interface HasEndpoint
 {
