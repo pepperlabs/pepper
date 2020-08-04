@@ -2,6 +2,7 @@
 
 namespace Pepper\Helpers;
 
+use Facade\Ignition\QueryRecorder\Query;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,8 +17,10 @@ use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Str;
+use Closure;
 
 trait GraphQLType
 {
@@ -84,7 +87,7 @@ trait GraphQLType
             $relationType = $model->getMethod($relation)->getReturnType()->getName();
             $type = '';
             if ($relationType === BelongsTo::class) {
-                $type = GraphQL::type($this->getTypeName());
+                $type = Type::listOf(GraphQL::type($this->getTypeName()));
             } elseif (in_array($relationType, [
                 BelongsToMany::class,
                 HasMany::class,
@@ -105,17 +108,10 @@ trait GraphQLType
             $fields[$relation] = [
                 'name' => $relation,
                 'type' => $type,
-                'resolve' => function ($root, $args) use ($relation, $relationType) {
-                    $method = 'set' . Str::of($relation)->studly() . 'Relation';
-                    if (method_exists($this, $method)) {
-                        $this->$method($root, $args);
-                    } else {
-                        if ($relationType === BelongsTo::class) {
-                            return $root->$relation()->first();
-                        } else {
-                            return $root->$relation()->get();
-                        }
-                    }
+                'args' => $this->getQueryArgs(),
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                    return $this->getQueryResolve($root, $args, $context, $resolveInfo, function () {
+                    });
                 }
             ];
         }
