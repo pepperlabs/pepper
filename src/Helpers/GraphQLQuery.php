@@ -2,23 +2,9 @@
 
 namespace Pepper\Helpers;
 
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
-use Illuminate\Support\Str;
 use Closure;
 
 trait GraphQLQuery
@@ -68,82 +54,7 @@ trait GraphQLQuery
         return $this->newModel()->when(isset($args['where']), function ($query) use (&$args) {
             foreach ($args['where'] as $field => $criteria) {
                 foreach ($criteria as $operation => $value) {
-                    switch ($operation) {
-                        case '_eq':
-                            $query = $query->where($field, '=', $value);
-                            break;
-
-                        case '_neq':
-                            $query = $query->where($field, '!=', $value);
-                            break;
-
-                        case '_gt':
-                            $query = $query->where($field, '>', $value);
-                            break;
-
-                        case '_lt':
-                            $query = $query->where($field, '<', $value);
-                            break;
-
-                        case '_gte':
-                            $query = $query->where($field, '>=', $value);
-                            break;
-
-                        case '_lte':
-                            $query = $query->where($field, '<=', $value);
-                            break;
-
-                        case '_in':
-                            $query = $query->whereIn($field, $value);
-                            break;
-
-                        case '_nin':
-                            $query = $query->whereNotIn($field, $value);
-                            break;
-
-                        case '_like':
-                            $query = $query->where($field, 'like', $value);
-                            break;
-
-                        case '_nlike':
-                            $query = $query->where($field, 'not like', $value);
-                            break;
-
-                        case '_ilike':
-                            $query = $query->where($field, 'ilike', $value);
-                            break;
-
-                        case '_nilike':
-                            $query = $query->where($field, 'not ilike', $value);
-                            break;
-
-                        case '_is_null':
-                            $query = $value ? $query->whereNull($field) : $query->whereNotNull($field);
-                            break;
-
-                        case '_date':
-                            $query = $query->whereDate($field, $value);
-                            break;
-
-                        case '_month':
-                            $query = $query->whereMonth($field, $value);
-                            break;
-
-                        case '_day':
-                            $query = $query->whereDay($field, $value);
-                            break;
-
-                        case '_year':
-                            $query = $query->whereYear($field, $value);
-                            break;
-
-                        case '_time':
-                            $query = $query->whereTime($field, $value);
-                            break;
-
-                        default:
-                            break;
-                    }
+                    $query = $this->executeCondition($query, $operation, $field, $value);
                 }
             }
             return $query;
@@ -165,6 +76,72 @@ trait GraphQLQuery
                 }
                 return $query;
             })->get();
+    }
+
+    private function executeCondition($query, $operation, $field, $value)
+    {
+        switch ($operation) {
+            case '_eq':
+                return $query->where($field, '=', $value);
+
+            case '_neq':
+                return $query->where($field, '!=', $value);
+
+            case '_gt':
+                return $query->where($field, '>', $value);
+
+            case '_lt':
+                return $query->where($field, '<', $value);
+
+            case '_gte':
+                return $query->where($field, '>=', $value);
+
+            case '_lte':
+                return $query->where($field, '<=', $value);
+
+            case '_in':
+                return $query->whereIn($field, $value);
+
+            case '_nin':
+                return $query->whereNotIn($field, $value);
+
+            case '_like':
+                return $query->where($field, 'like', $value);
+
+            case '_nlike':
+                return $query->where($field, 'not like', $value);
+
+            case '_ilike':
+                return $query->where($field, 'ilike', $value);
+
+            case '_nilike':
+                return $query->where($field, 'not ilike', $value);
+
+            case '_is_null':
+                return $value ? $query->whereNull($field) : $query->whereNotNull($field);
+
+            case '_date':
+                return $query->whereDate($field, $value);
+
+            case '_month':
+                return $query->whereMonth($field, $value);
+
+            case '_day':
+                return $query->whereDay($field, $value);
+
+            case '_year':
+                return $query->whereYear($field, $value);
+
+            case '_time':
+                return $query->whereTime($field, $value);
+
+            default:
+                return $query->whereHas($field, function ($q) use ($value, $operation) {
+                    foreach ($value as $nestedOperation => $nestedValue) {
+                        $this->executeCondition($q, $nestedOperation, $operation, $nestedValue);
+                    }
+                });
+        }
     }
 
     public function getQueryArgs()
@@ -194,53 +171,5 @@ trait GraphQLQuery
     public function getQueryType(): Type
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
-    }
-
-    /**
-     * Get graphQL query relations.
-     *
-     * @return array
-     */
-    public function getQueryRelations(): array
-    {
-        $fields = [];
-        foreach ($this->exposedRelations() as $relation) {
-            $model = $this->newModelReflection();
-            $relationType = $model->getMethod($relation)->getReturnType()->getName();
-            $type = '';
-            if ($relationType === BelongsTo::class) {
-                $type = GraphQL::type($this->getTypeName());
-            } elseif (in_array($relationType, [
-                BelongsToMany::class,
-                HasMany::class,
-                HasManyThrough::class,
-                HasOne::class,
-                HasOneOrMany::class,
-                HasOneThrough::class,
-                MorphMany::class,
-                MorphOne::class,
-                MorphOneOrMany::class,
-                MorphPivot::class,
-                MorphTo::class,
-                MorphToMany::class
-            ])) {
-                $type = Type::listOf(GraphQL::type($this->getTypeName()));
-            }
-
-            $fields[$relation] = [
-                'name' => $relation,
-                'type' => $type,
-                'resolve' => function ($root, $args) use ($relation) {
-                    $method = 'set' . Str::of($relation)->studly() . 'Relation';
-                    if (method_exists($this, $method)) {
-                        $this->$method($root, $args);
-                    } else {
-                        return $root->$relation();
-                    }
-                }
-            ];
-        }
-
-        return $fields;
     }
 }

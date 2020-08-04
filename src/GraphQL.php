@@ -4,6 +4,7 @@ namespace Pepper;
 
 use ReflectionClass;
 
+use Pepper\Helpers\GraphQLAggregate;
 use Pepper\Helpers\GraphQLMutation;
 use Illuminate\Support\Facades\DB;
 use Pepper\Helpers\GraphQLQuery;
@@ -14,7 +15,7 @@ use Illuminate\Support\Str;
 
 abstract class GraphQL
 {
-    use GraphQLType, GraphQLQuery, GraphQLInput, GraphQLOrder, GraphQLMutation;
+    use GraphQLType, GraphQLQuery, GraphQLInput, GraphQLOrder, GraphQLMutation, GraphQLAggregate;
 
     /** @var object */
     // protected $model;

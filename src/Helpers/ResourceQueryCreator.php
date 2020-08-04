@@ -2,6 +2,8 @@
 
 namespace Pepper\Helpers;
 
+use Illuminate\Support\Str;
+
 class ResourceQueryCreator extends ResourceCreator
 {
     protected $path;
@@ -55,6 +57,7 @@ class ResourceQueryCreator extends ResourceCreator
 
     protected function updateConfig($name)
     {
+        $name = Str::of($name)->snake();
         if ($this->configKeyExists('graphql.schemas.default.query.' . $name)) {
             $class = strval('App\GraphQL\Queries\Pepper\\' . $name . 'Query::class');
             $pattern = '/\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*/';

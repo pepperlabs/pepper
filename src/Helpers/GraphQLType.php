@@ -2,6 +2,23 @@
 
 namespace Pepper\Helpers;
 
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
+use Illuminate\Database\Eloquent\Relations\HasOneThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Rebing\GraphQL\Support\Facades\GraphQL;
+use GraphQL\Type\Definition\Type;
+use Illuminate\Support\Str;
+
 trait GraphQLType
 {
     /**
@@ -21,7 +38,7 @@ trait GraphQLType
             ];
         }
 
-        return $fields;
+        return array_merge($fields, $this->getTypeRelations());
     }
 
     /**
@@ -52,5 +69,57 @@ trait GraphQLType
         } else {
             return $this->getName() . ' type description.';
         }
+    }
+
+    /**
+     * Get graphQL query relations.
+     *
+     * @return array
+     */
+    public function getTypeRelations(): array
+    {
+        $fields = [];
+        foreach ($this->exposedRelations() as $relation) {
+            $model = $this->newModelReflection();
+            $relationType = $model->getMethod($relation)->getReturnType()->getName();
+            $type = '';
+            if ($relationType === BelongsTo::class) {
+                $type = GraphQL::type($this->getTypeName());
+            } elseif (in_array($relationType, [
+                BelongsToMany::class,
+                HasMany::class,
+                HasManyThrough::class,
+                HasOne::class,
+                HasOneOrMany::class,
+                HasOneThrough::class,
+                MorphMany::class,
+                MorphOne::class,
+                MorphOneOrMany::class,
+                MorphPivot::class,
+                MorphTo::class,
+                MorphToMany::class
+            ])) {
+                $type = Type::listOf(GraphQL::type($this->getTypeName()));
+            }
+
+            $fields[$relation] = [
+                'name' => $relation,
+                'type' => $type,
+                'resolve' => function ($root, $args) use ($relation, $relationType) {
+                    $method = 'set' . Str::of($relation)->studly() . 'Relation';
+                    if (method_exists($this, $method)) {
+                        $this->$method($root, $args);
+                    } else {
+                        if ($relationType === BelongsTo::class) {
+                            return $root->$relation()->first();
+                        } else {
+                            return $root->$relation()->get();
+                        }
+                    }
+                }
+            ];
+        }
+
+        return $fields;
     }
 }

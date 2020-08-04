@@ -10,7 +10,7 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 class AggregateType extends GraphQLType
 {
     protected $attributes = [
-        'name' => 'Aggregate',
+        'name' => 'AggregateType',
         'description' => 'A type'
     ];
 
@@ -20,16 +20,10 @@ class AggregateType extends GraphQLType
             'count' => [
                 'type' => Type::int(),
                 'selectable' => false,
-            ],
-            'sum' => [
-                'type' => Type::listOf(\Rebing\GraphQL\Support\Facades\GraphQL::type('User')),
-                'selectable' => false,
+                'resolve' => function ($root, $args) {
+                    return 999;
+                }
             ]
         ];
-    }
-
-    protected function resolveCountField($root, $args)
-    {
-        dd(1);
     }
 }

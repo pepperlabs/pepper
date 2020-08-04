@@ -3,6 +3,8 @@
 namespace Pepper\Helpers;
 
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use GraphQL\Type\Definition\Type;
+use Illuminate\Support\Str;
 
 trait GraphQLInput
 {
@@ -10,11 +12,20 @@ trait GraphQLInput
     {
         $fields = [];
 
+        $relations = $this->getRelations();
         foreach ($this->getFields() as $attribute) {
-            $fields[$attribute] = [
-                'name' => $attribute,
-                'type' => GraphQL::type('ConditionInput')
-            ];
+            if (in_array($attribute, $relations)) {
+                $fields[$attribute] = [
+                    'name' => $attribute,
+                    /** @todo FIX the type name */
+                    'type' => GraphQL::type(Str::of($attribute)->singular()->studly() . 'Input')
+                ];
+            } else {
+                $fields[$attribute] = [
+                    'name' => $attribute,
+                    'type' => GraphQL::type('ConditionInput')
+                ];
+            }
         }
 
         return $fields;

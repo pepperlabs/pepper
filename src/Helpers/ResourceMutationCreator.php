@@ -2,6 +2,8 @@
 
 namespace Pepper\Helpers;
 
+use Illuminate\Support\Str;
+
 class ResourceMutationCreator extends ResourceCreator
 {
     protected $path;
@@ -55,6 +57,7 @@ class ResourceMutationCreator extends ResourceCreator
 
     protected function updateConfig($name)
     {
+        $name = Str::of($name)->snake();
         if ($this->configKeyExists('graphql.schemas.default.mutation.' . $name)) {
             $class = strval('App\GraphQL\Mutations\Pepper\\' . $name . 'Mutation::class');
             $pattern = '/(\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*[^"]+?(?=["\']mutation["\'])["\']mutation["\']\s*=>\s*\[\s*)/';
