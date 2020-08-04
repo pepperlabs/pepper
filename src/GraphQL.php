@@ -63,7 +63,7 @@ abstract class GraphQL
      *
      * @return object
      */
-    private function newModel(): object
+    public function newModel(): object
     {
         return $this->newModelReflection()->newInstanceArgs();
     }
@@ -255,5 +255,10 @@ abstract class GraphQL
         } else {
             return Str::of($this->getClassName())->studly();
         }
+    }
+
+    public function call_field_type(string $field)
+    {
+        return call_user_func('\GraphQL\Type\Definition\Type::' . $this->getFieldType($field));
     }
 }

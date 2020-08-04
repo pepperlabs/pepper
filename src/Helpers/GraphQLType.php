@@ -17,7 +17,7 @@ trait GraphQLType
         foreach ($this->getFields(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => call_user_func('\GraphQL\Type\Definition\Type::' . $this->guessFieldType($attribute))
+                'type' => $this->call_field_type($attribute)
             ];
         }
 

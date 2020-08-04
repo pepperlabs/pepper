@@ -45,7 +45,7 @@ trait GraphQLMutation
         foreach ($this->getFields(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => GraphQL::type('OrderByEnum')
+                'type' => $this->call_field_type($attribute)
             ];
         }
 
