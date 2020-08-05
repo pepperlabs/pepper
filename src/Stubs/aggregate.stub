@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace App\GraphQL\Types\Pepper;
 
 use App;
+use Closure;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class {{ class }} extends GraphQLType
@@ -30,11 +32,28 @@ class {{ class }} extends GraphQLType
                 'type' => Type::int(),
                 'selectable' => false,
                 'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
-                    return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, function () {
-                        /** */
-                    })->count();
-                }
-            ]
+                    if (method_exists($root['root'], $root['name'])) {
+                        return $root['root']->{$root['name']}->count();
+                    } else {
+                        return 1;
+                    }
+                },
+            ],
+            'sum' => [
+                'type' => GraphQL::type('TagType'),
+                'selectable' => false,
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                    // print_r($getSelectFields);
+                    // die();
+                    // return $root['root']->{$root['name']}->sum('id');
+                    // print_r($root['root']->{$root['name']}->sum('id'));
+                    // if (method_exists($root['root'], $root['name'])) {
+                    //     return $root['root']->{$root['name']}->count();
+                    // } else {
+                    //     return 1;
+                    // }
+                },
+            ],
         ];
     }
 }

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\GraphQL\Types\Pepper;
 
 use App;
+use Closure;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
@@ -30,12 +32,12 @@ class {{ class }} extends GraphQLType
                 'selectable' => false,
                 'type' => GraphQL::type('{{ name }}AggregateType'),
                 'selectable' => false,
-                'resolve' => function ($root, $args) {
-                    return [];
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                    return $root;
                 }
             ],
             // 'nodes' => [
-            //     'type' => GraphQL::type('UserType'),
+            //     'type' => GraphQL::type('{{ name }}Type'),
             //     'selectable' => false,
             // ]
         ];

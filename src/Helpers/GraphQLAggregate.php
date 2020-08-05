@@ -2,7 +2,9 @@
 
 namespace Pepper\Helpers;
 
+use Closure;
 use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait GraphQLAggregate
@@ -17,7 +19,7 @@ trait GraphQLAggregate
                 'type' => GraphQL::type($this->getName() . 'FieldAggregateType'),
                 'selectable' => false,
                 'args' => $this->getQueryArgs(),
-                'resolve' => function ($root, $args) use ($attribute) {
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) use ($attribute) {
                     return ['root' => $root, 'args' => $args, 'name' => $attribute];
                 }
             ];
