@@ -41,7 +41,7 @@ trait GraphQLType
             ];
         }
 
-        return array_merge($fields, $this->getTypeRelations());
+        return array_merge($fields, $this->getTypeRelations(), $this->getAggregatedFields());
     }
 
     /**

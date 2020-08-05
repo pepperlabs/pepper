@@ -10,6 +10,8 @@ use Pepper\Helpers\ResourceInputCreator;
 use Pepper\Helpers\ResourceOrderCreator;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Pepper\Helpers\ResourceMutationCreator;
+use Pepper\Helpers\ResourceAggregateCreator;
+use Pepper\Helpers\ResourceFieldAggregateCreator;
 
 class AddCommand extends BaseCommand
 {
@@ -74,5 +76,13 @@ class AddCommand extends BaseCommand
         // create mutation
         $rq = new ResourceMutationCreator($fs);
         $rq->create($instance->getMutationName(), $instance->getName(), $instance->getMutationDescription(), $model);
+
+        // field aggregate
+        $rq = new ResourceFieldAggregateCreator($fs);
+        $rq->create($instance->getFieldAggregateName(), $instance->getName(), $instance->getFieldAggregateDescription(), $model);
+
+        // aggregate
+        $rq = new ResourceAggregateCreator($fs);
+        $rq->create($instance->getAggregateName(), $instance->getName(), $instance->getAggregateDescription(), $model);
     }
 }

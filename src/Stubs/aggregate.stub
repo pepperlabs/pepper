@@ -2,24 +2,25 @@
 
 declare(strict_types=1);
 
-namespace Pepper\GraphQL;
+namespace App\GraphQL\Types\Pepper;
 
+use App;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class AggregateType extends GraphQLType
+class {{ class }} extends GraphQLType
 {
     protected $attributes = [
-        'name' => 'AggregateType',
-        'description' => 'A type'
+        'name' => '{{ name }}AggregateType',
+        'description' => '{{ description }}'
     ];
 
     protected $instance;
 
     public function __construct()
     {
-        $this->instance = new \App\Http\Pepper\User;
+        $this->instance = new {{ model }};
     }
 
     public function fields(): array

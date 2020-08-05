@@ -11,10 +11,10 @@ trait GraphQLAggregate
     {
         $fields = [];
 
-        foreach ($this->getFields(false) as $attribute) {
+        foreach ($this->getFields() as $attribute) {
             $fields[$attribute . '_aggregate'] = [
                 'name' => $attribute . '_aggregate',
-                'type' => GraphQL::type('FieldAggregateType'),
+                'type' => GraphQL::type($this->getName() . 'FieldAggregateType'),
                 'selectable' => false,
                 'resolve' => function ($root, $args) {
                     return [];
@@ -23,5 +23,25 @@ trait GraphQLAggregate
         }
 
         return $fields;
+    }
+
+    public function getFieldAggregateName(): string
+    {
+        return $this->getName() . 'FieldAggregateType';
+    }
+
+    public function getFieldAggregateDescription(): string
+    {
+        return $this->getName() . ' field aggregate type description';
+    }
+
+    public function getAggregateName(): string
+    {
+        return $this->getName() . 'AggregateType';
+    }
+
+    public function getAggregateDescription(): string
+    {
+        return $this->getName() . ' aggregate type description';
     }
 }
