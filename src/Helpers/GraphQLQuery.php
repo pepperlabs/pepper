@@ -51,7 +51,12 @@ trait GraphQLQuery
      */
     public function getQueryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): object
     {
-        return $this->newModel()->when(isset($args['where']), function ($query) use (&$args) {
+        if (is_null($root)) {
+            $model = $this->newModel();
+        } else {
+            $model = $root;
+        }
+        return $model->when(isset($args['where']), function ($query) use (&$args) {
             foreach ($args['where'] as $field => $criteria) {
                 foreach ($criteria as $operation => $value) {
                     $query = $this->executeCondition($query, $operation, $field, $value);
@@ -75,7 +80,7 @@ trait GraphQLQuery
                     $query = $query->orderBy($column, $direction);
                 }
                 return $query;
-            })->get();
+            });
     }
 
     private function executeCondition($query, $operation, $field, $value)

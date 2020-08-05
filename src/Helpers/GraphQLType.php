@@ -109,9 +109,9 @@ trait GraphQLType
                 'name' => $relation,
                 'type' => $type,
                 'args' => $this->getQueryArgs(),
-                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
-                    return $this->getQueryResolve($root, $args, $context, $resolveInfo, function () {
-                    });
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) use ($relation) {
+                    return $this->getQueryResolve($root->$relation(), $args, $context, $resolveInfo, function () {
+                    })->get();
                 }
             ];
         }

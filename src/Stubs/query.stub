@@ -36,6 +36,6 @@ class {{ class }} extends Query
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields);
+        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 }

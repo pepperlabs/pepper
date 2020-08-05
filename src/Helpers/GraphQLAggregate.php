@@ -16,6 +16,7 @@ trait GraphQLAggregate
                 'name' => $attribute . '_aggregate',
                 'type' => GraphQL::type($this->getName() . 'FieldAggregateType'),
                 'selectable' => false,
+                'args' => $this->getQueryArgs(),
                 'resolve' => function ($root, $args) {
                     return [];
                 }
