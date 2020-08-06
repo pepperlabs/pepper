@@ -28,6 +28,31 @@ trait GraphQLAggregate
         return $fields;
     }
 
+    public function getResultAggregateFields(): array
+    {
+        $fields = [];
+
+        // Get fields excluded relations
+        foreach ($this->getFields(false) as $attribute) {
+            $fields[$attribute] = [
+                'name' => $attribute,
+                'type' => GraphQL::type('AnyScalar')
+            ];
+        }
+
+        return $fields;
+    }
+
+    public function getResultAggregateName(): string
+    {
+        return $this->getName() . 'ResultAggregateType';
+    }
+
+    public function getResultAggregateDescription(): string
+    {
+        return $this->getName() . ' result aggregate type description';
+    }
+
     public function getFieldAggregateName(): string
     {
         return $this->getName() . 'FieldAggregateType';

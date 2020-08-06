@@ -1,0 +1,32 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\GraphQL\Types\Pepper;
+
+use App;
+use Closure;
+use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
+use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rebing\GraphQL\Support\Type as GraphQLType;
+
+class {{ class }} extends GraphQLType
+{
+    protected $attributes = [
+        'name' => '{{ name }}FieldAggregateType',
+        'description' => '{{ description }}'
+    ];
+
+    protected $instance;
+
+    public function __construct()
+    {
+        $this->instance = new {{ model }};
+    }
+
+    public function fields(): array
+    {
+        return $this->instance->getResultAggregateFields();
+    }
+}
