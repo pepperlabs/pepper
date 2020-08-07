@@ -10,6 +10,17 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait GraphQLAggregate
 {
+    public function getFieldAggregateNodeType($method)
+    {
+        $override = 'set' . Str::of($method)->studly() . 'FieldAggregateNodeType';
+        if (method_exists($this, $override)) {
+            return $this->$override();
+        } else {
+            $guess = Str::of($method)->singular()->studly();
+            return GraphQL::type($guess . 'FieldAggregateType');
+        }
+    }
+
     private function getFieldAggregateRelationType($method)
     {
         $override = 'set' . Str::of($method)->studly() . 'FieldAggregateRelationType';
@@ -26,15 +37,10 @@ trait GraphQLAggregate
         $fields = [];
 
         $relations = $this->getRelations();
-        foreach ($this->getFields() as $attribute) {
-            if (in_array($attribute, $relations)) {
-                $type = $this->getFieldAggregateRelationType($attribute);
-            } else {
-                $type = GraphQL::type($this->getName() . 'FieldAggregateType');
-            }
+        foreach ($relations as $attribute) {
             $fields[$attribute . '_aggregate'] = [
                 'name' => $attribute . '_aggregate',
-                'type' => $type,
+                'type' => $this->getFieldAggregateRelationType($attribute),
                 'selectable' => false,
                 'args' => $this->getQueryArgs(),
                 'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) use ($attribute) {

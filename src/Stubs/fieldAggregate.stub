@@ -36,10 +36,10 @@ class {{ class }} extends GraphQLType
                     return $root;
                 }
             ],
-            // 'nodes' => [
-            //     'type' => GraphQL::type('{{ name }}Type'),
-            //     'selectable' => false,
-            // ]
+            'nodes' => [
+                'type' => GraphQL::type('{{ name }}Type'),
+                'selectable' => false,
+            ]
         ];
     }
 }
