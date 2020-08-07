@@ -60,7 +60,7 @@ trait GraphQLAggregate
         foreach ($this->getFields(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => GraphQL::type('AnyScalar')
+                'type' => GraphQL::type('AnyScalar'),
             ];
         }
 
