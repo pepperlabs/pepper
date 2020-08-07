@@ -10,14 +10,31 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait GraphQLAggregate
 {
+    private function getFieldAggregateRelationType($method)
+    {
+        $override = 'set' . Str::of($method)->studly() . 'FieldAggregateRelationType';
+        if (method_exists($this, $override)) {
+            return $this->$override();
+        } else {
+            $guess = Str::of($method)->singular()->studly();
+            return GraphQL::type($guess . 'FieldAggregateType');
+        }
+    }
+
     public function getAggregatedFields(): array
     {
         $fields = [];
 
+        $relations = $this->getRelations();
         foreach ($this->getFields() as $attribute) {
+            if (in_array($attribute, $relations)) {
+                $type = $this->getFieldAggregateRelationType($attribute);
+            } else {
+                $type = GraphQL::type($this->getName() . 'FieldAggregateType');
+            }
             $fields[$attribute . '_aggregate'] = [
                 'name' => $attribute . '_aggregate',
-                'type' => GraphQL::type($this->getName() . 'FieldAggregateType'),
+                'type' => $type,
                 'selectable' => false,
                 'args' => $this->getQueryArgs(),
                 'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) use ($attribute) {
