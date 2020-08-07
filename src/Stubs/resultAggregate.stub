@@ -14,7 +14,7 @@ use Rebing\GraphQL\Support\Type as GraphQLType;
 class {{ class }} extends GraphQLType
 {
     protected $attributes = [
-        'name' => '{{ name }}FieldAggregateType',
+        'name' => '{{ name }}ResultAggregateType',
         'description' => '{{ description }}'
     ];
 

@@ -3,6 +3,7 @@
 namespace Pepper\Helpers;
 
 use Closure;
+use Illuminate\Support\Str;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
@@ -71,5 +72,133 @@ trait GraphQLAggregate
     public function getAggregateDescription(): string
     {
         return $this->getName() . ' aggregate type description';
+    }
+
+    public function resolveCountAggregate($root, $args, $context, $resolveInfo)
+    {
+        $method = 'resolve' . Str::of($root['name'])->studly() . 'CountAggregate';
+        if (method_exists($this, $method)) {
+            return $this->$method($root, $args, $context, $resolveInfo);
+        }
+
+        if (method_exists($root['root'], $root['name'])) {
+            return $root['root']->{$root['name']}->count();
+        } else {
+            return 1;
+        }
+    }
+
+    public function resolveSumAggregate($root, $args, $context, $resolveInfo)
+    {
+        $method = 'resolve' . Str::of($root['name'])->studly() . 'SumAggregate';
+        if (method_exists($this, $method)) {
+            return $this->$method($root, $args, $context, $resolveInfo);
+        }
+
+        $result = [];
+        $result['__type'] = $resolveInfo->fragments['args']->typeCondition->name->value;
+        foreach ($resolveInfo->getFieldSelection() as $field => $key) {
+            $result[$field] = $root['root']->{$root['name']}->sum($field);
+        }
+        return $result;
+    }
+
+    private function getFragmentType($resolveInfo)
+    {
+        $pos = $resolveInfo->operation->name->loc->startToken;
+        while ($pos->next->value != array_reverse($resolveInfo->path)[2]) {
+            $pos = $pos->next;
+        }
+        while ($pos->next->kind != '...') {
+            $pos = $pos->next;
+        }
+        $fragmentName = $pos->next->next->value;
+        return $resolveInfo->fragments[$fragmentName]->typeCondition->name->value;
+    }
+
+    public function resolveAvgAggregate($root, $args, $context, $resolveInfo)
+    {
+        $method = 'resolve' . Str::of($root['name'])->studly() . 'AvgAggregate';
+        if (method_exists($this, $method)) {
+            return $this->$method($root, $args, $context, $resolveInfo);
+        }
+
+        $result = [];
+        $result['__type'] = $this->getFragmentType($resolveInfo);
+        foreach ($resolveInfo->getFieldSelection() as $field => $key) {
+            $result[$field] = $root['root']->{$root['name']}->avg($field);
+        }
+        return $result;
+    }
+
+    public function resolveMaxAggregate($root, $args, $context, $resolveInfo)
+    {
+        $method = 'resolve' . Str::of($root['name'])->studly() . 'MaxAggregate';
+        if (method_exists($this, $method)) {
+            return $this->$method($root, $args, $context, $resolveInfo);
+        }
+
+        $result = [];
+        $result['__type'] = $resolveInfo->fragments['args']->typeCondition->name->value;
+        foreach ($resolveInfo->getFieldSelection() as $field => $key) {
+            $result[$field] = $root['root']->{$root['name']}->max($field);
+        }
+        return $result;
+    }
+
+    public function resolveMinAggregate($root, $args, $context, $resolveInfo)
+    {
+        $method = 'resolve' . Str::of($root['name'])->studly() . 'MinAggregate';
+        if (method_exists($this, $method)) {
+            return $this->$method($root, $args, $context, $resolveInfo);
+        }
+
+        $result = [];
+        $result['__type'] = $resolveInfo->fragments['args']->typeCondition->name->value;
+        foreach ($resolveInfo->getFieldSelection() as $field => $key) {
+            $result[$field] = $root['root']->{$root['name']}->min($field);
+        }
+        return $result;
+    }
+
+    public function getAvailableAggregators()
+    {
+        return [
+            'count' => [
+                'type' => Type::int(),
+                'selectable' => false,
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                    return $this->resolveCountAggregate($root, $args, $context, $resolveInfo);
+                }
+            ],
+            'sum' => [
+                'type' => GraphQL::type('AllUnion'),
+                'selectable' => false,
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                    return $this->resolveSumAggregate($root, $args, $context, $resolveInfo);
+                }
+            ],
+            'avg' => [
+                'type' => GraphQL::type('AllUnion'),
+                'selectable' => false,
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                    return $this->resolveAvgAggregate($root, $args, $context, $resolveInfo);
+                },
+            ],
+            'max' => [
+                'type' => GraphQL::type('AllUnion'),
+                'selectable' => false,
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                    return $this->resolveMaxAggregate($root, $args, $context, $resolveInfo);
+                },
+            ],
+            'min' => [
+                'type' => GraphQL::type('AllUnion'),
+                'selectable' => false,
+                'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                    return $this->resolveMinAggregate($root, $args, $context, $resolveInfo);
+                },
+            ]
+        ];
     }
 }
