@@ -96,7 +96,7 @@ trait GraphQLAggregate
         }
 
         $result = [];
-        $result['__type'] = $resolveInfo->fragments['args']->typeCondition->name->value;
+        $result['__type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
             $result[$field] = $root['root']->{$root['name']}->sum($field);
         }
@@ -139,7 +139,7 @@ trait GraphQLAggregate
         }
 
         $result = [];
-        $result['__type'] = $resolveInfo->fragments['args']->typeCondition->name->value;
+        $result['__type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
             $result[$field] = $root['root']->{$root['name']}->max($field);
         }
@@ -154,7 +154,7 @@ trait GraphQLAggregate
         }
 
         $result = [];
-        $result['__type'] = $resolveInfo->fragments['args']->typeCondition->name->value;
+        $result['__type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
             $result[$field] = $root['root']->{$root['name']}->min($field);
         }
