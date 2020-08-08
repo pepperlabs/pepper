@@ -262,4 +262,9 @@ abstract class GraphQL
     {
         return call_user_func('\GraphQL\Type\Definition\Type::' . $this->getFieldType($field));
     }
+
+    // public function __callStatic($name, $arguments)
+    // {
+    //     return call_user_func_array([$this->getModel(), $name], $arguments);
+    // }
 }
