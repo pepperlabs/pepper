@@ -2,9 +2,7 @@
 
 namespace Pepper\Helpers;
 
-use Illuminate\Support\Str;
-
-class ResourceQueryCreator extends ResourceCreator
+class ResourceFieldUnresolvableAggregateCreator extends ResourceCreator
 {
     protected $path;
     protected $stub;
@@ -19,19 +17,10 @@ class ResourceQueryCreator extends ResourceCreator
     {
         Parent::__construct();
 
-        $this->path = app_path('GraphQL/Queries/Pepper');
-        $this->stub = '/query.stub';
+        $this->path = app_path('GraphQL/Types/Pepper');
+        $this->stub = '/fieldUnresolvableAggregate.stub';
     }
 
-    /**
-     * Create a new resource query at the given path.
-     *
-     * @param  string  $name
-     * @param  string  $path
-     * @param  string|null  $class
-     * @param  bool  $create
-     * @return string
-     */
     public function create($class, $name, $description, $model)
     {
         $this->resetResourceClass($class, $this->path);
@@ -41,9 +30,9 @@ class ResourceQueryCreator extends ResourceCreator
         $this->files->ensureDirectoryExists($this->path);
 
         $stub = $this->populateStub('class', $class, $stub);
+        $stub = $this->populateStub('model', $model, $stub);
         $stub = $this->populateStub('name', $name, $stub);
         $stub = $this->populateStub('description', $description, $stub);
-        $stub = $this->populateStub('model', $model, $stub);
 
         $this->files->replace(
             $class = $this->getPath($class, $this->path),
@@ -57,13 +46,11 @@ class ResourceQueryCreator extends ResourceCreator
 
     protected function updateConfig($name)
     {
-        $className = Str::of($name)->studly();
-        $name = Str::of($name)->snake();
-        if ($this->configKeyExists('graphql.schemas.default.query.' . $name)) {
-            $class = strval('App\GraphQL\Queries\Pepper\\' . $className . 'Query::class');
-            $pattern = '/\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*/';
-            $replace = "$0 '$name' => $class,\n                ";
-            $update = preg_replace($pattern, $replace, file_get_contents($this->config));
+        $name = strval($name . 'FieldAggregateUnresolvableType');
+        if ($this->configKeyExists('graphql.types.' . $name)) {
+            $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
+            $class = strval('App\GraphQL\Types\Pepper\\' . $name . '::class');
+            $update = preg_replace($pattern, "$0 '$name' => $class,\n        ", file_get_contents($this->config));
             file_put_contents($this->config, $update);
         }
     }

@@ -21,6 +21,33 @@ trait GraphQLAggregate
         }
     }
 
+    public function getFieldAggregateTypeFields($resolvable = true)
+    {
+        $fields = [
+            'aggregate' => [
+                'selectable' => false,
+                'type' => GraphQL::type('UserAggregateType'),
+                'selectable' => false,
+            ],
+            'nodes' => [
+                'type' => Type::listOf(GraphQL::type('UserType')),
+                'selectable' => false,
+            ]
+        ];
+
+        if ($resolvable) {
+            $fields['aggregate']['resolve'] = function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                return $root;
+            };
+
+            $fields['nodes']['resolve'] = function ($root, $args, $context, ResolveInfo $resolveInfo) {
+                return $root['root']->{$root['name']}()->get();
+            };
+        }
+
+        return $fields;
+    }
+
     private function getFieldAggregateRelationType($method)
     {
         $override = 'set' . Str::of($method)->studly() . 'FieldAggregateRelationType';
@@ -87,6 +114,16 @@ trait GraphQLAggregate
         return $this->getName() . ' field aggregate type description';
     }
 
+    public function getAggregateUnresolvableName(): string
+    {
+        return $this->getName() . 'FieldAggregateUnresolvableType';
+    }
+
+    public function getAggregateUnresolvableDescription(): string
+    {
+        return $this->getName() . ' unresolvable aggregate type description';
+    }
+
     public function getAggregateName(): string
     {
         return $this->getName() . 'AggregateType';
@@ -95,6 +132,31 @@ trait GraphQLAggregate
     public function getAggregateDescription(): string
     {
         return $this->getName() . ' aggregate type description';
+    }
+
+    /**
+     * Get GraphQL Query name.
+     *
+     * @return string
+     */
+    public function getAggregateQueryName(): string
+    {
+        $method = 'setAggregateQueryName';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . 'AggregateQuery';
+        }
+    }
+
+    public function getAggregateQueryDescription(): string
+    {
+        $method = 'setAggregateQueryDescription';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . ' aggregate query description.';
+        }
     }
 
     public function resolveCountAggregate($root, $args, $context, $resolveInfo)
@@ -107,7 +169,7 @@ trait GraphQLAggregate
         if (method_exists($root['root'], $root['name'])) {
             return $root['root']->{$root['name']}->count();
         } else {
-            return 1;
+            return $root['root']->count();
         }
     }
 
@@ -121,7 +183,11 @@ trait GraphQLAggregate
         $result = [];
         $result['__type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
-            $result[$field] = $root['root']->{$root['name']}->sum($field);
+            if (method_exists($root['root'], $root['name'])) {
+                $result[$field] = $root['root']->{$root['name']}->sum($field);
+            } else {
+                $result[$field] = $root['root']->sum($field);
+            }
         }
         return $result;
     }
@@ -149,7 +215,11 @@ trait GraphQLAggregate
         $result = [];
         $result['__type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
-            $result[$field] = $root['root']->{$root['name']}->avg($field);
+            if (method_exists($root['root'], $root['name'])) {
+                $result[$field] = $root['root']->{$root['name']}->avg($field);
+            } else {
+                $result[$field] = $root['root']->avg($field);
+            }
         }
         return $result;
     }
@@ -164,7 +234,11 @@ trait GraphQLAggregate
         $result = [];
         $result['__type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
-            $result[$field] = $root['root']->{$root['name']}->max($field);
+            if (method_exists($root['root'], $root['name'])) {
+                $result[$field] = $root['root']->{$root['name']}->max($field);
+            } else {
+                $result[$field] = $root['root']->max($field);
+            }
         }
         return $result;
     }
@@ -179,7 +253,11 @@ trait GraphQLAggregate
         $result = [];
         $result['__type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
-            $result[$field] = $root['root']->{$root['name']}->min($field);
+            if (method_exists($root['root'], $root['name'])) {
+                $result[$field] = $root['root']->{$root['name']}->min($field);
+            } else {
+                $result[$field] = $root['root']->min($field);
+            }
         }
         return $result;
     }

@@ -13,6 +13,8 @@ use Pepper\Helpers\ResourceMutationCreator;
 use Pepper\Helpers\ResourceAggregateCreator;
 use Pepper\Helpers\ResourceFieldAggregateCreator;
 use Pepper\Helpers\ResourceResultAggregateCreator;
+use Pepper\Helpers\ResourceFieldUnresolvableAggregateCreator;
+use Pepper\Helpers\ResourceQueryAggregateCreator;
 
 class AddCommand extends BaseCommand
 {
@@ -89,5 +91,13 @@ class AddCommand extends BaseCommand
         // aggregate
         $rq = new ResourceAggregateCreator($fs);
         $rq->create($instance->getAggregateName(), $instance->getName(), $instance->getAggregateDescription(), $model);
+
+        // unresolvable aggregate
+        $rq = new ResourceFieldUnresolvableAggregateCreator($fs);
+        $rq->create($instance->getAggregateUnresolvableName(), $instance->getName(), $instance->getAggregateUnresolvableDescription(), $model);
+
+        // aggregate query
+        $rq = new ResourceQueryAggregateCreator($fs);
+        $rq->create($instance->getAggregateQueryName(), $instance->getName(), $instance->getAggregateQueryDescription(), $model);
     }
 }

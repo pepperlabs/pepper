@@ -4,7 +4,7 @@ namespace Pepper\Helpers;
 
 use Illuminate\Support\Str;
 
-class ResourceQueryCreator extends ResourceCreator
+class ResourceQueryAggregateCreator extends ResourceCreator
 {
     protected $path;
     protected $stub;
@@ -20,18 +20,9 @@ class ResourceQueryCreator extends ResourceCreator
         Parent::__construct();
 
         $this->path = app_path('GraphQL/Queries/Pepper');
-        $this->stub = '/query.stub';
+        $this->stub = '/queryAggregate.stub';
     }
 
-    /**
-     * Create a new resource query at the given path.
-     *
-     * @param  string  $name
-     * @param  string  $path
-     * @param  string|null  $class
-     * @param  bool  $create
-     * @return string
-     */
     public function create($class, $name, $description, $model)
     {
         $this->resetResourceClass($class, $this->path);
@@ -58,9 +49,9 @@ class ResourceQueryCreator extends ResourceCreator
     protected function updateConfig($name)
     {
         $className = Str::of($name)->studly();
-        $name = Str::of($name)->snake();
+        $name = Str::of($name . '_aggregate')->snake();
         if ($this->configKeyExists('graphql.schemas.default.query.' . $name)) {
-            $class = strval('App\GraphQL\Queries\Pepper\\' . $className . 'Query::class');
+            $class = strval('App\GraphQL\Queries\Pepper\\' . $className . 'AggregateQuery::class');
             $pattern = '/\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*/';
             $replace = "$0 '$name' => $class,\n                ";
             $update = preg_replace($pattern, $replace, file_get_contents($this->config));
