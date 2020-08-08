@@ -51,4 +51,14 @@ trait GraphQLMutation
 
         return $fields;
     }
+
+    public function getMutationInsertFields()
+    {
+        return [
+            'objects' => [
+                'name' => 'objects',
+                'type' => Type::listOf(GraphQL::type('UserMutationInput'))
+            ]
+        ];
+    }
 }
