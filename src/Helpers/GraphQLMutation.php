@@ -61,4 +61,44 @@ trait GraphQLMutation
             ]
         ];
     }
+
+    public function getInputMutationName()
+    {
+        $method = 'setInputMutationName';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . 'InputMutation';
+        }
+    }
+
+    public function getInputMutationDescription(): string
+    {
+        $method = 'setInputMutationDescription';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . ' input mutation description.';
+        }
+    }
+
+    public function getInsertMutationName()
+    {
+        $method = 'setInsertMutationName';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . 'InsertMutation';
+        }
+    }
+
+    public function getInsertMutationDescription(): string
+    {
+        $method = 'setInsertMutationDescription';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . ' insert mutation description.';
+        }
+    }
 }

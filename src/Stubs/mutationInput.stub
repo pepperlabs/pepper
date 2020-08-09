@@ -1,0 +1,28 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\GraphQL\Inputs\Pepper;
+
+use App;
+use Rebing\GraphQL\Support\InputType;
+
+class {{ class }} extends InputType
+{
+    protected $attributes = [
+        'name' => '{{ name }}Mutation',
+        'description' => '{{ description }}'
+    ];
+
+    protected $instance;
+
+    public function __construct()
+    {
+        $this->instance = new {{ model }};
+    }
+
+    public function fields(): array
+    {
+        return $this->instance->getMutationFields();
+    }
+}

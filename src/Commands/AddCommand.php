@@ -15,6 +15,8 @@ use Pepper\Helpers\ResourceFieldAggregateCreator;
 use Pepper\Helpers\ResourceResultAggregateCreator;
 use Pepper\Helpers\ResourceFieldUnresolvableAggregateCreator;
 use Pepper\Helpers\ResourceQueryAggregateCreator;
+use Pepper\Helpers\ResourceInputMutationCreator;
+use Pepper\Helpers\ResourceMutationInsertCreator;
 
 class AddCommand extends BaseCommand
 {
@@ -99,5 +101,15 @@ class AddCommand extends BaseCommand
         // aggregate query
         $rq = new ResourceQueryAggregateCreator($fs);
         $rq->create($instance->getAggregateQueryName(), $instance->getName(), $instance->getAggregateQueryDescription(), $model);
+
+        // mutation input
+        $rq = new ResourceInputMutationCreator($fs);
+        $rq->create($instance->getInputMutationName(), $instance->getName(), $instance->getInputMutationDescription(), $model);
+
+        // mutation insert
+        $rq = new ResourceMutationInsertCreator($fs);
+        $rq->create($instance->getInsertMutationName(), $instance->getName(), $instance->getInsertMutationDescription(), $model);
+
+        // @todo LOL, stubs getting out of control. we need to police them! 🔫
     }
 }
