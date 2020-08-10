@@ -21,6 +21,7 @@ use Pepper\Helpers\ResourceMutationInsertOneCreator;
 use Pepper\Helpers\ResourceMutationUpdateByPkCreator;
 use Pepper\Helpers\ResourceMutationUpdateCreator;
 use Pepper\Helpers\ResourceMutationDeleteByPkCreator;
+use Pepper\Helpers\ResourceMutationDeleteCreator;
 
 class AddCommand extends BaseCommand
 {
@@ -129,6 +130,10 @@ class AddCommand extends BaseCommand
         // mutation delete by pk
         $rq = new ResourceMutationDeleteByPkCreator($fs);
         $rq->create($instance->getDeleteByPkMutationName(), $instance->getName(), $instance->getDeleteByPkMutationDescription(), $model);
+
+        // mutation delete
+        $rq = new ResourceMutationDeleteCreator($fs);
+        $rq->create($instance->getDeleteMutationName(), $instance->getName(), $instance->getDeleteMutationDescription(), $model);
 
         // @todo LOL, stubs getting out of control. we need to police them! 🔫
     }

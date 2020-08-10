@@ -222,4 +222,38 @@ trait GraphQLMutation
 
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
+
+    public function getDeleteMutationName()
+    {
+        $method = 'setDeleteMutationName';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . 'DeleteMutation';
+        }
+    }
+
+    public function getDeleteMutationDescription(): string
+    {
+        $method = 'setDeleteMutationDescription';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . ' Delete mutation description.';
+        }
+    }
+
+    public function deleteMutation($root, $args, $context, $resolveInfo, $getSelectFields)
+    {
+        // @todo: Not everyone are lucky enough to have a shiny id column.
+        $models = $this->getQueryResolve($this->newModel(), $args, $context, $resolveInfo, $getSelectFields);
+
+        $models->delete();
+
+        // Let the new born out in the wild.
+        $root = $models;
+
+        // return types are satisfied when they are iterable enough.
+        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+    }
 }
