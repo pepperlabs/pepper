@@ -58,8 +58,31 @@ trait GraphQLQuery
         }
         return $model->when(isset($args['where']), function ($query) use (&$args) {
             foreach ($args['where'] as $field => $criteria) {
-                foreach ($criteria as $operation => $value) {
-                    $query = $this->executeCondition($query, $operation, $field, $value);
+                if ($field == '_or') {
+                    foreach ($criteria as $f => $c) {
+                        foreach ($c as $operation => $value) {
+                            $query = $this->executeCondition($query, $operation, $f, $value, 'or');
+                        }
+                    }
+                } elseif ($field == '_and') {
+                    foreach ($criteria as $f => $c) {
+                        foreach ($c as $operation => $value) {
+                            $query = $this->executeCondition($query, $operation, $f, $value, 'and');
+                        }
+                    }
+                } elseif ($field == '_not') {
+                    foreach ($criteria as $f => $c) {
+                        foreach ($c as $operation => $value) {
+                            $query = $this->executeCondition($query, $operation, $f, $value, 'and');
+                            print_r($query->get(['id']));
+                            die();
+                            // $query->whereNotIn($query->)
+                        }
+                    }
+                } else {
+                    foreach ($criteria as $operation => $value) {
+                        $query = $this->executeCondition($query, $operation, $field, $value);
+                    }
                 }
             }
             return $query;
@@ -83,11 +106,11 @@ trait GraphQLQuery
             });
     }
 
-    private function executeCondition($query, $operation, $field, $value)
+    private function executeCondition($query, $operation, $field, $value, $exp = 'AND')
     {
         switch ($operation) {
             case '_eq':
-                return $query->where($field, '=', $value);
+                return $query->where($field, '=', $value, $exp);
 
             case '_neq':
                 return $query->where($field, '!=', $value);

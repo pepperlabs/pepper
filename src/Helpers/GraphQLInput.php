@@ -28,6 +28,21 @@ trait GraphQLInput
             }
         }
 
+        $fields['_and'] = [
+            'name' => '_and',
+            'type' => GraphQL::type($this->getInputName())
+        ];
+
+        $fields['_or'] = [
+            'name' => '_or',
+            'type' => GraphQL::type($this->getInputName())
+        ];
+
+        $fields['_not'] = [
+            'name' => '_not',
+            'type' => GraphQL::type($this->getInputName())
+        ];
+
         return $fields;
     }
 
