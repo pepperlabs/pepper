@@ -71,14 +71,13 @@ trait GraphQLQuery
                         }
                     }
                 } elseif ($field == '_not') {
+                    $notQuery = clone $query;
                     foreach ($criteria as $f => $c) {
                         foreach ($c as $operation => $value) {
-                            $query = $this->executeCondition($query, $operation, $f, $value, 'and');
-                            print_r($query->get(['id']));
-                            die();
-                            // $query->whereNotIn($query->)
+                            $notQuery = $this->executeCondition($notQuery, $operation, $f, $value, 'and');
                         }
                     }
+                    $query = $query->whereNotIn('id', $notQuery->pluck('id')->toArray());
                 } else {
                     foreach ($criteria as $operation => $value) {
                         $query = $this->executeCondition($query, $operation, $field, $value);
@@ -106,67 +105,67 @@ trait GraphQLQuery
             });
     }
 
-    private function executeCondition($query, $operation, $field, $value, $exp = 'AND')
+    private function executeCondition($query, $operation, $field, $value, $exp = 'and')
     {
         switch ($operation) {
             case '_eq':
                 return $query->where($field, '=', $value, $exp);
 
             case '_neq':
-                return $query->where($field, '!=', $value);
+                return $query->where($field, '!=', $value, $exp);
 
             case '_gt':
-                return $query->where($field, '>', $value);
+                return $query->where($field, '>', $value, $exp);
 
             case '_lt':
-                return $query->where($field, '<', $value);
+                return $query->where($field, '<', $value, $exp);
 
             case '_gte':
-                return $query->where($field, '>=', $value);
+                return $query->where($field, '>=', $value, $exp);
 
             case '_lte':
-                return $query->where($field, '<=', $value);
+                return $query->where($field, '<=', $value, $exp);
 
             case '_in':
-                return $query->whereIn($field, $value);
+                return $query->whereIn($field, $value, $exp);
 
             case '_nin':
-                return $query->whereNotIn($field, $value);
+                return $query->whereNotIn($field, $value, $exp);
 
             case '_like':
-                return $query->where($field, 'like', $value);
+                return $query->where($field, 'like', $value, $exp);
 
             case '_nlike':
-                return $query->where($field, 'not like', $value);
+                return $query->where($field, 'not like', $value, $exp);
 
             case '_ilike':
-                return $query->where($field, 'ilike', $value);
+                return $query->where($field, 'ilike', $value, $exp);
 
             case '_nilike':
-                return $query->where($field, 'not ilike', $value);
+                return $query->where($field, 'not ilike', $value, $exp);
 
             case '_is_null':
-                return $value ? $query->whereNull($field) : $query->whereNotNull($field);
+                return $value ? $query->whereNull($field, $exp) : $query->whereNotNull($field, $exp);
 
             case '_date':
-                return $query->whereDate($field, $value);
+                return $query->whereDate($field, '=', $value, $exp);
 
             case '_month':
-                return $query->whereMonth($field, $value);
+                return $query->whereMonth($field, '=', $value, $exp);
 
             case '_day':
-                return $query->whereDay($field, $value);
+                return $query->whereDay($field, '=', $value, $exp);
 
             case '_year':
-                return $query->whereYear($field, $value);
+                return $query->whereYear($field, '=', $value, $exp);
 
             case '_time':
-                return $query->whereTime($field, $value);
+                return $query->whereTime($field, '=', $value, $exp);
 
             default:
-                return $query->whereHas($field, function ($q) use ($value, $operation) {
+                return $query->whereHas($field, function ($q) use ($value, $operation, $exp) {
                     foreach ($value as $nestedOperation => $nestedValue) {
-                        $this->executeCondition($q, $nestedOperation, $operation, $nestedValue);
+                        $this->executeCondition($q, $nestedOperation, $operation, $nestedValue, $exp);
                     }
                 });
         }
