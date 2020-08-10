@@ -101,4 +101,24 @@ trait GraphQLMutation
             return $this->getName() . ' insert mutation description.';
         }
     }
+
+    public function getInsertOneMutationName()
+    {
+        $method = 'setInsertOneMutationName';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . 'InsertOneMutation';
+        }
+    }
+
+    public function getInsertOneMutationDescription(): string
+    {
+        $method = 'setInsertOneMutationDescription';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . ' insert mutation description.';
+        }
+    }
 }
