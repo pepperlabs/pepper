@@ -191,4 +191,35 @@ trait GraphQLMutation
         // return types are satisfied when they are iterable enough.
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
+
+    public function getDeleteByPkMutationName()
+    {
+        $method = 'setDeleteByPkMutationName';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . 'DeleteByPkMutation';
+        }
+    }
+
+    public function getDeleteByPkMutationDescription(): string
+    {
+        $method = 'setDeleteByPkMutationDescription';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . ' DeleteByPk mutation description.';
+        }
+    }
+
+    public function deleteByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields)
+    {
+        $models = $this->newModel()::where($args);
+
+        $models->delete();
+
+        $root = $models;
+
+        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+    }
 }
