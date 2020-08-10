@@ -1,0 +1,46 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\GraphQL\Mutations\Pepper;
+
+use App;
+use Closure;
+use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Mutation;
+use Rebing\GraphQL\Support\Facades\GraphQL;
+
+use GraphQL\Type\Definition\ResolveInfo;
+
+class {{ class }} extends Mutation
+{
+    protected $attributes = [
+        'name' => '{{ name }}UpdateMutation',
+        'description' => '{{ description }}'
+    ];
+
+    protected $instance;
+
+    public function __construct()
+    {
+        $this->instance = new {{ model }};
+    }
+
+    public function type(): Type
+    {
+        return $this->instance->getMutationType();
+    }
+
+    public function args(): array
+    {
+        return [
+            'where' => ['type' => GraphQL::type($this->instance->getInputName())],
+            '_set' => ['type' => GraphQL::type('{{ name }}InputMutation')]
+        ];
+    }
+
+    public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
+    {
+        return $this->instance->updateMutation($root, $args, $context, $resolveInfo, $getSelectFields);
+    }
+}

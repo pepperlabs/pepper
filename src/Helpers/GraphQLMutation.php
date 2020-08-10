@@ -156,4 +156,39 @@ trait GraphQLMutation
         // return types are satisfied when they are iterable enough.
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
+
+    public function getUpdateMutationName()
+    {
+        $method = 'setUpdateMutationName';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . 'UpdateMutation';
+        }
+    }
+
+    public function getUpdateMutationDescription(): string
+    {
+        $method = 'setUpdateMutationDescription';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . ' update mutation description.';
+        }
+    }
+
+    public function updateMutation($root, $args, $context, $resolveInfo, $getSelectFields)
+    {
+        // @todo: Not everyone are lucky enough to have a shiny id column.
+        $models = $this->getQueryResolve($this->newModel(), $args, $context, $resolveInfo, $getSelectFields);
+        foreach ($models->get() as $model) {
+            $model->update($args['_set']);
+        }
+
+        // Let the new born out in the wild.
+        $root = $models;
+
+        // return types are satisfied when they are iterable enough.
+        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+    }
 }
