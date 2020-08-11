@@ -199,4 +199,56 @@ trait GraphQLQuery
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
+
+    public function getQueryByPkType(): Type
+    {
+        return GraphQL::type($this->getTypeName());
+    }
+
+    public function getQueryByPkFields(): array
+    {
+        $fields = [];
+
+        // Get fields excluded relations
+        foreach ($this->getFields(false) as $attribute) {
+            $fields[$attribute] = [
+                'name' => $attribute,
+                'type' => $this->call_field_type($attribute)
+            ];
+        }
+
+        return $fields;
+    }
+
+    public function getQueryByPkName(): string
+    {
+        $method = 'setQueryByPkName';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . 'QueryByPk';
+        }
+    }
+
+    public function getQueryByPkDescription(): string
+    {
+        $method = 'setQueryByPkDescription';
+        if (method_exists($this, $method)) {
+            $this->$method($this->getClassName);
+        } else {
+            return $this->getName() . ' query by PK description.';
+        }
+    }
+
+    public function queryByPk($root, $args, $context, $resolveInfo, $getSelectFields)
+    {
+        $model = $this->newModel();
+        $pk = $model->getKeyName();
+
+        // Let the new born out in the wild.
+        $root = $this->getModel()::where($pk, $args[$pk]);
+
+        // return types are satisfied when they are iterable enough.
+        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->first();
+    }
 }

@@ -57,10 +57,11 @@ class ResourceMutationInsertOneCreator extends ResourceCreator
 
     protected function updateConfig($name)
     {
+        $className = Str::of($name)->studly();
         $name = Str::of($name)->snake();
         $key = 'insert_' . $name . '_one';
         if ($this->configKeyExists('graphql.schemas.default.mutation.' . $key)) {
-            $class = strval('App\GraphQL\Mutations\Pepper\\' . $name . 'InsertOneMutation::class');
+            $class = strval('App\GraphQL\Mutations\Pepper\\' . $className . 'InsertOneMutation::class');
             $pattern = '/(\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*[^"]+?(?=["\']mutation["\'])["\']mutation["\']\s*=>\s*\[\s*)/';
             $replace = "$0 '$key' => $class,\n                ";
             $update = preg_replace($pattern, $replace, file_get_contents($this->config));

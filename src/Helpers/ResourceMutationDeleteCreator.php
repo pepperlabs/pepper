@@ -57,10 +57,11 @@ class ResourceMutationDeleteCreator extends ResourceCreator
 
     protected function updateConfig($name)
     {
+        $className = Str::of($name)->studly();
         $name = Str::of($name)->snake();
         $key = 'delete_' . $name;
         if ($this->configKeyExists('graphql.schemas.default.mutation.' . $key)) {
-            $class = strval('App\GraphQL\Mutations\Pepper\\' . $name . 'DeleteMutation::class');
+            $class = strval('App\GraphQL\Mutations\Pepper\\' . $className . 'DeleteMutation::class');
             $pattern = '/(\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*[^"]+?(?=["\']mutation["\'])["\']mutation["\']\s*=>\s*\[\s*)/';
             $replace = "$0 '$key' => $class,\n                ";
             $update = preg_replace($pattern, $replace, file_get_contents($this->config));

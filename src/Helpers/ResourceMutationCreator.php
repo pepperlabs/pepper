@@ -57,9 +57,10 @@ class ResourceMutationCreator extends ResourceCreator
 
     protected function updateConfig($name)
     {
+        $className = Str::of($name)->studly();
         $name = Str::of($name)->snake();
         if ($this->configKeyExists('graphql.schemas.default.mutation.' . $name)) {
-            $class = strval('App\GraphQL\Mutations\Pepper\\' . $name . 'Mutation::class');
+            $class = strval('App\GraphQL\Mutations\Pepper\\' . $className . 'Mutation::class');
             $pattern = '/(\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*[^"]+?(?=["\']mutation["\'])["\']mutation["\']\s*=>\s*\[\s*)/';
             $replace = "$0 '$name' => $class,\n                ";
             $update = preg_replace($pattern, $replace, file_get_contents($this->config));
