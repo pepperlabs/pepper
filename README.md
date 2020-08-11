@@ -5,6 +5,8 @@
 - [Pepper](#pepper)
   - [Table of contents](#table-of-contents)
   - [Introducation](#introducation)
+    - [Installation](#installation)
+    - [Supported databases](#supported-databases)
   - [Background](#background)
   - [Commands](#commands)
   - [API](#api)
@@ -16,6 +18,10 @@
       - [Arguments](#arguments)
         - [Distinct](#distinct)
         - [Where](#where)
+          - [_and](#_and)
+          - [_or](#_or)
+          - [_not](#_not)
+          - [Operators](#operators)
         - [Order](#order)
         - [Pagination](#pagination)
     - [Mutation](#mutation)
@@ -36,6 +42,10 @@
 ## Introducation
 
 [Table of contents](#table-of-contents)
+
+### Installation
+
+### Supported databases
 
 ## Background
 
@@ -106,9 +116,69 @@ query {
 
 [Table of contents](#table-of-contents)
 
+Example:
+
+```graphql
+query {
+  user {
+    id
+    name
+    tags {
+      id
+      title
+    }
+    categories_aggregate {
+      aggregate {
+        count
+      }
+      nodes {
+        title
+      }
+    }
+  }
+}
+```
+
 #### Aggregate object
 
 [Table of contents](#table-of-contents)
+
+```graphql
+user_aggregate {
+  aggregate {
+    count
+    sum {
+      id
+    }
+    avg {
+      id
+    }
+    max {
+      id
+    }
+    min {
+      id
+    }
+  }
+  nodes {
+    id
+    name
+    tags {
+      title
+    }
+    categories_aggregate {
+      aggregate {
+        count
+      }
+      nodes {
+        title
+      }
+    }
+  }
+}
+```
+
+Available aggregate functions: `min`, `max`, `sum`, `avg` and, `count`.
 
 #### Arguments
 
@@ -118,17 +188,186 @@ query {
 
 [Table of contents](#table-of-contents)
 
+Example:
+
+```graphql
+query {
+  user(distinct: true) {
+    id
+    name
+    email
+    created_at
+  }
+}
+```
+
+> :warning: For PostgreSQL users: There is no `distinct_on` support at the moment.
+
 ##### Where
 
 [Table of contents](#table-of-contents)
 
+Example:
+
+```graphql
+query {
+  user(where: {email: {_like: "%example.com"}}) {
+    name
+    tags {
+      title
+    }
+  }
+}
+```
+
+###### _and
+
+[Table of contents](#table-of-contents)
+
+Queries are executed with `and` operator by default.
+
+Example:
+
+```graphql
+query {
+  user(
+    where: {
+      _and: {
+        name: { _nlike: "%pattern%" },
+        updated_at: { _year: "2020" }
+      }
+    }
+  ) {
+    id
+    name
+    email
+    updated_at
+  }
+}
+```
+
+###### _or
+
+[Table of contents](#table-of-contents)
+
+Example:
+
+```graphql
+query {
+  user(
+    where: {
+      _or: {
+        name: { _nlike: "%pattern%" },
+        updated_at: { _year: "2021" }
+      }
+    }
+  ) {
+    id
+    name
+    email
+    updated_at
+  }
+}
+```
+
+###### _not
+
+[Table of contents](#table-of-contents)
+
+Example:
+
+```graphql
+query {
+  user(
+    where: {
+      _not: {
+        name: { _nlike: "%pattern%" },
+        updated_at: { _year: "2020" }
+      }
+    }
+  ) {
+    id
+    name
+    email
+    updated_at
+  }
+}
+```
+
+###### Operators
+
+[Table of contents](#table-of-contents)
+
+| Operator    | Equivalent       |
+| :---------- | :--------------- |
+| `_eq`       | `=`              |
+| `_neq`      | `<>`,`!=`        |
+| `_gt`       | `>`              |
+| `_lt`       | `<`              |
+| `_gte`      | `>=`             |
+| `_lte`      | `<=`             |
+| `_in`       | `IN`             |
+| `_nin`      | `NOT IN`         |
+| `_like`     | `LIKE`           |
+| `_nlike`    | `NOT LIKE`       |
+| `_ilike`    | `ILIKE`          |
+| `nilike`    | `NOT ILIKE`      |
+| `_similar`  | `SIMILAR TO`     |
+| `_nsimilar` | `NOT SIMILAR TO` |
+| `_is_null`  | `IS NULL`        |
+
+> :warning: JSON operators are not yet supported.
+
 ##### Order
+
+Example:
+
+```graphql
+query {
+  user(
+    order_by: { id: asc }
+  ) {
+    id
+    name
+  }
+}
+```
+
+Available orders: `asc`, `desc`
 
 [Table of contents](#table-of-contents)
 
 ##### Pagination
 
 [Table of contents](#table-of-contents)
+
+Example #1:
+
+```graphql
+query {
+  user(
+    limit: 5
+    offset: 10
+  ) {
+    id
+    name
+  }
+}
+```
+
+Example #2:
+
+```graphql
+query {
+  user(
+    take: 5
+    skip: 10
+  ) {
+    id
+    name
+  }
+}
+```
 
 ### Mutation
 

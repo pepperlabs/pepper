@@ -102,7 +102,8 @@ trait GraphQLType
                 MorphTo::class,
                 MorphToMany::class
             ])) {
-                $type = Type::listOf(GraphQL::type($this->getTypeName()));
+                /** @todo nasty 🥶 */
+                $type = Type::listOf(GraphQL::type(Str::of($relation)->singular()->studly() . 'Type'));
             }
 
             $fields[$relation] = [
