@@ -463,13 +463,39 @@ mutation update_example {
 
 [Table of contents](#table-of-contents)
 
+Example:
+
+```graphql
+mutation delete_example {
+  delete_tag_by_pk(
+    id: 5
+  ) {
+    id
+  }
+}
+```
+
 #### delete
 
 [Table of contents](#table-of-contents)
 
+Example:
+
+```graphql
+mutation delete_example {
+  delete_tag(
+    where: { color: { _is_null: true } }
+  ){
+    id
+  }
+}
+```
+
 ### Subscription
 
 [Table of contents](#table-of-contents)
+
+Not supported.
 
 ## Acknowledgement
 
