@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace Pepper\Console;
 
-use Illuminate\Console\GeneratorCommand;
-
-class OrderMakeCommand extends GeneratorCommand
+class OrderMakeCommand extends BaseMakeCommand
 {
-    protected $signature = 'make:pepper:Order {name}';
+    protected $signature = 'make:pepper:order {name} {class} {description} {model}';
     protected $description = 'Create a new Pepper order class';
-    protected $type = 'Order';
+    protected $type = 'class';
 
     protected function getStub()
     {
@@ -20,25 +18,5 @@ class OrderMakeCommand extends GeneratorCommand
     protected function getDefaultNamespace($rootNamespace)
     {
         return $rootNamespace . '\GraphQL\Inputs\Pepper';
-    }
-
-    protected function buildClass($name)
-    {
-        $stub = parent::buildClass($name);
-
-        return $this->replaceGraphqlName($stub);
-    }
-
-    protected function replaceGraphqlName(string $stub): string
-    {
-        $graphqlName = $this->getNameInput();
-        $graphqlName = str_replace('InputObject', 'Input', $graphqlName);
-        $graphqlName = preg_replace('/Type$/', '', $graphqlName);
-
-        return str_replace(
-            'DummyGraphqlName',
-            $graphqlName,
-            $stub
-        );
     }
 }

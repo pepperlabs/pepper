@@ -10,6 +10,8 @@ use Pepper\Commands\OrderCommand;
 use Pepper\Commands\MutationCommand;
 use Pepper\Commands\AddCommand;
 
+use Pepper\Console\OrderMakeCommand;
+
 class PepperServiceProvider extends ServiceProvider
 {
     public function boot()
@@ -27,24 +29,22 @@ class PepperServiceProvider extends ServiceProvider
 
     public function register()
     {
+        $this->registerPepper();
+
+        if ($this->app->runningInConsole()) {
+            $this->registerConsole();
+        }
+    }
+
+    public function registerPepper(): void
+    {
         $this->mergeConfigFrom(__DIR__ . '/../config/pepper.php', 'pepper');
 
         $this->app->register(\Rebing\GraphQL\GraphQLServiceProvider::class);
+    }
 
-        $this->app->bind('command.pepper:queries', QueryCommand::class);
-        $this->app->bind('command.pepper:types', TypeCommand::class);
-        $this->app->bind('command.pepper:inputs', InputCommand::class);
-        $this->app->bind('command.pepper:orders', OrderCommand::class);
-        $this->app->bind('command.pepper:mutations', MutationCommand::class);
-        $this->app->bind('command.pepper:add', AddCommand::class);
-
-        $this->commands([
-            'command.pepper:queries',
-            'command.pepper:types',
-            'command.pepper:inputs',
-            'command.pepper:orders',
-            'command.pepper:mutations',
-            'command.pepper:add',
-        ]);
+    public function registerConsole(): void
+    {
+        $this->commands(OrderMakeCommand::class);
     }
 }
