@@ -38,6 +38,7 @@
     - [Feature request](#feature-request)
     - [Pull request](#pull-request)
   - [Support](#support)
+  - [License](#license)
 
 ## Introducation
 
@@ -520,3 +521,7 @@ Not supported.
 ## Support
 
 [Table of contents](#table-of-contents)
+
+## License
+
+The MIT License (MIT). Please see [License File](LICENSE) File for more information.
