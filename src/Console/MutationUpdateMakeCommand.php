@@ -4,21 +4,21 @@ declare(strict_types=1);
 
 namespace Pepper\Console;
 
-class InputOrderMakeCommand extends BaseMakeCommand
+class MutationUpdateMakeCommand extends BaseMakeCommand
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'make:pepper:input:order {name} {class} {description} {model}';
+    protected $signature = 'make:pepper:mutation:update {name} {class} {description} {model}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Create a new Pepper input order class';
+    protected $description = 'Create a new Pepper mutation update class';
 
     /**
      * Get the stub file for the generator.
@@ -27,7 +27,7 @@ class InputOrderMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/input_order.stub';
+        return __DIR__ . '/stubs/mutation_update.stub';
     }
 
     /**
@@ -38,6 +38,6 @@ class InputOrderMakeCommand extends BaseMakeCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\GraphQL\Inputs\Pepper';
+        return $rootNamespace . '\GraphQL\Mutations\Pepper';
     }
 }

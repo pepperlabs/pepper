@@ -9,16 +9,36 @@ use Symfony\Component\Console\Input\InputArgument;
 
 abstract class BaseMakeCommand extends GeneratorCommand
 {
+    /**
+     * The type of class being generated.
+     *
+     * @var string
+     */
+    protected $type = 'class';
+
+    /**
+     * Get the console command arguments.
+     *
+     * @return array
+     */
     protected function getArguments()
     {
         return [
             ['name', InputArgument::REQUIRED, 'The name of the class'],
             ['class', InputArgument::REQUIRED, 'The name of the GraphQL class'],
             ['description', InputArgument::REQUIRED, 'The description of the GraphQL class'],
-            ['model', InputArgument::REQUIRED, 'The model of the GraphQL'],
+            ['model', InputArgument::REQUIRED, 'The model of the GraphQL class'],
         ];
     }
 
+    /**
+     * Build the class with the given arguments.
+     *
+     * @param  string  $name
+     * @return string
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
     protected function buildClass($name)
     {
         $stub = parent::buildClass($name);
@@ -28,6 +48,13 @@ abstract class BaseMakeCommand extends GeneratorCommand
             ->replaceModel($stub, $this->argument('model'));
     }
 
+    /**
+     * Replace the name for the given stub.
+     *
+     * @param  string  $stub
+     * @param  string  $name
+     * @return $this
+     */
     protected function replaceName(&$stub, $name)
     {
         $stub = str_replace(['DummyName', '{{ name }}', '{{name}}'], $name, $stub);
@@ -35,6 +62,13 @@ abstract class BaseMakeCommand extends GeneratorCommand
         return $this;
     }
 
+    /**
+     * Replace the description for the given stub.
+     *
+     * @param  string  $stub
+     * @param  string  $description
+     * @return $this
+     */
     protected function replaceDescription(&$stub, $description)
     {
         $stub = str_replace(['DummyDescription', '{{ description }}', '{{description}}'], $description, $stub);
@@ -42,6 +76,13 @@ abstract class BaseMakeCommand extends GeneratorCommand
         return $this;
     }
 
+    /**
+     * Replace the class model for the given stub.
+     *
+     * @param  string  $stub
+     * @param  string  $model
+     * @return string
+     */
     protected function replaceModel($stub, $model)
     {
         return str_replace(['DummyModel', '{{ model }}', '{{model}}'], $model, $stub);
