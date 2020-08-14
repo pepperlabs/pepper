@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace Pepper\Console;
 
-class OrderMakeCommand extends BaseMakeCommand
+class InputOrderMakeCommand extends BaseMakeCommand
 {
-    protected $signature = 'make:pepper:order {name} {class} {description} {model}';
-    protected $description = 'Create a new Pepper order class';
+    protected $signature = 'make:pepper:input:order {name} {class} {description} {model}';
+    protected $description = 'Create a new Pepper input order class';
     protected $type = 'class';
 
     protected function getStub()
     {
-        return __DIR__ . '/stubs/order.stub';
+        return __DIR__ . '/stubs/input_order.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)

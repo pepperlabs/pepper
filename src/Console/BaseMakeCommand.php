@@ -30,14 +30,14 @@ abstract class BaseMakeCommand extends GeneratorCommand
 
     protected function replaceName(&$stub, $name)
     {
-        str_replace(['DummyName', '{{ name }}', '{{name}}'], $name, $stub);
+        $stub = str_replace(['DummyName', '{{ name }}', '{{name}}'], $name, $stub);
 
         return $this;
     }
 
     protected function replaceDescription(&$stub, $description)
     {
-        str_replace(['DummyDescription', '{{ description }}', '{{description}}'], $description, $stub);
+        $stub = str_replace(['DummyDescription', '{{ description }}', '{{description}}'], $description, $stub);
 
         return $this;
     }

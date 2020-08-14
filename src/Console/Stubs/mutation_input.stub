@@ -2,23 +2,23 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Inputs\Pepper;
+namespace DummyNamespace;
 
 use App;
 use Rebing\GraphQL\Support\InputType;
 
-class {{ class }} extends InputType
+class DummyClass extends InputType
 {
     protected $attributes = [
-        'name' => '{{ name }}Mutation',
-        'description' => '{{ description }}'
+        'name' => 'DummyName',
+        'description' => 'DummyDescription'
     ];
 
     protected $instance;
 
     public function __construct()
     {
-        $this->instance = new {{ model }};
+        $this->instance = new DummyModel;
     }
 
     public function fields(): array

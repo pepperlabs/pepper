@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Mutations\Pepper;
+namespace DummyNamespace;
 
 use App;
 use Closure;
@@ -12,18 +12,18 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 use GraphQL\Type\Definition\ResolveInfo;
 
-class {{ class }} extends Mutation
+class DummyClass extends Mutation
 {
     protected $attributes = [
-        'name' => '{{ name }}InsertMutation',
-        'description' => '{{ description }}'
+        'name' => 'DummyName',
+        'description' => 'DummyDescription'
     ];
 
     protected $instance;
 
     public function __construct()
     {
-        $this->instance = new {{ model }};
+        $this->instance = new DummyModel;
     }
 
     public function type(): Type

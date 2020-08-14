@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Types\Pepper;
+namespace DummyNamespace;
 
 use App;
 use Closure;
@@ -11,22 +11,22 @@ use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class {{ class }} extends GraphQLType
+class DummyClass extends GraphQLType
 {
     protected $attributes = [
-        'name' => '{{ name }}FieldAggregateType',
-        'description' => '{{ description }}'
+        'name' => 'DummyName',
+        'description' => 'DummyDescription'
     ];
 
     protected $instance;
 
     public function __construct()
     {
-        $this->instance = new {{ model }};
+        $this->instance = new DummyModel;
     }
 
     public function fields(): array
     {
-        return $this->instance->getFieldAggregateTypeFields();
+        return $this->instance->getResultAggregateFields();
     }
 }

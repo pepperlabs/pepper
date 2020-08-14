@@ -2,27 +2,28 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Mutations\Pepper;
+namespace DummyNamespace;
 
 use App;
 use Closure;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
 use GraphQL\Type\Definition\ResolveInfo;
 
-class {{ class }} extends Mutation
+class DummyClass extends Mutation
 {
     protected $attributes = [
-        'name' => '{{ name }}DeleteByPkMutation',
-        'description' => '{{ description }}'
+        'name' => 'DummyName',
+        'description' => 'DummyDescription'
     ];
 
     protected $instance;
 
     public function __construct()
     {
-        $this->instance = new {{ model }};
+        $this->instance = new DummyModel;
     }
 
     public function type(): Type
@@ -32,11 +33,13 @@ class {{ class }} extends Mutation
 
     public function args(): array
     {
-        return $this->instance->getMutationFields();
+        return [
+            'where' => ['type' => GraphQL::type($this->instance->getInputName())]
+        ];
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return $this->instance->deleteByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields);
+        return $this->instance->deleteMutation($root, $args, $context, $resolveInfo, $getSelectFields);
     }
 }

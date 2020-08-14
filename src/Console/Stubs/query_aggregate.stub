@@ -2,27 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Queries\Pepper;
+namespace DummyNamespace;
 
-use Rebing\GraphQL\Support\Facades\GraphQL;
-use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Query;
-use Closure;
 use App;
+use Closure;
+use Rebing\GraphQL\Support\Query;
+use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class {{ class }} extends Query
+class DummyClass extends Query
 {
     protected $attributes = [
-        'name' => '{{ name }}AggregateQuery',
-        'description' => '{{ description }}'
+        'name' => 'DummyName',
+        'description' => 'DummyDescription'
     ];
 
     protected $instance;
 
     public function __construct()
     {
-        $this->instance = new {{ model }};
+        $this->instance = new DummyModel;
     }
 
     public function type(): Type
