@@ -33,26 +33,11 @@ class DummyClass extends Mutation
 
     public function args(): array
     {
-        return [
-            'objects' => [
-                'name' => 'objects',
-                'type' => Type::listOf(GraphQL::type('{{ name }}InputMutation'))
-            ]
-        ];
+        $this->instance->getMutationInsertFields();
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        // @todo: Not everyone are lucky enough to have a shiny id column.
-        $ids = [];
-        foreach ($args['objects'] as $obj) {
-            $ids[] = $this->instance->getModel()::create($obj)->id;
-        }
-
-        // Let the new born out in the wild.
-        $root = $this->instance->newModel()->whereIn('id', $ids);
-
-        // return types are satisfied when they are iterable enough.
-        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        $this->instance->resolveMutationInsert($root, $args, $context, $resolveInfo, $getSelectFields);
     }
 }

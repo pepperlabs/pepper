@@ -33,16 +33,7 @@ class DummyClass extends Mutation
 
     public function args(): array
     {
-        return [
-            'pk_columns' => [
-                'name' => 'pk_columns',
-                'type' => GraphQL::type('{{ name }}InputMutation')
-            ],
-            '_set' => [
-                'name' => '_set',
-                'type' => GraphQL::type('{{ name }}InputMutation')
-            ]
-        ];
+        return $this->instance->getMutationUpdateByPkFields();
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)

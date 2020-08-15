@@ -251,4 +251,13 @@ trait GraphQLQuery
         // return types are satisfied when they are iterable enough.
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->first();
     }
+
+    public function resolveQueryAggregate($root, $args, $context, $resolveInfo, $getSelectFields)
+    {
+        $query = $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        return [
+            'aggregate' => ['root' => $query, 'name' => preg_replace('/_aggregate$/', '', array_reverse($resolveInfo->path)[0])],
+            'nodes' => $query
+        ];
+    }
 }

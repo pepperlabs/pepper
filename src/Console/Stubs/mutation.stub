@@ -36,7 +36,6 @@ class DummyClass extends Mutation
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        // return type need to be iterable.
-        return [$root->updateOrCreate(['id' => $args['id'] ?? -1], $args)];
+        $this->instance->resolveMutation($root, $args, $context, $resolveInfo, $getSelectFields);
     }
 }

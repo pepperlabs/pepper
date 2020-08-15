@@ -52,15 +52,15 @@ trait GraphQLMutation
         return $fields;
     }
 
-    public function getMutationInsertFields()
-    {
-        return [
-            'objects' => [
-                'name' => 'objects',
-                'type' => Type::listOf(GraphQL::type('UserMutationInput'))
-            ]
-        ];
-    }
+    // public function getMutationInsertFields()
+    // {
+    //     return [
+    //         'objects' => [
+    //             'name' => 'objects',
+    //             'type' => Type::listOf(GraphQL::type('UserMutationInput'))
+    //         ]
+    //     ];
+    // }
 
     public function getInputMutationName()
     {
@@ -255,5 +255,81 @@ trait GraphQLMutation
 
         // return types are satisfied when they are iterable enough.
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+    }
+
+    public function getMutationUpdateByPkFields(): array
+    {
+        return [
+            'pk_columns' => [
+                'name' => 'pk_columns',
+                'type' => GraphQL::type('{{ name }}InputMutation')
+            ],
+            '_set' => [
+                'name' => '_set',
+                'type' => GraphQL::type('{{ name }}InputMutation')
+            ]
+        ];
+    }
+
+
+    public function getMutationUpdateFields(): array
+    {
+        return [
+            'where' => ['type' => GraphQL::type($this->instance->getInputName())],
+            '_set' => ['type' => GraphQL::type('{{ name }}InputMutation')]
+        ];
+    }
+
+    public function getMutationInsertOneFields(): array
+    {
+        return [
+            'object' => [
+                'name' => 'object',
+                'type' => GraphQL::type('{{ name }}InputMutation')
+            ]
+        ];
+    }
+
+    public function resolveMutationInsertOne($root, $args, $context, $resolveInfo, $getSelectFields)
+    {
+        // @todo: Not everyone are lucky enough to have a shiny id column.
+        $id = $this->instance->getModel()::create($args['object'])->id;
+
+        // Let the new born out in the wild.
+        $root = $this->instance->newModel()->whereIn('id', [$id]);
+
+        // return types are satisfied when they are iterable enough.
+        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+    }
+
+    public function resolveMutationInsert($root, $args, $context, $resolveInfo, $getSelectFields)
+    {
+        // @todo: Not everyone are lucky enough to have a shiny id column.
+        $ids = [];
+        foreach ($args['objects'] as $obj) {
+            $ids[] = $this->instance->getModel()::create($obj)->id;
+        }
+
+        // Let the new born out in the wild.
+        $root = $this->instance->newModel()->whereIn('id', $ids);
+
+        // return types are satisfied when they are iterable enough.
+        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+    }
+
+    public function getMutationInsertFields(): array
+    {
+        return [
+            'objects' => [
+                'name' => 'objects',
+                'type' => Type::listOf(GraphQL::type('{{ name }}InputMutation'))
+            ]
+        ];
+    }
+
+    public function resolveMutation($root, $args, $context, $resolveInfo, $getSelectFields)
+    {
+        // return type need to be iterable.
+        return [$root->updateOrCreate(['id' => $args['id'] ?? -1], $args)];
     }
 }
