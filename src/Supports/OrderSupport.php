@@ -1,10 +1,10 @@
 <?php
 
-namespace Pepper\Helpers;
+namespace Pepper\Supports;
 
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait GraphQLOrder
+trait OrderSupport
 {
     /**
      * Get GraphQL ordering fields.

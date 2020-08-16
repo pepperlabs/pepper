@@ -1,13 +1,13 @@
 <?php
 
-namespace Pepper\Helpers;
+namespace Pepper\Supports;
 
-use Rebing\GraphQL\Support\Facades\GraphQL;
-use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Type\Definition\Type;
 use Closure;
+use GraphQL\Type\Definition\Type;
+use GraphQL\Type\Definition\ResolveInfo;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait GraphQLQuery
+trait QuerySupport
 {
     /**
      * Get GraphQL Query name.

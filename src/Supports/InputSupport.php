@@ -1,12 +1,11 @@
 <?php
 
-namespace Pepper\Helpers;
+namespace Pepper\Supports;
 
-use Rebing\GraphQL\Support\Facades\GraphQL;
-use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Str;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait GraphQLInput
+trait InputSupport
 {
     public function getInputFields(): array
     {

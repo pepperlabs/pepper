@@ -1,14 +1,13 @@
 <?php
 
-namespace Pepper\Helpers;
+namespace Pepper\Supports;
 
-use Closure;
 use Illuminate\Support\Str;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait GraphQLAggregate
+trait AggregateSupport
 {
     public function getFieldAggregateNodeType($method)
     {

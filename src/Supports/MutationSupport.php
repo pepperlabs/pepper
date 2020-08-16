@@ -1,11 +1,11 @@
 <?php
 
-namespace Pepper\Helpers;
+namespace Pepper\Supports;
 
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use GraphQL\Type\Definition\Type;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait GraphQLMutation
+trait MutationSupport
 {
     /**
      * Get GraphQL Mutation name.
@@ -22,6 +22,11 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get mutation description.
+     *
+     * @return string
+     */
     public function getMutationDescription(): string
     {
         $method = 'setMutationDescription';
@@ -32,11 +37,21 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get mutation type.
+     *
+     * @return Type
+     */
     public function getMutationType(): Type
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
 
+    /**
+     * Get mutation fields.
+     *
+     * @return array
+     */
     public function getMutationFields(): array
     {
         $fields = [];
@@ -52,16 +67,11 @@ trait GraphQLMutation
         return $fields;
     }
 
-    // public function getMutationInsertFields()
-    // {
-    //     return [
-    //         'objects' => [
-    //             'name' => 'objects',
-    //             'type' => Type::listOf(GraphQL::type('UserMutationInput'))
-    //         ]
-    //     ];
-    // }
-
+    /**
+     * Get input mutation name.
+     *
+     * @return string
+     */
     public function getInputMutationName()
     {
         $method = 'setInputMutationName';
@@ -72,6 +82,11 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get input mutation description.
+     *
+     * @return string
+     */
     public function getInputMutationDescription(): string
     {
         $method = 'setInputMutationDescription';
@@ -82,7 +97,12 @@ trait GraphQLMutation
         }
     }
 
-    public function getInsertMutationName()
+    /**
+     * Get insert mutation name.
+     *
+     * @return string
+     */
+    public function getInsertMutationName(): string
     {
         $method = 'setInsertMutationName';
         if (method_exists($this, $method)) {
@@ -92,6 +112,11 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get insert mutation description.
+     *
+     * @return string
+     */
     public function getInsertMutationDescription(): string
     {
         $method = 'setInsertMutationDescription';
@@ -102,7 +127,12 @@ trait GraphQLMutation
         }
     }
 
-    public function getInsertOneMutationName()
+    /**
+     * Get insert one mutation name.
+     *
+     * @return string
+     */
+    public function getInsertOneMutationName(): string
     {
         $method = 'setInsertOneMutationName';
         if (method_exists($this, $method)) {
@@ -112,6 +142,11 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get insert one mutation description.
+     *
+     * @return string
+     */
     public function getInsertOneMutationDescription(): string
     {
         $method = 'setInsertOneMutationDescription';
@@ -122,7 +157,12 @@ trait GraphQLMutation
         }
     }
 
-    public function getUpdateByPkMutationName()
+    /**
+     * Get update by PK mutation name.
+     *
+     * @return string
+     */
+    public function getUpdateByPkMutationName(): string
     {
         $method = 'setUpdateByPkMutationName';
         if (method_exists($this, $method)) {
@@ -132,6 +172,11 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get update by PK mutation description.
+     *
+     * @return string
+     */
     public function getUpdateByPkMutationDescription(): string
     {
         $method = 'setUpdateByPkMutationDescription';
@@ -142,6 +187,17 @@ trait GraphQLMutation
         }
     }
 
+
+    /**
+     * Update by PK mutation.
+     *
+     * @param  object $root
+     * @param  array $args
+     * @param  object $context
+     * @param  ResolveInfo $resolveInfo
+     * @param  Closure $getSelectFields
+     * @return object
+     */
     public function updateByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
         // @todo: Not everyone are lucky enough to have a shiny id column.
@@ -157,7 +213,12 @@ trait GraphQLMutation
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 
-    public function getUpdateMutationName()
+    /**
+     * Get update mutation name.
+     *
+     * @return string
+     */
+    public function getUpdateMutationName(): string
     {
         $method = 'setUpdateMutationName';
         if (method_exists($this, $method)) {
@@ -167,6 +228,11 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get update mutation description.
+     *
+     * @return string
+     */
     public function getUpdateMutationDescription(): string
     {
         $method = 'setUpdateMutationDescription';
@@ -177,22 +243,34 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Update mutation.
+     *
+     * @param  object $root
+     * @param  array $args
+     * @param  object $context
+     * @param  ResolveInfo $resolveInfo
+     * @param  Closure $getSelectFields
+     * @return object
+     */
     public function updateMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        // @todo: Not everyone are lucky enough to have a shiny id column.
         $models = $this->getQueryResolve($this->newModel(), $args, $context, $resolveInfo, $getSelectFields);
         foreach ($models->get() as $model) {
             $model->update($args['_set']);
         }
 
-        // Let the new born out in the wild.
         $root = $models;
 
-        // return types are satisfied when they are iterable enough.
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 
-    public function getDeleteByPkMutationName()
+    /**
+     * Get delete by PK mutation name.
+     *
+     * @return string
+     */
+    public function getDeleteByPkMutationName(): string
     {
         $method = 'setDeleteByPkMutationName';
         if (method_exists($this, $method)) {
@@ -202,6 +280,11 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get delete by PK mutation description.
+     *
+     * @return string
+     */
     public function getDeleteByPkMutationDescription(): string
     {
         $method = 'setDeleteByPkMutationDescription';
@@ -212,6 +295,17 @@ trait GraphQLMutation
         }
     }
 
+
+    /**
+     * Delete by PK mutation.
+     *
+     * @param  object $root
+     * @param  array $args
+     * @param  object $context
+     * @param  ResolveInfo $resolveInfo
+     * @param  Closure $getSelectFields
+     * @return object
+     */
     public function deleteByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
         $models = $this->newModel()::where($args);
@@ -223,7 +317,12 @@ trait GraphQLMutation
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 
-    public function getDeleteMutationName()
+    /**
+     * Get delete mutation name.
+     *
+     * @return string
+     */
+    public function getDeleteMutationName(): string
     {
         $method = 'setDeleteMutationName';
         if (method_exists($this, $method)) {
@@ -233,6 +332,11 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Get delete mutation description.
+     *
+     * @return string
+     */
     public function getDeleteMutationDescription(): string
     {
         $method = 'setDeleteMutationDescription';
@@ -243,20 +347,32 @@ trait GraphQLMutation
         }
     }
 
+    /**
+     * Delete mutation.
+     *
+     * @param  object $root
+     * @param  array $args
+     * @param  object $context
+     * @param  ResolveInfo $resolveInfo
+     * @param  Closure $getSelectFields
+     * @return object
+     */
     public function deleteMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        // @todo: Not everyone are lucky enough to have a shiny id column.
         $models = $this->getQueryResolve($this->newModel(), $args, $context, $resolveInfo, $getSelectFields);
 
         $models->delete();
 
-        // Let the new born out in the wild.
         $root = $models;
 
-        // return types are satisfied when they are iterable enough.
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 
+    /**
+     * Get mutation update by PK fields.
+     *
+     * @return array
+     */
     public function getMutationUpdateByPkFields(): array
     {
         return [
@@ -271,7 +387,11 @@ trait GraphQLMutation
         ];
     }
 
-
+    /**
+     * Get mutation update fields.
+     *
+     * @return array
+     */
     public function getMutationUpdateFields(): array
     {
         return [
@@ -280,6 +400,11 @@ trait GraphQLMutation
         ];
     }
 
+    /**
+     * Get mutation insert one fields.
+     *
+     * @return array
+     */
     public function getMutationInsertOneFields(): array
     {
         return [
@@ -290,33 +415,53 @@ trait GraphQLMutation
         ];
     }
 
+    /**
+     * Resolve mutation insert one.
+     *
+     * @param  object $root
+     * @param  array $args
+     * @param  object $context
+     * @param  ResolveInfo $resolveInfo
+     * @param  Closure $getSelectFields
+     * @return object
+     */
     public function resolveMutationInsertOne($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        // @todo: Not everyone are lucky enough to have a shiny id column.
         $id = $this->instance->getModel()::create($args['object'])->id;
 
-        // Let the new born out in the wild.
         $root = $this->instance->newModel()->whereIn('id', [$id]);
 
-        // return types are satisfied when they are iterable enough.
         return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 
+
+    /**
+     * Resolve mutation insert.
+     *
+     * @param  object $root
+     * @param  array $args
+     * @param  object $context
+     * @param  ResolveInfo $resolveInfo
+     * @param  Closure $getSelectFields
+     * @return object
+     */
     public function resolveMutationInsert($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        // @todo: Not everyone are lucky enough to have a shiny id column.
         $ids = [];
         foreach ($args['objects'] as $obj) {
             $ids[] = $this->instance->getModel()::create($obj)->id;
         }
 
-        // Let the new born out in the wild.
         $root = $this->instance->newModel()->whereIn('id', $ids);
 
-        // return types are satisfied when they are iterable enough.
         return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 
+    /**
+     * Get mutation insert fields.
+     *
+     * @return array
+     */
     public function getMutationInsertFields(): array
     {
         return [
@@ -327,9 +472,18 @@ trait GraphQLMutation
         ];
     }
 
+    /**
+     * Resolve mutation.
+     *
+     * @param  object $root
+     * @param  array $args
+     * @param  object $context
+     * @param  ResolveInfo $resolveInfo
+     * @param  Closure $getSelectFields
+     * @return object
+     */
     public function resolveMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        // return type need to be iterable.
         return [$root->updateOrCreate(['id' => $args['id'] ?? -1], $args)];
     }
 }
