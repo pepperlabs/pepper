@@ -3,14 +3,8 @@
 namespace Pepper;
 
 use Illuminate\Support\ServiceProvider;
-use Pepper\Commands\TypeCommand;
-use Pepper\Commands\QueryCommand;
-use Pepper\Commands\InputCommand;
-use Pepper\Commands\OrderCommand;
-use Pepper\Commands\MutationCommand;
-use Pepper\Commands\AddCommand;
 
-use Pepper\Console\OrderMakeCommand;
+// use Pepper\Console\OrderMakeCommand;
 
 class PepperServiceProvider extends ServiceProvider
 {
@@ -45,6 +39,6 @@ class PepperServiceProvider extends ServiceProvider
 
     public function registerConsole(): void
     {
-        $this->commands(OrderMakeCommand::class);
+        // $this->commands(OrderMakeCommand::class);
     }
 }
