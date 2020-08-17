@@ -4,18 +4,18 @@ namespace Pepper;
 
 use ReflectionClass;
 
-use Pepper\Helpers\GraphQLAggregate;
-use Pepper\Helpers\GraphQLMutation;
+use Pepper\Supports\AggregateSupport;
+use Pepper\Supports\MutationSupport;
 use Illuminate\Support\Facades\DB;
-use Pepper\Helpers\GraphQLQuery;
-use Pepper\Helpers\GraphQLInput;
-use Pepper\Helpers\GraphQLOrder;
-use Pepper\Helpers\GraphQLType;
+use Pepper\Supports\QuerySupport;
+use Pepper\Supports\InputSupport;
+use Pepper\Supports\OrderSupport;
+use Pepper\Supports\TypeSupport;
 use Illuminate\Support\Str;
 
 abstract class GraphQL
 {
-    use GraphQLType, GraphQLQuery, GraphQLInput, GraphQLOrder, GraphQLMutation, GraphQLAggregate;
+    use TypeSupport, QuerySupport, InputSupport, OrderSupport, MutationSupport, AggregateSupport;
 
     /** @var object */
     // protected $model;
@@ -258,6 +258,9 @@ abstract class GraphQL
         }
     }
 
+    /**
+     * @deprecated
+     */
     public function call_field_type(string $field)
     {
         return call_user_func('\GraphQL\Type\Definition\Type::' . $this->getFieldType($field));
