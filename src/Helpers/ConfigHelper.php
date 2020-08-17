@@ -2,14 +2,45 @@
 
 namespace Pepper\Helpers;
 
+use Illuminate\Config\Repository;
+
+/**
+ * Update configuration of GraphQL file.
+ *
+ * Example usage:
+ *
+ * $config = new ConfigHelper($GraphQLConfigPath);
+ *
+ * $config = new ConfigHelper(); // fallback to default graphql.php file
+ *
+ * $config->addType('key', 'class');
+ *
+ * $config->addQuery('key', 'class');
+ *
+ * $config->addMutation('key', 'class');
+ *
+ * @author Amirmasoud Sheydaei <amirmasoud.sheydaei@gmail.com>
+ * @since 1.0.0
+ */
 class ConfigHelper
 {
     /** @var string */
-    protected $config;
+    public $path;
 
-    public function __construct()
+    /** @var Illuminate\Config\Repository */
+    public $repository;
+
+    /**
+     * Inititate config helper.
+     *
+     * @param string|null $path
+     *
+     * @throws ErrorException
+     */
+    public function __construct(?string $path)
     {
-        $this->config = config_path('graphql.php');
+        $this->path = $path ?? config_path('graphql.php');
+        $this->repository = new Repository(include $path);
     }
 
     /**
@@ -21,11 +52,11 @@ class ConfigHelper
      */
     public function addType(string $key, string $class): void
     {
-        if ($this->exists('graphql.types.' . $key)) {
+        if ($this->canAdd('types.' . $key)) {
             $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
             $class = strval('App\GraphQL\Types\Pepper\\' . $class . '::class');
-            $update = preg_replace($pattern, "$0 '$key' => $class,\n      ", file_get_contents($this->config));
-            file_put_contents($this->config, $update);
+            $update = preg_replace($pattern, "$0'$key' => $class,\n        ", file_get_contents($this->path));
+            file_put_contents($this->path, $update);
         }
     }
 
@@ -38,12 +69,12 @@ class ConfigHelper
      */
     public function addQuery(string $key, string $class): void
     {
-        if ($this->exists('graphql.schemas.default.query.' . $key)) {
+        if ($this->canAdd('schemas.default.query.' . $key)) {
             $pattern = '/\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*/';
             $class = strval('App\GraphQL\Queries\Pepper\\' . $class . '::class');
             $replace = "$0 '$key' => $class,\n              ";
-            $update = preg_replace($pattern, $replace, file_get_contents($this->config));
-            file_put_contents($this->config, $update);
+            $update = preg_replace($pattern, $replace, file_get_contents($this->path));
+            file_put_contents($this->path, $update);
         }
     }
 
@@ -56,23 +87,24 @@ class ConfigHelper
      */
     public function addMutation(string $key, string $class): void
     {
-        if ($this->exists('graphql.schemas.default.mutation.' . $key)) {
+        if ($this->canAdd('schemas.default.mutation.' . $key)) {
             $pattern = '/(\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*[^"]+?(?=["\']mutation["\'])["\']mutation["\']\s*=>\s*\[\s*)/';
             $class = strval('App\GraphQL\Mutations\Pepper\\' . $class . '::class');
             $replace = "$0 '$key' => $class,\n              ";
-            $update = preg_replace($pattern, $replace, file_get_contents($this->config));
-            file_put_contents($this->config, $update);
+            $update = preg_replace($pattern, $replace, file_get_contents($this->path));
+            file_put_contents($this->path, $update);
         }
     }
 
     /**
-     * Checks if config file exists and given key is not null.
+     * Check if we can add the given key by checking the nullability of the
+     * given key in the config file.
      *
      * @param  string $key
      * @return bool
      */
-    protected function exists($key): bool
+    protected function canAdd($key): bool
     {
-        return file_exists($this->config) && !is_null(config($key));
+        return !$this->repository->has($key);
     }
 }

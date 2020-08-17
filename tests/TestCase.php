@@ -7,7 +7,7 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 class TestCase extends BaseTestCase
 {
     /** @var string */
-    protected $config;
+    protected $configPath = __DIR__ . '/Stubs/graphql.stub';
 
     /**
      * Setup the test environment.
@@ -18,6 +18,20 @@ class TestCase extends BaseTestCase
     {
         parent::setUp();
 
-        $this->config = include __DIR__ . '/Stubs/graphql.php';
+        // Hello graphql config file.
+        copy($this->configPath, $this->configPath . '.php');
+    }
+
+    /**
+     * Teardown the test environment.
+     *
+     * @return void
+     */
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        // Good bye graphql config file.
+        unlink($this->configPath . '.php');
     }
 }
