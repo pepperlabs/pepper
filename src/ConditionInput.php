@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pepper\GraphQL;
+namespace Pepper;
 
 use App\GraphQL\Unions\AnyUnion;
 use GraphQL\Type\Definition\Type;
@@ -21,75 +21,75 @@ class ConditionInput extends InputType
         return [
             '_eq' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'A test field',
+                'description' => '= equivalent',
             ],
             '_neq' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => '<> or != equivalent',
             ],
             '_gt' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => '> equivalent',
             ],
             '_lt' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => '< equivalent',
             ],
             '_gte' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => '>= equivalent',
             ],
             '_lte' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => '<= equivalent',
             ],
             '_in' => [
                 'type' => Type::listOf(GraphQL::type('AnyScalar')),
-                'description' => '...',
+                'description' => 'IN equivalent',
             ],
             '_nin' => [
                 'type' => Type::listOf(GraphQL::type('AnyScalar')),
-                'description' => '...',
+                'description' => 'NOT IN equivalent',
             ],
             '_like' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => 'LIKE equivalent',
             ],
             '_nlike' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => 'NOT LIKE equivalent',
             ],
             '_ilike' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => 'ILIKE equivalent',
             ],
             '_nilike' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => '...',
+                'description' => 'NOT ILIKE equivalent',
             ],
             '_is_null' => [
                 'type' => Type::boolean(),
-                'description' => 'Checking for null values',
+                'description' => 'IS NULL equivalent',
             ],
             '_date' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Checking for date values',
+                'description' => 'Laravel whereDate() equivalent',
             ],
             '_month' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Checking for month values',
+                'description' => 'Laravel whereMonth() equivalent',
             ],
             '_day' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Checking for day values',
+                'description' => 'Laravel whereDay() equivalent',
             ],
             '_year' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Checking for year values',
+                'description' => 'Laravel whereYear() equivalent',
             ],
             '_time' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Checking for time values',
+                'description' => 'Laravel whereTime() equivalent',
             ]
         ];
     }

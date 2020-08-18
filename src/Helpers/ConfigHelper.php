@@ -40,7 +40,7 @@ class ConfigHelper
     public function __construct(?string $path)
     {
         $this->path = $path ?? config_path('graphql.php');
-        $this->repository = new Repository(include $path);
+        $this->repository = new Repository(include $this->path);
     }
 
     /**

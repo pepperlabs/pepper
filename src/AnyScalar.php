@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pepper\GraphQL;
+namespace Pepper;
 
 use Exception;
 use GraphQL\Error\Error;

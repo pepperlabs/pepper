@@ -3,6 +3,8 @@
 namespace Pepper;
 
 use Illuminate\Support\ServiceProvider;
+use Pepper\Console\HttpMakeCommand;
+use Pepper\Console\PepperGrindCommand;
 use Pepper\Console\InputMakeCommand;
 use Pepper\Console\InputMutationMakeCommand;
 use Pepper\Console\InputOrderMakeCommand;
@@ -60,6 +62,8 @@ class PepperServiceProvider extends ServiceProvider
      */
     public function registerConsole(): void
     {
+        $this->commands(HttpMakeCommand::class);
+        $this->commands(PepperGrindCommand::class);
         $this->commands(InputMakeCommand::class);
         $this->commands(InputMutationMakeCommand::class);
         $this->commands(InputOrderMakeCommand::class);

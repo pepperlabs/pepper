@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Pepper\Console;
 
 use Illuminate\Console\GeneratorCommand;
+use Pepper\Helpers\ConfigHelper as Config;
 use Symfony\Component\Console\Input\InputArgument;
 
 abstract class BaseMakeCommand extends GeneratorCommand
@@ -86,5 +87,28 @@ abstract class BaseMakeCommand extends GeneratorCommand
     protected function replaceModel($stub, $model)
     {
         return str_replace(['DummyModel', '{{ model }}', '{{model}}'], $model, $stub);
+    }
+
+    /**
+     * Execute the console command.
+     *
+     * @return bool|null
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function handle()
+    {
+        parent::handle();
+
+        if (!$this->hasOption('--no-config') || !$this->option('--no-config')) {
+            $config = new Config(null);
+            $gql = strtolower($this->gql);
+
+            if ($gql == 'type') {
+                $config->addType($this->argument('name'), $this->argument('class'));
+            } elseif ($gql == 'query') {
+            } elseif ($gql == 'mutation') {
+            }
+        }
     }
 }

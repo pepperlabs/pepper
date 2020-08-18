@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pepper\GraphQL;
+namespace Pepper;
 
 use Rebing\GraphQL\Support\EnumType;
 
