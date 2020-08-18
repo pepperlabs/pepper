@@ -88,6 +88,7 @@ class PepperGrindCommand extends Command
     {
         $basename = class_basename($model);
         $studly = Str::of($basename)->studly();
+        $noConfig = $this->hasOption('--no-config') && $this->option('--no-config');
 
         $this->ensureGraphQLConfigExists();
         $config = new Config(null);
@@ -106,7 +107,7 @@ class PepperGrindCommand extends Command
             'class' => $typeClass, // ClassType
             'description' => $basename . ' type description',
             'model' => $model,
-            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+            '--no-config' => $noConfig
         ]);
 
         // Create new type aggregate
@@ -117,7 +118,7 @@ class PepperGrindCommand extends Command
             'class' => $typeClass, // ClassAggregateType
             'description' => $basename . ' aggregate type description',
             'model' => $model,
-            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+            '--no-config' => $noConfig
         ]);
 
         // Create new field aggregate type
@@ -128,7 +129,7 @@ class PepperGrindCommand extends Command
             'class' => $typeClass, // ClassFieldAggregateType
             'description' => $basename . ' field aggregate type description',
             'model' => $model,
-            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+            '--no-config' => $noConfig
         ]);
 
         // Create new field aggregate unresolvalbe type
@@ -139,7 +140,7 @@ class PepperGrindCommand extends Command
             'class' => $typeClass, // ClassFieldAggregateUnresolvableType
             'description' => $basename . ' field aggregate unresolvable type description',
             'model' => $model,
-            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+            '--no-config' => $noConfig
         ]);
 
         // Create new result aggregate type
@@ -150,7 +151,40 @@ class PepperGrindCommand extends Command
             'class' => $typeClass, // ClassResultAggregateType
             'description' => $basename . ' result aggregate type description',
             'model' => $model,
-            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new input
+        $inputName = $inputClass = $studly . 'Input';
+        $this->info('Creating ' . $inputName . '...');
+        $this->call('make:pepper:input', [
+            'name' => $inputName, // ClassInput
+            'class' => $inputClass, // ClassInput
+            'description' => $basename . ' input description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new order input
+        $inputName = $inputClass = $studly . 'OrderInput';
+        $this->info('Creating ' . $inputName . '...');
+        $this->call('make:pepper:input:order', [
+            'name' => $inputName, // ClassOrderInput
+            'class' => $inputClass, // ClassOrderInput
+            'description' => $basename . ' order input description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new mutation input
+        $inputName = $inputClass = $studly . 'MutationInput';
+        $this->info('Creating ' . $inputName . '...');
+        $this->call('make:pepper:input:mutation', [
+            'name' => $inputName, // ClassMutationInput
+            'class' => $inputClass, // ClassMutationInput
+            'description' => $basename . ' mutation input description',
+            'model' => $model,
+            '--no-config' => $noConfig
         ]);
     }
 

@@ -107,6 +107,8 @@ abstract class BaseMakeCommand extends GeneratorCommand
 
             if ($gql == 'type') {
                 $config->addType($this->argument('name'), $this->argument('class'));
+            } elseif ($gql == 'input') {
+                $config->addType($this->argument('name'), $this->argument('class'), 'App\GraphQL\Inputs\Pepper\\');
             } elseif ($gql == 'query') {
             } elseif ($gql == 'mutation') {
             }
