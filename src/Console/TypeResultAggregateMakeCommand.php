@@ -11,7 +11,12 @@ class TypeResultAggregateMakeCommand extends BaseMakeCommand
      *
      * @var string
      */
-    protected $signature = 'make:pepper:type:result-aggregate {name} {class} {description} {model}';
+    protected $signature = 'make:pepper:type:result-aggregate
+                            {name : The name of the class}
+                            {class : The name of the GraphQL class}
+                            {description : The description of the GraphQL class}
+                            {model : The model of the GraphQL class}
+                            {--N|--no-config : Do not update the config file}';
 
     /**
      * The console command description.
@@ -19,6 +24,13 @@ class TypeResultAggregateMakeCommand extends BaseMakeCommand
      * @var string
      */
     protected $description = 'Create a new Pepper type result aggregate class';
+
+    /**
+     * Type of GraphQL class.
+     *
+     * @var string
+     */
+    protected $gql = 'type';
 
     /**
      * Get the stub file for the generator.

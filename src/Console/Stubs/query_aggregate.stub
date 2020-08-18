@@ -27,7 +27,7 @@ class DummyClass extends Query
 
     public function type(): Type
     {
-        return GraphQL::type('{{ name }}FieldAggregateUnresolvableType');
+        return $this->instance->getQueryAggregateType();
     }
 
     public function args(): array

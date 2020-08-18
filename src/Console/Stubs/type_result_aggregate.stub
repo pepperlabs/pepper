@@ -5,10 +5,6 @@ declare(strict_types=1);
 namespace DummyNamespace;
 
 use App;
-use Closure;
-use GraphQL\Type\Definition\Type;
-use GraphQL\Type\Definition\ResolveInfo;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Type as GraphQLType;
 
 class DummyClass extends GraphQLType

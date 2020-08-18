@@ -86,13 +86,54 @@ class PepperGrindCommand extends Command
     private function initModelHttp(string $model): void
     {
         $basename = class_basename($model);
+        $studly = Str::of($basename)->studly();
 
         // Creeat new type
-        $typeName = $typeClass = Str::of($basename)->studly() . 'Type';
+        $typeName = $typeClass = $studly . 'Type';
         $this->call('make:pepper:type', [
             'name' => $typeName, // ClassType
             'class' => $typeClass, // ClassType
             'description' => $basename . ' type description',
+            'model' => $model,
+            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+        ]);
+
+        // Create new type aggregate
+        $typeName = $typeClass = $studly . 'AggregateType';
+        $this->call('make:pepper:type:aggregate', [
+            'name' => $typeName, // ClassAggregateType
+            'class' => $typeClass, // ClassAggregateType
+            'description' => $basename . ' aggregate type description',
+            'model' => $model,
+            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+        ]);
+
+        // Create new field aggregate type
+        $typeName = $typeClass = $studly . 'FieldAggregateType';
+        $this->call('make:pepper:type:field-aggregate', [
+            'name' => $typeName, // ClassFieldAggregateType
+            'class' => $typeClass, // ClassFieldAggregateType
+            'description' => $basename . ' field aggregate type description',
+            'model' => $model,
+            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+        ]);
+
+        // Create new field aggregate unresolvalbe type
+        $typeName = $typeClass = $studly . 'FieldAggregateUnresolvableType';
+        $this->call('make:pepper:type:field-aggregate-unresolvable', [
+            'name' => $typeName, // ClassFieldAggregateUnresolvableType
+            'class' => $typeClass, // ClassFieldAggregateUnresolvableType
+            'description' => $basename . ' field aggregate unresolvable type description',
+            'model' => $model,
+            '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
+        ]);
+
+        // Create new result aggregate type
+        $typeName = $typeClass = $studly . 'ResultAggregateType';
+        $this->call('make:pepper:type:result-aggregate', [
+            'name' => $typeName, // ClassResultAggregateType
+            'class' => $typeClass, // ClassResultAggregateType
+            'description' => $basename . ' result aggregate type description',
             'model' => $model,
             '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
         ]);
