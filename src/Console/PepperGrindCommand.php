@@ -5,6 +5,7 @@ namespace Pepper\Console;
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use HaydenPierce\ClassFinder\ClassFinder;
+use Pepper\Helpers\ConfigHelper as Config;
 
 class PepperGrindCommand extends Command
 {
@@ -88,8 +89,16 @@ class PepperGrindCommand extends Command
         $basename = class_basename($model);
         $studly = Str::of($basename)->studly();
 
+        $config = new Config(null);
+        $this->info('Adding default types to config...');
+        $config->addType('ConditionInput', 'ConditionInput', 'Pepper\GraphQL\\');
+        $config->addType('OrderByEnum', 'OrderByEnum', 'Pepper\GraphQL\\');
+        $config->addType('AnyScalar', 'AnyScalar', 'Pepper\GraphQL\\');
+        $config->addType('AllUnion', 'AllUnion', 'Pepper\GraphQL\\');
+
         // Creeat new type
         $typeName = $typeClass = $studly . 'Type';
+        $this->info('Creating ' . $typeName . '...');
         $this->call('make:pepper:type', [
             'name' => $typeName, // ClassType
             'class' => $typeClass, // ClassType
@@ -100,6 +109,7 @@ class PepperGrindCommand extends Command
 
         // Create new type aggregate
         $typeName = $typeClass = $studly . 'AggregateType';
+        $this->info('Creating ' . $typeName . '...');
         $this->call('make:pepper:type:aggregate', [
             'name' => $typeName, // ClassAggregateType
             'class' => $typeClass, // ClassAggregateType
@@ -110,6 +120,7 @@ class PepperGrindCommand extends Command
 
         // Create new field aggregate type
         $typeName = $typeClass = $studly . 'FieldAggregateType';
+        $this->info('Creating ' . $typeName . '...');
         $this->call('make:pepper:type:field-aggregate', [
             'name' => $typeName, // ClassFieldAggregateType
             'class' => $typeClass, // ClassFieldAggregateType
@@ -120,6 +131,7 @@ class PepperGrindCommand extends Command
 
         // Create new field aggregate unresolvalbe type
         $typeName = $typeClass = $studly . 'FieldAggregateUnresolvableType';
+        $this->info('Creating ' . $typeName . '...');
         $this->call('make:pepper:type:field-aggregate-unresolvable', [
             'name' => $typeName, // ClassFieldAggregateUnresolvableType
             'class' => $typeClass, // ClassFieldAggregateUnresolvableType
@@ -130,6 +142,7 @@ class PepperGrindCommand extends Command
 
         // Create new result aggregate type
         $typeName = $typeClass = $studly . 'ResultAggregateType';
+        $this->info('Creating ' . $typeName . '...');
         $this->call('make:pepper:type:result-aggregate', [
             'name' => $typeName, // ClassResultAggregateType
             'class' => $typeClass, // ClassResultAggregateType

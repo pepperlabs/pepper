@@ -48,13 +48,14 @@ class ConfigHelper
      *
      * @param  string $key
      * @param  string $class
+     * @param  string $namespace default: App\GraphQL\Types\Pepper\\
      * @return void
      */
-    public function addType(string $key, string $class): void
+    public function addType(string $key, string $class, string $namespace = 'App\GraphQL\Types\Pepper\\'): void
     {
         if ($this->canAdd('types.' . $key)) {
             $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
-            $class = strval('App\GraphQL\Types\Pepper\\' . $class . '::class');
+            $class = strval($namespace . $class . '::class');
             $update = preg_replace($pattern, "$0'$key' => $class,\n        ", file_get_contents($this->path));
             file_put_contents($this->path, $update);
         }
