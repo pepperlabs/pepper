@@ -378,11 +378,11 @@ trait MutationSupport
         return [
             'pk_columns' => [
                 'name' => 'pk_columns',
-                'type' => GraphQL::type('{{ name }}InputMutation')
+                'type' => GraphQL::type($this->getStudly() . 'InputMutation')
             ],
             '_set' => [
                 'name' => '_set',
-                'type' => GraphQL::type('{{ name }}InputMutation')
+                'type' => GraphQL::type($this->getStudly() . 'InputMutation')
             ]
         ];
     }
@@ -396,7 +396,7 @@ trait MutationSupport
     {
         return [
             'where' => ['type' => GraphQL::type($this->instance->getInputName())],
-            '_set' => ['type' => GraphQL::type('{{ name }}InputMutation')]
+            '_set' => ['type' => GraphQL::type($this->getStudly() . 'InputMutation')]
         ];
     }
 
@@ -410,7 +410,7 @@ trait MutationSupport
         return [
             'object' => [
                 'name' => 'object',
-                'type' => GraphQL::type('{{ name }}InputMutation')
+                'type' => GraphQL::type($this->getStudly() . 'InputMutation')
             ]
         ];
     }
@@ -467,7 +467,7 @@ trait MutationSupport
         return [
             'objects' => [
                 'name' => 'objects',
-                'type' => Type::listOf(GraphQL::type('{{ name }}InputMutation'))
+                'type' => Type::listOf(GraphQL::type($this->getStudly() . 'InputMutation'))
             ]
         ];
     }

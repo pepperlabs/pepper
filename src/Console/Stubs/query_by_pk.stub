@@ -6,13 +6,11 @@ namespace DummyNamespace;
 
 use App;
 use Closure;
+use Rebing\GraphQL\Support\Query;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Mutation;
-use Rebing\GraphQL\Support\Facades\GraphQL;
-
 use GraphQL\Type\Definition\ResolveInfo;
 
-class DummyClass extends Mutation
+class DummyClass extends Query
 {
     protected $attributes = [
         'name' => 'DummyName',
@@ -23,7 +21,7 @@ class DummyClass extends Mutation
 
     public function __construct()
     {
-        $this->instance = new DummyModel;
+        $this->instance = new {{ model }};
     }
 
     public function type(): Type

@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace DummyNamespace;
 
 use App;
-use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\InputType;
 
 class DummyClass extends InputType

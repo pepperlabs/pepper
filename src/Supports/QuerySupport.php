@@ -226,7 +226,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'QueryByPk';
+            return $this->getName() . 'ByPkQuery';
         }
     }
 

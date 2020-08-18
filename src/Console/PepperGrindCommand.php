@@ -87,17 +87,19 @@ class PepperGrindCommand extends Command
     private function initModelHttp(string $model): void
     {
         $basename = class_basename($model);
+        $model = 'App\Http\Pepper\\' . $basename;
         $studly = Str::of($basename)->studly();
+        $snake = Str::of($basename)->snake();
         $noConfig = $this->hasOption('--no-config') && $this->option('--no-config');
 
         $this->ensureGraphQLConfigExists();
         $config = new Config(null);
 
         $this->info('Adding default types to config...');
-        $config->addType('ConditionInput', 'ConditionInput', 'Pepper\GraphQL\\');
-        $config->addType('OrderByEnum', 'OrderByEnum', 'Pepper\GraphQL\\');
-        $config->addType('AnyScalar', 'AnyScalar', 'Pepper\GraphQL\\');
-        $config->addType('AllUnion', 'AllUnion', 'Pepper\GraphQL\\');
+        $config->addType('ConditionInput', 'ConditionInput', 'Pepper\\');
+        $config->addType('OrderByEnum', 'OrderByEnum', 'Pepper\\');
+        $config->addType('AnyScalar', 'AnyScalar', 'Pepper\\');
+        $config->addType('AllUnion', 'AllUnion', 'Pepper\\');
 
         // Creeat new type
         $typeName = $typeClass = $studly . 'Type';
@@ -183,6 +185,42 @@ class PepperGrindCommand extends Command
             'name' => $inputName, // ClassMutationInput
             'class' => $inputClass, // ClassMutationInput
             'description' => $basename . ' mutation input description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new query
+        $queryName = $studly . 'Query';
+        $queryClass = $snake->__toString();
+        $this->info('Creating ' . $queryName . '...');
+        $this->call('make:pepper:query', [
+            'name' => $queryName, // ClassQuery
+            'class' => $queryClass, // class
+            'description' => $basename . ' query description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new query aggregate
+        $queryName = $studly . 'AggregateQuery';
+        $queryClass = $snake . '_aggregate';
+        $this->info('Creating ' . $queryName . '...');
+        $this->call('make:pepper:query:aggregate', [
+            'name' => $queryName, // ClassQuery
+            'class' => $queryClass, // class_aggregate
+            'description' => $basename . ' query description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new query by PK aggregate
+        $queryName = $studly . 'ByPkQuery';
+        $queryClass = $snake . '_by_pk';
+        $this->info('Creating ' . $queryName . '...');
+        $this->call('make:pepper:query:by-pk', [
+            'name' => $queryName, // ClassQuery
+            'class' => $queryClass, // class_by_pk
+            'description' => $basename . ' by PK query description',
             'model' => $model,
             '--no-config' => $noConfig
         ]);

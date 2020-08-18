@@ -304,7 +304,7 @@ trait AggregateSupport
 
     public function getQueryAggregateType(): Type
     {
-        return GraphQL::type($this->studly() . 'FieldAggregateUnresolvableType');
+        return GraphQL::type($this->getStudly() . 'FieldAggregateUnresolvableType');
     }
 
     public function resolveQueryAggregate($root, $args, $context, $resolveInfo, $getSelectFields)
