@@ -101,6 +101,7 @@ abstract class BaseMakeCommand extends GeneratorCommand
         parent::handle();
 
         if (!$this->hasOption('--no-config') || !$this->option('--no-config')) {
+            $this->ensureGraphQLConfigExists();
             $config = new Config(null);
             $gql = strtolower($this->gql);
 
@@ -109,6 +110,21 @@ abstract class BaseMakeCommand extends GeneratorCommand
             } elseif ($gql == 'query') {
             } elseif ($gql == 'mutation') {
             }
+        }
+    }
+
+    /**
+     * Ensure GraphQL config file exists, otherwise we would publish a new one.
+     *
+     * @return void
+     */
+    private function ensureGraphQLConfigExists(): void
+    {
+        if (!file_exists(config_path('graphql.php'))) {
+            $this->info('Publishing default graphql config...');
+            $this->call('vendor:publish', [
+                '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider'
+            ]);
         }
     }
 }

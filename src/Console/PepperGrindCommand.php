@@ -89,7 +89,9 @@ class PepperGrindCommand extends Command
         $basename = class_basename($model);
         $studly = Str::of($basename)->studly();
 
+        $this->ensureGraphQLConfigExists();
         $config = new Config(null);
+
         $this->info('Adding default types to config...');
         $config->addType('ConditionInput', 'ConditionInput', 'Pepper\GraphQL\\');
         $config->addType('OrderByEnum', 'OrderByEnum', 'Pepper\GraphQL\\');
@@ -150,5 +152,20 @@ class PepperGrindCommand extends Command
             'model' => $model,
             '--no-config' => $this->hasOption('--no-config') && $this->option('--no-config')
         ]);
+    }
+
+    /**
+     * Ensure GraphQL config file exists, otherwise we would publish a new one.
+     *
+     * @return void
+     */
+    private function ensureGraphQLConfigExists(): void
+    {
+        if (!file_exists(config_path('graphql.php'))) {
+            $this->info('Publishing default graphql config...');
+            $this->call('vendor:publish', [
+                '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider'
+            ]);
+        }
     }
 }
