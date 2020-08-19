@@ -207,17 +207,15 @@ trait QuerySupport
 
     public function getQueryByPkFields(): array
     {
-        $fields = [];
+        $model = $this->newModel();
+        $pk = $model->getKeyName();
 
-        // Get fields excluded relations
-        foreach ($this->getFields(false) as $attribute) {
-            $fields[$attribute] = [
-                'name' => $attribute,
-                'type' => $this->call_field_type($attribute)
-            ];
-        }
-
-        return $fields;
+        return [
+            $pk => [
+                'name' => $pk,
+                'type' => $this->call_field_type($pk)
+            ]
+        ];
     }
 
     public function getQueryByPkName(): string
@@ -240,15 +238,16 @@ trait QuerySupport
         }
     }
 
+    /**
+     * Resolve query by PK.
+     */
     public function queryByPk($root, $args, $context, $resolveInfo, $getSelectFields)
     {
         $model = $this->newModel();
         $pk = $model->getKeyName();
 
-        // Let the new born out in the wild.
         $root = $this->getModel()::where($pk, $args[$pk]);
 
-        // return types are satisfied when they are iterable enough.
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->first();
     }
 }

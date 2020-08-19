@@ -25,20 +25,24 @@ use Pepper\Console\TypeResultAggregateMakeCommand;
 
 class PepperServiceProvider extends ServiceProvider
 {
-    public function boot()
+    /**
+     * Boot package.
+     *
+     * @return void
+     */
+    public function boot(): void
     {
         $this->publishes([
             __DIR__ . '/../config/pepper.php' => config_path('pepper.php'),
         ], 'config');
-
-        $this->publishes([
-            __DIR__ . '/../resources/lang' => "{$this->app['path.lang']}/vendor/pepper",
-        ]);
-
-        $this->loadTranslationsFrom(__DIR__ . '/../resources/lang/', 'pepper');
     }
 
-    public function register()
+    /**
+     * Register package and its commands.
+     *
+     * @return void
+     */
+    public function register(): void
     {
         $this->registerPepper();
 
@@ -47,6 +51,11 @@ class PepperServiceProvider extends ServiceProvider
         }
     }
 
+    /**
+     * Register Pepper.
+     *
+     * @return void
+     */
     public function registerPepper(): void
     {
         $this->mergeConfigFrom(__DIR__ . '/../config/pepper.php', 'pepper');
