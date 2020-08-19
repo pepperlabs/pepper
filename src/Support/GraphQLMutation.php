@@ -1,11 +1,11 @@
 <?php
 
-namespace Pepper\Supports;
+namespace Pepper\Helpers;
 
-use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use GraphQL\Type\Definition\Type;
 
-trait MutationSupport
+trait GraphQLMutation
 {
     /**
      * Get GraphQL Mutation name.
@@ -378,11 +378,11 @@ trait MutationSupport
         return [
             'pk_columns' => [
                 'name' => 'pk_columns',
-                'type' => GraphQL::type($this->getStudly() . 'MutationInput')
+                'type' => GraphQL::type($this->getName() . 'MutationInput')
             ],
             '_set' => [
                 'name' => '_set',
-                'type' => GraphQL::type($this->getStudly() . 'MutationInput')
+                'type' => GraphQL::type($this->getName() . 'MutationInput')
             ]
         ];
     }
@@ -395,8 +395,8 @@ trait MutationSupport
     public function getMutationUpdateFields(): array
     {
         return [
-            'where' => ['type' => GraphQL::type($this->getInputName())],
-            '_set' => ['type' => GraphQL::type($this->getStudly() . 'MutationInput')]
+            'where' => ['type' => GraphQL::type($this->instance->getInputName())],
+            '_set' => ['type' => GraphQL::type($this->getName() . 'MutationInput')]
         ];
     }
 
@@ -410,7 +410,7 @@ trait MutationSupport
         return [
             'object' => [
                 'name' => 'object',
-                'type' => GraphQL::type($this->getStudly() . 'MutationInput')
+                'type' => GraphQL::type($this->getName() . 'MutationInput')
             ]
         ];
     }
@@ -427,11 +427,11 @@ trait MutationSupport
      */
     public function resolveMutationInsertOne($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        $id = $this->getModel()::create($args['object'])->id;
+        $id = $this->instance->getModel()::create($args['object'])->id;
 
-        $root = $this->newModel()->whereIn('id', [$id]);
+        $root = $this->instance->newModel()->whereIn('id', [$id]);
 
-        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 
 
@@ -449,12 +449,12 @@ trait MutationSupport
     {
         $ids = [];
         foreach ($args['objects'] as $obj) {
-            $ids[] = $this->getModel()::create($obj)->id;
+            $ids[] = $this->instance->getModel()::create($obj)->id;
         }
 
-        $root = $this->newModel()->whereIn('id', $ids);
+        $root = $this->instance->newModel()->whereIn('id', $ids);
 
-        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 
     /**
@@ -467,23 +467,23 @@ trait MutationSupport
         return [
             'objects' => [
                 'name' => 'objects',
-                'type' => Type::listOf(GraphQL::type($this->getStudly() . 'MutationInput'))
+                'type' => Type::listOf(GraphQL::type($this->getName() . 'MutationInput'))
             ]
         ];
     }
 
-    /**
-     * Resolve mutation.
-     *
-     * @param  object $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
-     * @return object
-     */
-    public function resolveMutation($root, $args, $context, $resolveInfo, $getSelectFields)
-    {
-        return [$root->updateOrCreate(['id' => $args['id'] ?? -1], $args)];
-    }
+    // /**
+    //  * Resolve mutation.
+    //  *
+    //  * @param  object $root
+    //  * @param  array $args
+    //  * @param  object $context
+    //  * @param  ResolveInfo $resolveInfo
+    //  * @param  Closure $getSelectFields
+    //  * @return object
+    //  */
+    // public function resolveMutation($root, $args, $context, $resolveInfo, $getSelectFields)
+    // {
+    //     return [$root->updateOrCreate(['id' => $args['id'] ?? -1], $args)];
+    // }
 }

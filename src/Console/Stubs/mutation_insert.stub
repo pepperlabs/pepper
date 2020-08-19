@@ -33,11 +33,11 @@ class DummyClass extends Mutation
 
     public function args(): array
     {
-        $this->instance->getMutationInsertFields();
+        return $this->instance->getMutationInsertFields();
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        $this->instance->resolveMutationInsert($root, $args, $context, $resolveInfo, $getSelectFields);
+        return $this->instance->resolveMutationInsert($root, $args, $context, $resolveInfo, $getSelectFields);
     }
 }

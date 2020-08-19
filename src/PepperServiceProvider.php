@@ -12,7 +12,6 @@ use Pepper\Console\MutationDeleteByPkMakeCommand;
 use Pepper\Console\MutationDeleteMakeCommand;
 use Pepper\Console\MutationInsertMakeCommand;
 use Pepper\Console\MutationInsertOneMakeCommand;
-use Pepper\Console\MutationMakeCommand;
 use Pepper\Console\MutationUpdateByPkMakeCommand;
 use Pepper\Console\MutationUpdateMakeCommand;
 use Pepper\Console\QueryAggregateMakeCommand;
@@ -71,7 +70,6 @@ class PepperServiceProvider extends ServiceProvider
         $this->commands(MutationDeleteMakeCommand::class);
         $this->commands(MutationInsertMakeCommand::class);
         $this->commands(MutationInsertOneMakeCommand::class);
-        $this->commands(MutationMakeCommand::class);
         $this->commands(MutationUpdateByPkMakeCommand::class);
         $this->commands(MutationUpdateMakeCommand::class);
         $this->commands(QueryAggregateMakeCommand::class);

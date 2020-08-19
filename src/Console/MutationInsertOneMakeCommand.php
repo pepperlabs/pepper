@@ -11,7 +11,12 @@ class MutationInsertOneMakeCommand extends BaseMakeCommand
      *
      * @var string
      */
-    protected $signature = 'make:pepper:mutation:insert-one {name} {class} {description} {model}';
+    protected $signature = 'make:pepper:mutation:insert:one
+                            {name : The name of the class}
+                            {class : The name of the GraphQL class}
+                            {description : The description of the GraphQL class}
+                            {model : The model of the GraphQL class}
+                            {--N|--no-config : Do not update the config file}';
 
     /**
      * The console command description.
@@ -19,6 +24,13 @@ class MutationInsertOneMakeCommand extends BaseMakeCommand
      * @var string
      */
     protected $description = 'Create a new Pepper mutation insert one class';
+
+    /**
+     * Mutation of GraphQL class.
+     *
+     * @var string
+     */
+    protected $gql = 'mutation';
 
     /**
      * Get the stub file for the generator.

@@ -192,7 +192,7 @@ class PepperGrindCommand extends Command
         // Create new query
         $queryName = $studly . 'Query';
         $queryClass = $snake->__toString();
-        $this->info('Creating ' . $queryName . '...');
+        $this->info('Creating ' . $queryClass . '...');
         $this->call('make:pepper:query', [
             'name' => $queryName, // ClassQuery
             'class' => $queryClass, // class
@@ -204,7 +204,7 @@ class PepperGrindCommand extends Command
         // Create new query aggregate
         $queryName = $studly . 'AggregateQuery';
         $queryClass = $snake . '_aggregate';
-        $this->info('Creating ' . $queryName . '...');
+        $this->info('Creating ' . $queryClass . '...');
         $this->call('make:pepper:query:aggregate', [
             'name' => $queryName, // ClassQuery
             'class' => $queryClass, // class_aggregate
@@ -216,11 +216,83 @@ class PepperGrindCommand extends Command
         // Create new query by PK aggregate
         $queryName = $studly . 'ByPkQuery';
         $queryClass = $snake . '_by_pk';
-        $this->info('Creating ' . $queryName . '...');
+        $this->info('Creating ' . $queryClass . '...');
         $this->call('make:pepper:query:by-pk', [
             'name' => $queryName, // ClassQuery
             'class' => $queryClass, // class_by_pk
             'description' => $basename . ' by PK query description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new delete mutation
+        $mutationName = $studly . 'DeleteMutation';
+        $mutationClass = 'delete_' . $snake;
+        $this->info('Creating ' . $mutationClass . '...');
+        $this->call('make:pepper:mutation:delete:by-pk', [
+            'name' => $mutationName, // ClassDeleteByPkMutation
+            'class' => $mutationClass, // delete_class
+            'description' => $basename . ' delete by PK mutation description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new delete mutation by PK
+        $mutationName = $studly . 'DeleteByPkMutation';
+        $mutationClass = 'delete_' . $snake . '_by_pk';
+        $this->info('Creating ' . $mutationClass . '...');
+        $this->call('make:pepper:mutation:delete', [
+            'name' => $mutationName, // ClassDeleteByPkMutation
+            'class' => $mutationClass, // delete_class_by_pk
+            'description' => $basename . ' delete by PK mutation description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new insert mutation
+        $mutationName = $studly . 'InsertMutation';
+        $mutationClass = 'insert_' . $snake;
+        $this->info('Creating ' . $mutationClass . '...');
+        $this->call('make:pepper:mutation:insert', [
+            'name' => $mutationName, // ClassInsertMutation
+            'class' => $mutationClass, // insert_class
+            'description' => $basename . ' insert mutation description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new insert one mutation
+        $mutationName = $studly . 'DeleteByPkMutation';
+        $mutationClass = 'insert_' . $snake . '_one';
+        $this->info('Creating ' . $mutationClass . '...');
+        $this->call('make:pepper:mutation:insert:one', [
+            'name' => $mutationName, // ClassInsertOneMutation
+            'class' => $mutationClass, // insert_class_one
+            'description' => $basename . ' insert one mutation description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new update mutation
+        $mutationName = $studly . 'UpdateMutation';
+        $mutationClass = 'update_' . $snake;
+        $this->info('Creating ' . $mutationClass . '...');
+        $this->call('make:pepper:mutation:update', [
+            'name' => $mutationName, // ClassUpdateMutation
+            'class' => $mutationClass, // update_class
+            'description' => $basename . ' update mutation description',
+            'model' => $model,
+            '--no-config' => $noConfig
+        ]);
+
+        // Create new update mutation by PK
+        $mutationName = $studly . 'UpdateByPkMutation';
+        $mutationClass = 'update_' . $snake . '_by_pk';
+        $this->info('Creating ' . $mutationClass . '...');
+        $this->call('make:pepper:mutation:update:by-pk', [
+            'name' => $mutationName, // ClassUpdateByPkMutation
+            'class' => $mutationClass, // update_class_by_pk
+            'description' => $basename . ' update by PK mutation description',
             'model' => $model,
             '--no-config' => $noConfig
         ]);

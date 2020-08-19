@@ -112,6 +112,7 @@ abstract class BaseMakeCommand extends GeneratorCommand
             } elseif ($gql == 'query') {
                 $config->addQuery($this->argument('class'), $this->argument('name'));
             } elseif ($gql == 'mutation') {
+                $config->addMutation($this->argument('class'), $this->argument('name'));
             }
         }
     }

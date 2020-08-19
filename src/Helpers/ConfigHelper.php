@@ -91,7 +91,7 @@ class ConfigHelper
         if ($this->canAdd('schemas.default.mutation.' . $key)) {
             $pattern = '/(\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*[^"]+?(?=["\']mutation["\'])["\']mutation["\']\s*=>\s*\[\s*)/';
             $class = strval('App\GraphQL\Mutations\Pepper\\' . $class . '::class');
-            $replace = "$0 '$key' => $class,\n              ";
+            $replace = "$0'$key' => $class,\n                ";
             $update = preg_replace($pattern, $replace, file_get_contents($this->path));
             file_put_contents($this->path, $update);
         }

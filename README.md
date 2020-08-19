@@ -1,11 +1,28 @@
 # Pepper
 
+[WIP]
+
+## Version support
+
+PHP: ?
+Laravel: ?
+
+## Installation
+
+You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/amirmasoud/pepper).
+
+```bash
+$ composer require amirmasoud/pepper
+```
+
 ## Table of contents
 
 - [Pepper](#pepper)
+  - [Version support](#version-support)
+  - [Installation](#installation)
   - [Table of contents](#table-of-contents)
   - [Introducation](#introducation)
-    - [Installation](#installation)
+    - [Installation](#installation-1)
     - [Supported databases](#supported-databases)
   - [Background](#background)
   - [Commands](#commands)
