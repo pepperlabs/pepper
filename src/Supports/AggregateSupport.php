@@ -193,7 +193,10 @@ trait AggregateSupport
 
     private function getFragmentType($resolveInfo)
     {
-        $pos = $resolveInfo->operation->name->loc->startToken;
+        $operation = $resolveInfo->operation;
+        $pos = is_object($operation->name)
+            ? $operation->name->loc->startToken
+            : $resolveInfo->operation->loc->startToken;
         while ($pos->next->value != array_reverse($resolveInfo->path)[2]) {
             $pos = $pos->next;
         }

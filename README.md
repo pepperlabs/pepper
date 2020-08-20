@@ -170,16 +170,16 @@ user_aggregate {
   aggregate {
     count
     sum {
-      id
+      ...aggregateOnThisFields
     }
     avg {
-      id
+      ...aggregateOnThisFields
     }
     max {
-      id
+      ...aggregateOnThisFields
     }
     min {
-      id
+      ...aggregateOnThisFields
     }
   }
   nodes {
@@ -197,6 +197,10 @@ user_aggregate {
       }
     }
   }
+}
+
+fragment aggregateOnThisFields on UserResultAggregateType {
+  id
 }
 ```
 
