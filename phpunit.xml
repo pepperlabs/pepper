@@ -3,6 +3,7 @@
     <testsuites>
         <testsuite name="Unit">
             <directory suffix=".php">tests/Unit</directory>
+            <directory suffix=".php">tests/Feature</directory>
         </testsuite>
     </testsuites>
     <filter>
