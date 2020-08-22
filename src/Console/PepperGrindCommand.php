@@ -4,6 +4,7 @@ namespace Pepper\Console;
 
 use Illuminate\Support\Str;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\App;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Pepper\Helpers\ConfigHelper as Config;
 
@@ -57,7 +58,7 @@ class PepperGrindCommand extends Command
     private function getModels(): array
     {
         $classes = [];
-        foreach (ClassFinder::getClassesInNamespace(config('pepper.namespace')) as $class) {
+        foreach (ClassFinder::getClassesInNamespace(config('pepper.namespace.models')) as $class) {
             $classes[] = $class;
         }
         return $classes;
@@ -92,7 +93,9 @@ class PepperGrindCommand extends Command
     private function initModelHttp(string $model): void
     {
         $basename = class_basename($model);
-        $model = 'App\Http\Pepper\\' . $basename;
+        $model = App::runningUnitTests()
+            ? 'Pepper\Tests\Http\\' . $basename
+            : 'App\Http\Pepper\\' . $basename;
         $studly = Str::of($basename)->studly();
         $snake = Str::of($basename)->snake();
         $noConfig = $this->hasOption('no-config') && $this->option('no-config');
@@ -267,7 +270,7 @@ class PepperGrindCommand extends Command
         ]);
 
         // Create new insert one mutation
-        $mutationName = $studly . 'DeleteByPkMutation';
+        $mutationName = $studly . 'InsertOneMutation';
         $mutationClass = 'insert_' . $snake . '_one';
         $this->info('Creating ' . $mutationClass . '...');
         $this->call('make:pepper:mutation:insert:one', [

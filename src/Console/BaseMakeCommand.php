@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Pepper\Console;
 
+use Illuminate\Support\Facades\App;
 use Illuminate\Console\GeneratorCommand;
 use Pepper\Helpers\ConfigHelper as Config;
 use Symfony\Component\Console\Input\InputArgument;
@@ -90,6 +91,20 @@ abstract class BaseMakeCommand extends GeneratorCommand
     }
 
     /**
+     * Get the root namespace for the class.
+     *
+     * @return string
+     */
+    protected function rootNamespace()
+    {
+        if (App::runningUnitTests()) {
+            return 'Pepper\Tests\\';
+        } else {
+            return config('pepper.namespace.root') ?? $this->laravel->getNamespace();
+        }
+    }
+
+    /**
      * Execute the console command.
      *
      * @return bool|null
@@ -106,9 +121,9 @@ abstract class BaseMakeCommand extends GeneratorCommand
             $gql = strtolower($this->gql);
 
             if ($gql == 'type') {
-                $config->addType($this->argument('name'), $this->argument('class'));
+                $config->addType($this->argument('name'), $this->argument('class'), $gql);
             } elseif ($gql == 'input') {
-                $config->addType($this->argument('name'), $this->argument('class'), 'App\GraphQL\Inputs\Pepper\\');
+                $config->addType($this->argument('name'), $this->argument('class'), $gql);
             } elseif ($gql == 'query') {
                 $config->addQuery($this->argument('class'), $this->argument('name'));
             } elseif ($gql == 'mutation') {

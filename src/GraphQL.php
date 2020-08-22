@@ -51,7 +51,7 @@ abstract class GraphQL
         // @todo check for appended slash
         return property_exists($this, 'model')
             ? $this->model
-            : config('pepper.namespace') . '\\' . $this->getClassName();
+            : config('pepper.namespace.models') . '\\' . $this->getClassName();
     }
 
     /**
