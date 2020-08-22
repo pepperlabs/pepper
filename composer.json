@@ -18,9 +18,12 @@
     }
   ],
   "require": {
+    "php": ">= 7.2",
+    "illuminate/support": "^6.0|^7.0",
     "doctrine/dbal": "^2.10",
     "haydenpierce/class-finder": "^0.4.2",
-    "rebing/graphql-laravel": "^5.1"
+    "rebing/graphql-laravel": "^5.1",
+    "ext-json": "*"
   },
   "require-dev": {
     "orchestra/testbench": "^5.3",

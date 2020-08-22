@@ -15,7 +15,8 @@ class PepperGrindCommand extends Command
      * @var string
      */
     protected $signature = 'pepper:grind
-                            {--N|--no-config : Do not update the config file}';
+                            {--N|no-config : Do not update the config file}
+                            {--A|all : Include all models}';
 
     /**
      * The console command description.
@@ -33,13 +34,17 @@ class PepperGrindCommand extends Command
     {
         $models = $this->getModels();
 
-        $selected = $this->choice(
-            'Select models to be included',
-            array_merge(['-- select all --'], $models),
-            null,
-            null,
-            true
-        );
+        if (!$this->hasOption('all') || !$this->option('all')) {
+            $selected = $this->choice(
+                'Select models to be included',
+                array_merge(['-- select all --'], $models),
+                null,
+                null,
+                true
+            );
+        } else {
+            $selected = [0];
+        }
 
         $this->createHttp($models, $selected);
     }
@@ -90,7 +95,7 @@ class PepperGrindCommand extends Command
         $model = 'App\Http\Pepper\\' . $basename;
         $studly = Str::of($basename)->studly();
         $snake = Str::of($basename)->snake();
-        $noConfig = $this->hasOption('--no-config') && $this->option('--no-config');
+        $noConfig = $this->hasOption('no-config') && $this->option('no-config');
 
         $this->ensureGraphQLConfigExists();
         $config = new Config(null);

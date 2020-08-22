@@ -16,7 +16,7 @@ class TypeFieldAggregateMakeCommand extends BaseMakeCommand
                             {class : The name of the GraphQL class}
                             {description : The description of the GraphQL class}
                             {model : The model of the GraphQL class}
-                            {--N|--no-config : Do not update the config file}';
+                            {--N|no-config : Do not update the config file}';
 
     /**
      * The console command description.

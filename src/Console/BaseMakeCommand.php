@@ -100,7 +100,7 @@ abstract class BaseMakeCommand extends GeneratorCommand
     {
         parent::handle();
 
-        if (!$this->hasOption('--no-config') || !$this->option('--no-config')) {
+        if (!$this->hasOption('no-config') || !$this->option('no-config')) {
             $this->ensureGraphQLConfigExists();
             $config = new Config(null);
             $gql = strtolower($this->gql);
