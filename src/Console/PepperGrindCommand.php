@@ -58,7 +58,10 @@ class PepperGrindCommand extends Command
     private function getModels(): array
     {
         $classes = [];
-        foreach (ClassFinder::getClassesInNamespace(config('pepper.namespace.models')) as $class) {
+        $models = App::runningUnitTests()
+            ? 'Pepper\Tests\Support\Models'
+            : config('pepper.namespace.models');
+        foreach (ClassFinder::getClassesInNamespace($models) as $class) {
             $classes[] = $class;
         }
         return $classes;
