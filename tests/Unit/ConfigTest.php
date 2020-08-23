@@ -1,8 +1,8 @@
 <?php
 
-namespace Pepper\Tests\Unit;
+namespace Tests\Unit;
 
-use Pepper\Tests\TestCase;
+use Tests\TestCase;
 use Pepper\Helpers\ConfigHelper as Config;
 
 class ConfigTest extends TestCase

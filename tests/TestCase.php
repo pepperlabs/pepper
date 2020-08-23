@@ -1,6 +1,6 @@
 <?php
 
-namespace Pepper\Tests;
+namespace Tests;
 
 use GraphQL\Type\Schema;
 use Illuminate\Console\Command;

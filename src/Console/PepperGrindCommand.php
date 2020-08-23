@@ -7,6 +7,7 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Pepper\Helpers\ConfigHelper as Config;
+use Pepper\PepperServiceProvider;
 
 class PepperGrindCommand extends Command
 {
@@ -61,6 +62,7 @@ class PepperGrindCommand extends Command
         $models = App::runningUnitTests()
             ? 'Pepper\Tests\Support\Models'
             : config('pepper.namespace.models');
+
         foreach (ClassFinder::getClassesInNamespace($models) as $class) {
             $classes[] = $class;
         }

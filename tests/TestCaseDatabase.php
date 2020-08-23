@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Pepper\Tests;
+namespace Tests;
 
-use Pepper\Tests\Support\Traits\SqlAssertionTrait;
+use Tests\Support\Traits\SqlAssertionTrait;
 
 abstract class TestCaseDatabase extends TestCase
 {
@@ -25,6 +25,8 @@ abstract class TestCaseDatabase extends TestCase
         $this->artisan('pepper:grind', [
             '--all' => true
         ]);
+
+        dd(config('graphql'));
     }
 
     protected function setUpTraits()

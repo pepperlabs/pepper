@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pepper\Tests\Support\Models;
+namespace Tests\Support\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;

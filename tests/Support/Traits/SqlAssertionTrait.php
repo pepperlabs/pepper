@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pepper\Tests\Support\Traits;
+namespace Tests\Support\Traits;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Events\QueryExecuted;

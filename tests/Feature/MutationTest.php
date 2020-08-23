@@ -1,9 +1,9 @@
 <?php
 
-namespace Pepper\Tests\Feature;
+namespace Tests\Feature;
 
 
-use Pepper\Tests\TestCase;
+use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 

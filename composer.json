@@ -1,5 +1,5 @@
 {
-  "name": "amirmasoud/pepper",
+  "name": "pepper/pepper",
   "description": "Pepper is a auto-generate GraphQL API for Laravel",
   "keywords": [
     "graphql",
@@ -36,12 +36,13 @@
   },
   "autoload": {
     "psr-4": {
-      "Pepper\\": "src"
+      "Pepper\\": "src/"
     }
   },
   "autoload-dev": {
     "psr-4": {
-      "Pepper\\Tests\\": "tests/"
+      "App\\": "vendor/orchestra/testbench-core/laravel/app",
+      "Tests\\": "tests/"
     }
   },
   "scripts": {
@@ -62,7 +63,10 @@
     "laravel": {
       "providers": [
         "Pepper\\PepperServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "Pepper": "Pepper\\Pepper"
+      }
     }
   },
   "minimum-stability": "dev",

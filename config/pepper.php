@@ -15,6 +15,7 @@ return [
         | Example: 'App\GraphQL' or 'GraphQL'
         |
         */
+
         'root' => 'App',
 
         /*
@@ -29,6 +30,7 @@ return [
         | Example: 'App\Models' or 'App\Supports'
         |
         */
+
         'models' => 'App'
 
     ]

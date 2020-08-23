@@ -1,10 +1,10 @@
 <?php
 
-namespace Pepper\Tests\Feature;
+namespace Tests\Feature;
 
 
-use Pepper\Tests\TestCaseDatabase;
-use Pepper\Tests\Support\Models\Post;
+use Tests\TestCaseDatabase;
+use Tests\Support\Models\Post;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +41,8 @@ GRAQPHQL;
         ];
 
         $this->assertEquals($response->getStatusCode(), 200);
+        dd(config('graphql'));
+        dd($response->json());
         $this->assertEquals($expectedResult, $response->json());
     }
 

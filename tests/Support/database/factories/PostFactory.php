@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Faker\Generator as Faker;
-use Pepper\Tests\Support\Models\Post;
+use Tests\Support\Models\Post;
 
 $factory->define(Post::class, function (Faker $faker) {
     return [
