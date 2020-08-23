@@ -60,7 +60,7 @@ class PepperGrindCommand extends Command
     {
         $classes = [];
         $models = App::runningUnitTests()
-            ? 'Pepper\Tests\Support\Models'
+            ? 'Tests\Support\Models'
             : config('pepper.namespace.models');
 
         foreach (ClassFinder::getClassesInNamespace($models) as $class) {
@@ -98,9 +98,7 @@ class PepperGrindCommand extends Command
     private function initModelHttp(string $model): void
     {
         $basename = class_basename($model);
-        $model = App::runningUnitTests()
-            ? 'Pepper\Tests\Http\\' . $basename
-            : 'App\Http\Pepper\\' . $basename;
+        $model = 'App\Http\Pepper\\' . $basename;
         $studly = Str::of($basename)->studly();
         $snake = Str::of($basename)->snake();
         $noConfig = $this->hasOption('no-config') && $this->option('no-config');

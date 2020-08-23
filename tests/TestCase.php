@@ -39,7 +39,7 @@ class TestCase extends BaseTestCase
         parent::tearDown();
 
         // Good bye graphql config file.
-        // unlink($this->configPath . '.php');
+        unlink($this->configPath . '.php');
     }
 
     protected function getEnvironmentSetUp($app)

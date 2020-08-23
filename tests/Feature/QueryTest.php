@@ -40,8 +40,9 @@ GRAQPHQL;
             ],
         ];
 
+        dd($response->getContent());
         $this->assertEquals($response->getStatusCode(), 200);
-        dd(config('graphql'));
+
         dd($response->json());
         $this->assertEquals($expectedResult, $response->json());
     }

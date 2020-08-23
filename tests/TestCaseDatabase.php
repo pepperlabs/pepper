@@ -14,7 +14,6 @@ abstract class TestCaseDatabase extends TestCase
     {
         parent::setUp();
 
-
         $this->loadMigrationsFrom(__DIR__ . '/Support/database/migrations');
         $this->withFactories(__DIR__ . '/Support/database/factories');
 
@@ -25,8 +24,6 @@ abstract class TestCaseDatabase extends TestCase
         $this->artisan('pepper:grind', [
             '--all' => true
         ]);
-
-        dd(config('graphql'));
     }
 
     protected function setUpTraits()
