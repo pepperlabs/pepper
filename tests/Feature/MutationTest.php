@@ -3,11 +3,11 @@
 namespace Tests\Feature;
 
 
-use Tests\TestCase;
+use Tests\TestCaseDatabase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithoutMiddleware;
 
-class MutationTest extends TestCase
+class MutationTest extends TestCaseDatabase
 {
     /**
      * A basic test example.
