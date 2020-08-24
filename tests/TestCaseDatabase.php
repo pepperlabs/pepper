@@ -48,6 +48,9 @@ abstract class TestCaseDatabase extends TestCase
             'prefix' => '',
         ]);
 
+        // $app->artisan('vendor:publish', ['--provider' => 'Rebing\GraphQL\GraphQLServiceProvider']);
+        // $app->artisan('vendor:publish', ['--provider' => 'Pepper\PepperServiceProvider']);
+
         if (file_exists(config_path('graphql.php'))) {
             $config = new \Illuminate\Config\Repository(include config_path('graphql.php'));
             $app['config']->set('graphql', $config->all());

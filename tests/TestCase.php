@@ -5,6 +5,7 @@ namespace Tests;
 use GraphQL\Type\Schema;
 use Illuminate\Console\Command;
 use Pepper\PepperServiceProvider;
+use Illuminate\Support\Facades\Artisan;
 use Rebing\GraphQL\GraphQLServiceProvider;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Orchestra\Testbench\TestCase as BaseTestCase;
@@ -47,16 +48,6 @@ class TestCase extends BaseTestCase
         if (env('TESTS_ENABLE_LAZYLOAD_TYPES') === '1') {
             $app['config']->set('graphql.lazyload_types', true);
         }
-
-        $app['config']->set('graphql.schemas.default', [
-            'query' => [],
-            'mutation' => [],
-        ]);
-
-        $app['config']->set('graphql.schemas.custom', [
-            'query' => [],
-            'mutation' => [],
-        ]);
 
         $app['config']->set('graphql.types', []);
 
