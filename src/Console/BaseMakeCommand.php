@@ -131,6 +131,7 @@ abstract class BaseMakeCommand extends GeneratorCommand
     /**
      * Ensure GraphQL config file exists, otherwise we would publish a new one.
      *
+     * @todo refactor to trait
      * @return void
      */
     private function ensureGraphQLConfigExists(): void

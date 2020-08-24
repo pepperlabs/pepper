@@ -112,10 +112,10 @@ class PepperGrindCommand extends Command
         ]);
 
         $this->info('Adding default types to config...');
-        $config->addType('ConditionInput', 'ConditionInput', 'Pepper\\');
-        $config->addType('OrderByEnum', 'OrderByEnum', 'Pepper\\');
-        $config->addType('AnyScalar', 'AnyScalar', 'Pepper\\');
-        $config->addType('AllUnion', 'AllUnion', 'Pepper\\');
+        $config->addGlobalType('ConditionInput');
+        $config->addGlobalType('OrderByEnum');
+        $config->addGlobalType('AnyScalar');
+        $config->addGlobalType('AllUnion');
 
         // Creeat new type
         $typeName = $typeClass = $studly . 'Type';
@@ -317,6 +317,7 @@ class PepperGrindCommand extends Command
     /**
      * Ensure GraphQL config file exists, otherwise we would publish a new one.
      *
+     * @todo refactor to trait
      * @return void
      */
     private function ensureGraphQLConfigExists(): void
@@ -325,6 +326,13 @@ class PepperGrindCommand extends Command
             $this->info('Publishing default graphql config...');
             $this->call('vendor:publish', [
                 '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider'
+            ]);
+        }
+
+        if (!file_exists(config_path('pepper.php'))) {
+            $this->info('Publishing default Pepper config...');
+            $this->call('vendor:publish', [
+                '--provider' => 'Pepper\PepperServiceProvider'
             ]);
         }
     }

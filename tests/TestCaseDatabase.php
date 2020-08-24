@@ -41,12 +41,18 @@ abstract class TestCaseDatabase extends TestCase
     {
         parent::getEnvironmentSetUp($app);
 
-        $app['config']->set('pepper.namespace', 'Pepper\Tests\Support\Models');
         $app['config']->set('database.default', 'sqlite');
         $app['config']->set('database.connections.sqlite', [
             'driver' => 'sqlite',
             'database' => ':memory:',
             'prefix' => '',
         ]);
+
+        $config = new \Illuminate\Config\Repository(include config_path('graphql.php'));
+        $app['config']->set('graphql', $config->all());
+
+        $config = new \Illuminate\Config\Repository(include config_path('pepper.php'));
+        $app['config']->set('pepper', $config->all());
+        $app['config']->set('pepper.namespace.models', 'Tests\Support\Models');
     }
 }

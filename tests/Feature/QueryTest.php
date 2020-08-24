@@ -18,17 +18,23 @@ class QueryTest extends TestCaseDatabase
             'title' => 'Title of the post',
         ]);
 
-        $graphql = <<<GRAQPHQL
-{
-  post(id: $post->id) {
-    id
-    title
-  }
-}
-GRAQPHQL;
+        //         $graphql = <<<GRAQPHQL
+        // {
+        //     post_by_pk(id: $post->id) {
+        //     id
+        //     title
+        //   }
+        // }
+        // GRAQPHQL;
 
-        $response = $this->call('GET', '/graphql', [
-            'query' => $graphql,
+        //         $response = $this->call('POST', '/graphql', [
+        //             'query' => $graphql,
+        //         ]);
+
+        $response = $this->withHeaders([
+            'Content-Type' => 'application/json',
+        ])->json('GET', '/graphql', [
+            'query' => 'query {post{id}}'
         ]);
 
         $expectedResult = [
@@ -40,7 +46,6 @@ GRAQPHQL;
             ],
         ];
 
-        dd($response->getContent());
         $this->assertEquals($response->getStatusCode(), 200);
 
         dd($response->json());

@@ -1,20 +1,11 @@
 {
   "name": "pepper/pepper",
   "description": "Pepper is a auto-generate GraphQL API for Laravel",
-  "keywords": [
-    "graphql",
-    "laravel",
-    "auto-generate"
-  ],
-  "homepage": "https://github.com/amirmasoud/pepper",
   "license": "MIT",
-  "type": "library",
   "authors": [
     {
       "name": "Amirmasoud Sheydaei",
-      "email": "amirmasoud.sheydaei@gmail.com",
-      "homepage": "https://amirmasoud.me",
-      "role": "Developer"
+      "email": "amirmasoud.sheydaei@gmail.com"
     }
   ],
   "require": {
@@ -45,20 +36,6 @@
       "Tests\\": "tests/"
     }
   },
-  "scripts": {
-    "phpstan": "phpstan analyse --memory-limit=512M",
-    "phpstan-baseline": "phpstan analyse --memory-limit=512M --generate-baseline",
-    "lint": "php-cs-fixer fix --diff --diff-format=udiff --dry-run",
-    "fix-style": "php-cs-fixer fix",
-    "tests": "phpunit --colors=always --verbose",
-    "tests-all": [
-      "TESTS_ENABLE_LAZYLOAD_TYPES=0 phpunit --colors=always --verbose",
-      "TESTS_ENABLE_LAZYLOAD_TYPES=1 phpunit --colors=always --verbose"
-    ]
-  },
-  "config": {
-    "sort-packages": true
-  },
   "extra": {
     "laravel": {
       "providers": [
@@ -68,6 +45,9 @@
         "Pepper": "Pepper\\Pepper"
       }
     }
+  },
+  "scripts": {
+    "tests": "phpunit --colors=always --verbose"
   },
   "minimum-stability": "dev",
   "prefer-stable": true
