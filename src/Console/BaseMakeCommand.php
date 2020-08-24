@@ -97,11 +97,7 @@ abstract class BaseMakeCommand extends GeneratorCommand
      */
     protected function rootNamespace()
     {
-        if (App::runningUnitTests()) {
-            return 'Pepper\Tests\\';
-        } else {
-            return config('pepper.namespace.root') ?? $this->laravel->getNamespace();
-        }
+        return $this->laravel->getNamespace();
     }
 
     /**
@@ -143,6 +139,13 @@ abstract class BaseMakeCommand extends GeneratorCommand
             $this->info('Publishing default graphql config...');
             $this->call('vendor:publish', [
                 '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider'
+            ]);
+        }
+
+        if (!file_exists(config_path('pepper.php'))) {
+            $this->info('Publishing default Pepper config...');
+            $this->call('vendor:publish', [
+                '--provider' => 'Pepper\PepperServiceProvider'
             ]);
         }
     }

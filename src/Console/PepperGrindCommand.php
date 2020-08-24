@@ -106,6 +106,11 @@ class PepperGrindCommand extends Command
         $this->ensureGraphQLConfigExists();
         $config = new Config(null);
 
+        $this->info('Creating Http' . $basename . '...');
+        $this->call('make:pepper:http', [
+            'name' => $basename, // Class
+        ]);
+
         $this->info('Adding default types to config...');
         $config->addType('ConditionInput', 'ConditionInput', 'Pepper\\');
         $config->addType('OrderByEnum', 'OrderByEnum', 'Pepper\\');
