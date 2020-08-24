@@ -48,11 +48,15 @@ abstract class TestCaseDatabase extends TestCase
             'prefix' => '',
         ]);
 
-        $config = new \Illuminate\Config\Repository(include config_path('graphql.php'));
-        $app['config']->set('graphql', $config->all());
+        if (file_exists(config_path('graphql.php'))) {
+            $config = new \Illuminate\Config\Repository(include config_path('graphql.php'));
+            $app['config']->set('graphql', $config->all());
+        }
 
-        $config = new \Illuminate\Config\Repository(include config_path('pepper.php'));
-        $app['config']->set('pepper', $config->all());
-        $app['config']->set('pepper.namespace.models', 'Tests\Support\Models');
+        if (file_exists(config_path('pepper.php'))) {
+            $config = new \Illuminate\Config\Repository(include config_path('pepper.php'));
+            $app['config']->set('pepper', $config->all());
+            $app['config']->set('pepper.namespace.models', 'Tests\Support\Models');
+        }
     }
 }

@@ -100,8 +100,7 @@ trait TypeSupport
                 MorphTo::class,
                 MorphToMany::class
             ])) {
-                /** @todo nasty 🥶 */
-                $type = Type::listOf(GraphQL::type(Str::of($relation)->singular()->studly() . 'Type'));
+                $type = Type::listOf(GraphQL::type($this->getRelatedType($relation)));
             }
 
             $fields[$relation] = [
@@ -116,5 +115,10 @@ trait TypeSupport
         }
 
         return $fields;
+    }
+
+    public function getRelatedType($attribute)
+    {
+        return $this->getRelatedModel($attribute)->getTypeName();
     }
 }

@@ -13,28 +13,21 @@ class QueryTest extends TestCaseDatabase
 {
     public function testWithoutSelectFields(): void
     {
-        // dd(DB::connection()->getDoctrineSchemaManager()->listTableNames());
         $post = factory(Post::class)->create([
             'title' => 'Title of the post',
         ]);
 
-        //         $graphql = <<<GRAQPHQL
-        // {
-        //     post_by_pk(id: $post->id) {
-        //     id
-        //     title
-        //   }
-        // }
-        // GRAQPHQL;
+        $graphql = <<<GRAQPHQL
+        {
+            post {
+            id
+            title
+            }
+        }
+        GRAQPHQL;
 
-        //         $response = $this->call('POST', '/graphql', [
-        //             'query' => $graphql,
-        //         ]);
-
-        $response = $this->withHeaders([
-            'Content-Type' => 'application/json',
-        ])->json('GET', '/graphql', [
-            'query' => 'query {post{id}}'
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
         ]);
 
         $expectedResult = [
@@ -47,8 +40,6 @@ class QueryTest extends TestCaseDatabase
         ];
 
         $this->assertEquals($response->getStatusCode(), 200);
-
-        dd($response->json());
         $this->assertEquals($expectedResult, $response->json());
     }
 

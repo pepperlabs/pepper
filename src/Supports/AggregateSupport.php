@@ -15,8 +15,9 @@ trait AggregateSupport
         if (method_exists($this, $override)) {
             return $this->$override();
         } else {
-            $guess = Str::of($method)->singular()->studly();
-            return GraphQL::type($guess . 'FieldAggregateType');
+            // $guess = Str::of($method)->singular()->studly();
+            // return GraphQL::type($guess . 'FieldAggregateType');
+            return $this->getRelatedFieldAggregateType($method);
         }
     }
 
@@ -53,9 +54,15 @@ trait AggregateSupport
         if (method_exists($this, $override)) {
             return $this->$override();
         } else {
-            $guess = Str::of($method)->singular()->studly();
-            return GraphQL::type($guess . 'FieldAggregateType');
+            // $guess = Str::of($method)->singular()->studly();
+            // return GraphQL::type($guess . 'FieldAggregateType');
+            return $this->getRelatedFieldAggregateType($method);
         }
+    }
+
+    public function getRelatedFieldAggregateType($attribute)
+    {
+        return $this->getRelatedModel($attribute)->getFieldAggregateName();
     }
 
     public function getAggregatedFields(): array

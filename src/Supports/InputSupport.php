@@ -2,7 +2,7 @@
 
 namespace Pepper\Supports;
 
-use Illuminate\Support\Str;
+use App;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait InputSupport
@@ -16,8 +16,7 @@ trait InputSupport
             if (in_array($attribute, $relations)) {
                 $fields[$attribute] = [
                     'name' => $attribute,
-                    /** @todo FIX the type name */
-                    'type' => GraphQL::type(Str::of($attribute)->singular()->studly() . 'Input')
+                    'type' => GraphQL::type($this->getRelatedInput($attribute))
                 ];
             } else {
                 $fields[$attribute] = [
@@ -43,6 +42,11 @@ trait InputSupport
         ];
 
         return $fields;
+    }
+
+    public function getRelatedInput($attribute)
+    {
+        return $this->getRelatedModel($attribute)->getInputName();
     }
 
     /**

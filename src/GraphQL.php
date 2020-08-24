@@ -270,4 +270,12 @@ abstract class GraphQL
     {
         return call_user_func('\GraphQL\Type\Definition\Type::' . $this->getFieldType($field));
     }
+
+    private function getRelatedModel($attribute)
+    {
+        $relatedModel = get_class($this->newModel()->$attribute()->getRelated());
+        $class_basename = class_basename($relatedModel);
+        $httpClass = 'App\Http\Pepper\\' . $class_basename;
+        return new $httpClass;
+    }
 }
