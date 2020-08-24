@@ -19,7 +19,7 @@ class QueryTest extends TestCaseDatabase
 
         $graphql = <<<GRAQPHQL
         {
-            post {
+            post_by_pk(id: $post->id) {
             id
             title
             }
@@ -32,7 +32,7 @@ class QueryTest extends TestCaseDatabase
 
         $expectedResult = [
             'data' => [
-                'post' => [
+                'post_by_pk' => [
                     'id' => "$post->id",
                     'title' => 'Title of the post',
                 ],
