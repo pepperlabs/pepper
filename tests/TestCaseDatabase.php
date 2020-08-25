@@ -24,6 +24,19 @@ abstract class TestCaseDatabase extends TestCase
         $this->artisan('pepper:grind', [
             '--all' => true
         ]);
+
+        $this->clearCache();
+
+        if (file_exists(config_path('graphql.php'))) {
+            $config = new \Illuminate\Config\Repository(include config_path('graphql.php'));
+            config(['graphql' => $config->all()]);
+        }
+
+        if (file_exists(config_path('pepper.php'))) {
+            $config = new \Illuminate\Config\Repository(include config_path('pepper.php'));
+            config(['pepper' => $config->all()]);
+            config(['pepper.namespace.models' => 'Tests\Support\Models']);
+        }
     }
 
     protected function setUpTraits()
@@ -48,18 +61,7 @@ abstract class TestCaseDatabase extends TestCase
             'prefix' => '',
         ]);
 
-        // $app->artisan('vendor:publish', ['--provider' => 'Rebing\GraphQL\GraphQLServiceProvider']);
-        // $app->artisan('vendor:publish', ['--provider' => 'Pepper\PepperServiceProvider']);
-
-        if (file_exists(config_path('graphql.php'))) {
-            $config = new \Illuminate\Config\Repository(include config_path('graphql.php'));
-            $app['config']->set('graphql', $config->all());
-        }
-
-        if (file_exists(config_path('pepper.php'))) {
-            $config = new \Illuminate\Config\Repository(include config_path('pepper.php'));
-            $app['config']->set('pepper', $config->all());
-            $app['config']->set('pepper.namespace.models', 'Tests\Support\Models');
-        }
+        // $this->artisan('vendor:publish', ['--provider' => 'Rebing\GraphQL\GraphQLServiceProvider']);
+        // $this->artisan('vendor:publish', ['--provider' => 'Pepper\PepperServiceProvider']);
     }
 }
