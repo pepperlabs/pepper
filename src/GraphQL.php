@@ -38,7 +38,7 @@ abstract class GraphQL
 
     public function getStudly(): string
     {
-        return Str::of($this->getClassName())->studly();
+        return Str::studly($this->getClassName());
     }
 
     /**
@@ -259,7 +259,7 @@ abstract class GraphQL
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName());
         } else {
-            return Str::of($this->getClassName())->studly();
+            return Str::studly($this->getClassName());
         }
     }
 

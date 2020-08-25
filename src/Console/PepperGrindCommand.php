@@ -99,8 +99,8 @@ class PepperGrindCommand extends Command
     {
         $basename = class_basename($model);
         $model = 'App\Http\Pepper\\' . $basename;
-        $studly = Str::of($basename)->studly();
-        $snake = Str::of($basename)->snake();
+        $studly = Str::studly($basename);
+        $snake = Str::snake($basename);
         $noConfig = $this->hasOption('no-config') && $this->option('no-config');
 
         $this->ensureGraphQLConfigExists();
@@ -207,7 +207,7 @@ class PepperGrindCommand extends Command
 
         // Create new query
         $queryName = $studly . 'Query';
-        $queryClass = $snake->__toString();
+        $queryClass = $snake;
         $this->info('Creating ' . $queryClass . '...');
         $this->call('make:pepper:query', [
             'name' => $queryName, // ClassQuery

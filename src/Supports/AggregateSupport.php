@@ -11,12 +11,10 @@ trait AggregateSupport
 {
     public function getFieldAggregateNodeType($method)
     {
-        $override = 'set' . Str::of($method)->studly() . 'FieldAggregateNodeType';
+        $override = 'set' . Str::studly($method) . 'FieldAggregateNodeType';
         if (method_exists($this, $override)) {
             return $this->$override();
         } else {
-            // $guess = Str::of($method)->singular()->studly();
-            // return GraphQL::type($guess . 'FieldAggregateType');
             return $this->getRelatedFieldAggregateType($method);
         }
     }
@@ -50,12 +48,10 @@ trait AggregateSupport
 
     private function getFieldAggregateRelationType($method)
     {
-        $override = 'set' . Str::of($method)->studly() . 'FieldAggregateRelationType';
+        $override = 'set' . Str::studly($method) . 'FieldAggregateRelationType';
         if (method_exists($this, $override)) {
             return $this->$override();
         } else {
-            // $guess = Str::of($method)->singular()->studly();
-            // return GraphQL::type($guess . 'FieldAggregateType');
             return $this->getRelatedFieldAggregateType($method);
         }
     }
@@ -167,7 +163,7 @@ trait AggregateSupport
 
     public function resolveCountAggregate($root, $args, $context, $resolveInfo)
     {
-        $method = 'resolve' . Str::of($root['name'])->studly() . 'CountAggregate';
+        $method = 'resolve' . Str::studly($root['name']) . 'CountAggregate';
         if (method_exists($this, $method)) {
             return $this->$method($root, $args, $context, $resolveInfo);
         }
@@ -181,7 +177,7 @@ trait AggregateSupport
 
     public function resolveSumAggregate($root, $args, $context, $resolveInfo)
     {
-        $method = 'resolve' . Str::of($root['name'])->studly() . 'SumAggregate';
+        $method = 'resolve' . Str::studly($root['name']) . 'SumAggregate';
         if (method_exists($this, $method)) {
             return $this->$method($root, $args, $context, $resolveInfo);
         }
@@ -216,7 +212,7 @@ trait AggregateSupport
 
     public function resolveAvgAggregate($root, $args, $context, $resolveInfo)
     {
-        $method = 'resolve' . Str::of($root['name'])->studly() . 'AvgAggregate';
+        $method = 'resolve' . Str::studly($root['name']) . 'AvgAggregate';
         if (method_exists($this, $method)) {
             return $this->$method($root, $args, $context, $resolveInfo);
         }
@@ -235,7 +231,7 @@ trait AggregateSupport
 
     public function resolveMaxAggregate($root, $args, $context, $resolveInfo)
     {
-        $method = 'resolve' . Str::of($root['name'])->studly() . 'MaxAggregate';
+        $method = 'resolve' . Str::studly($root['name']) . 'MaxAggregate';
         if (method_exists($this, $method)) {
             return $this->$method($root, $args, $context, $resolveInfo);
         }
@@ -254,7 +250,7 @@ trait AggregateSupport
 
     public function resolveMinAggregate($root, $args, $context, $resolveInfo)
     {
-        $method = 'resolve' . Str::of($root['name'])->studly() . 'MinAggregate';
+        $method = 'resolve' . Str::studly($root['name']) . 'MinAggregate';
         if (method_exists($this, $method)) {
             return $this->$method($root, $args, $context, $resolveInfo);
         }
