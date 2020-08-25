@@ -36,7 +36,8 @@ GRAQPHQL;
             ],
         ];
 
-        $this->assertEquals($response->getStatusCode(), 200);
+        $response->dump()->assertStatus(200);
+
         $this->assertEquals($expectedResult, $response->json());
     }
 }
