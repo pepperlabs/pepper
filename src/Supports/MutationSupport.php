@@ -18,7 +18,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'Mutation';
+            return $this->getName().'Mutation';
         }
     }
 
@@ -33,7 +33,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' mutation description.';
+            return $this->getName().' mutation description.';
         }
     }
 
@@ -60,7 +60,7 @@ trait MutationSupport
         foreach ($this->getFields(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => $this->call_field_type($attribute)
+                'type' => $this->call_field_type($attribute),
             ];
         }
 
@@ -78,7 +78,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'MutationInput';
+            return $this->getName().'MutationInput';
         }
     }
 
@@ -93,7 +93,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' input mutation description.';
+            return $this->getName().' input mutation description.';
         }
     }
 
@@ -108,7 +108,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'InsertMutation';
+            return $this->getName().'InsertMutation';
         }
     }
 
@@ -123,7 +123,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' insert mutation description.';
+            return $this->getName().' insert mutation description.';
         }
     }
 
@@ -138,7 +138,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'InsertOneMutation';
+            return $this->getName().'InsertOneMutation';
         }
     }
 
@@ -153,7 +153,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' insert mutation description.';
+            return $this->getName().' insert mutation description.';
         }
     }
 
@@ -168,7 +168,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'UpdateByPkMutation';
+            return $this->getName().'UpdateByPkMutation';
         }
     }
 
@@ -183,10 +183,9 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' insert mutation description.';
+            return $this->getName().' insert mutation description.';
         }
     }
-
 
     /**
      * Update by PK mutation.
@@ -224,7 +223,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'UpdateMutation';
+            return $this->getName().'UpdateMutation';
         }
     }
 
@@ -239,7 +238,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' update mutation description.';
+            return $this->getName().' update mutation description.';
         }
     }
 
@@ -276,7 +275,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'DeleteByPkMutation';
+            return $this->getName().'DeleteByPkMutation';
         }
     }
 
@@ -291,10 +290,9 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' DeleteByPk mutation description.';
+            return $this->getName().' DeleteByPk mutation description.';
         }
     }
-
 
     /**
      * Delete by PK mutation.
@@ -328,7 +326,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'DeleteMutation';
+            return $this->getName().'DeleteMutation';
         }
     }
 
@@ -343,7 +341,7 @@ trait MutationSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' Delete mutation description.';
+            return $this->getName().' Delete mutation description.';
         }
     }
 
@@ -378,12 +376,12 @@ trait MutationSupport
         return [
             'pk_columns' => [
                 'name' => 'pk_columns',
-                'type' => GraphQL::type($this->getStudly() . 'MutationInput')
+                'type' => GraphQL::type($this->getStudly().'MutationInput'),
             ],
             '_set' => [
                 'name' => '_set',
-                'type' => GraphQL::type($this->getStudly() . 'MutationInput')
-            ]
+                'type' => GraphQL::type($this->getStudly().'MutationInput'),
+            ],
         ];
     }
 
@@ -396,7 +394,7 @@ trait MutationSupport
     {
         return [
             'where' => ['type' => GraphQL::type($this->getInputName())],
-            '_set' => ['type' => GraphQL::type($this->getStudly() . 'MutationInput')]
+            '_set' => ['type' => GraphQL::type($this->getStudly().'MutationInput')],
         ];
     }
 
@@ -410,8 +408,8 @@ trait MutationSupport
         return [
             'object' => [
                 'name' => 'object',
-                'type' => GraphQL::type($this->getStudly() . 'MutationInput')
-            ]
+                'type' => GraphQL::type($this->getStudly().'MutationInput'),
+            ],
         ];
     }
 
@@ -433,7 +431,6 @@ trait MutationSupport
 
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
-
 
     /**
      * Resolve mutation insert.
@@ -467,8 +464,8 @@ trait MutationSupport
         return [
             'objects' => [
                 'name' => 'objects',
-                'type' => Type::listOf(GraphQL::type($this->getStudly() . 'MutationInput'))
-            ]
+                'type' => Type::listOf(GraphQL::type($this->getStudly().'MutationInput')),
+            ],
         ];
     }
 

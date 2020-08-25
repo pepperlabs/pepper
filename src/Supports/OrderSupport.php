@@ -18,7 +18,7 @@ trait OrderSupport
         foreach ($this->getFields() as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => GraphQL::type('OrderByEnum')
+                'type' => GraphQL::type('OrderByEnum'),
             ];
         }
 
@@ -36,7 +36,7 @@ trait OrderSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'OrderInput';
+            return $this->getName().'OrderInput';
         }
     }
 
@@ -51,7 +51,7 @@ trait OrderSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' order description.';
+            return $this->getName().' order description.';
         }
     }
 }

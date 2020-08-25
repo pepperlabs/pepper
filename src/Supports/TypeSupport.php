@@ -2,23 +2,22 @@
 
 namespace Pepper\Supports;
 
-use Illuminate\Support\Str;
-use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
-use Rebing\GraphQL\Support\Facades\GraphQL;
-use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\MorphTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
+use GraphQL\Type\Definition\Type;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\MorphPivot;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasOneOrMany;
 use Illuminate\Database\Eloquent\Relations\HasOneThrough;
-use Illuminate\Database\Eloquent\Relations\BelongsToMany;
-use Illuminate\Database\Eloquent\Relations\HasManyThrough;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
+use Illuminate\Database\Eloquent\Relations\MorphPivot;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait TypeSupport
 {
@@ -35,7 +34,7 @@ trait TypeSupport
         foreach ($this->getFields(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => $this->call_field_type($attribute)
+                'type' => $this->call_field_type($attribute),
             ];
         }
 
@@ -53,7 +52,7 @@ trait TypeSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'Type';
+            return $this->getName().'Type';
         }
     }
 
@@ -68,7 +67,7 @@ trait TypeSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' type description.';
+            return $this->getName().' type description.';
         }
     }
 
@@ -98,7 +97,7 @@ trait TypeSupport
                 MorphOneOrMany::class,
                 MorphPivot::class,
                 MorphTo::class,
-                MorphToMany::class
+                MorphToMany::class,
             ])) {
                 $type = Type::listOf(GraphQL::type($this->getRelatedType($relation)));
             }
@@ -110,7 +109,7 @@ trait TypeSupport
                 'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) use ($relation) {
                     return $this->getQueryResolve($root->$relation(), $args, $context, $resolveInfo, function () {
                     })->get();
-                }
+                },
             ];
         }
 

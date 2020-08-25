@@ -39,7 +39,7 @@ class InputMutationMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/Stubs/input_mutation.stub';
+        return __DIR__.'/Stubs/input_mutation.stub';
     }
 
     /**
@@ -50,6 +50,6 @@ class InputMutationMakeCommand extends BaseMakeCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\GraphQL\Inputs\Pepper';
+        return $rootNamespace.'\GraphQL\Inputs\Pepper';
     }
 }

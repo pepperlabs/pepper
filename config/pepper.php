@@ -31,7 +31,7 @@ return [
         |
         */
 
-        'models' => 'App'
+        'models' => 'App',
 
-    ]
+    ],
 ];

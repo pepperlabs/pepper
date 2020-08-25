@@ -39,7 +39,7 @@ class MutationDeleteMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/Stubs/mutation_delete.stub';
+        return __DIR__.'/Stubs/mutation_delete.stub';
     }
 
     /**
@@ -50,6 +50,6 @@ class MutationDeleteMakeCommand extends BaseMakeCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\GraphQL\Mutations\Pepper';
+        return $rootNamespace.'\GraphQL\Mutations\Pepper';
     }
 }

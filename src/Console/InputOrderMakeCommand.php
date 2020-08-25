@@ -39,7 +39,7 @@ class InputOrderMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/Stubs/input_order.stub';
+        return __DIR__.'/Stubs/input_order.stub';
     }
 
     /**
@@ -50,6 +50,6 @@ class InputOrderMakeCommand extends BaseMakeCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\GraphQL\Inputs\Pepper';
+        return $rootNamespace.'\GraphQL\Inputs\Pepper';
     }
 }

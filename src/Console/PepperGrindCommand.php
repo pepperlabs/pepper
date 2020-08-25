@@ -2,12 +2,11 @@
 
 namespace Pepper\Console;
 
-use Illuminate\Support\Str;
+use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\App;
-use HaydenPierce\ClassFinder\ClassFinder;
+use Illuminate\Support\Str;
 use Pepper\Helpers\ConfigHelper as Config;
-use Pepper\PepperServiceProvider;
 
 class PepperGrindCommand extends Command
 {
@@ -36,7 +35,7 @@ class PepperGrindCommand extends Command
     {
         $models = $this->getModels();
 
-        if (!$this->hasOption('all') || !$this->option('all')) {
+        if (! $this->hasOption('all') || ! $this->option('all')) {
             $selected = $this->choice(
                 'Select models to be included',
                 array_merge(['-- select all --'], $models),
@@ -66,6 +65,7 @@ class PepperGrindCommand extends Command
         foreach (ClassFinder::getClassesInNamespace($models) as $class) {
             $classes[] = $class;
         }
+
         return $classes;
     }
 
@@ -98,7 +98,7 @@ class PepperGrindCommand extends Command
     private function initModelHttp(string $model): void
     {
         $basename = class_basename($model);
-        $model = 'App\Http\Pepper\\' . $basename;
+        $model = 'App\Http\Pepper\\'.$basename;
         $studly = Str::studly($basename);
         $snake = Str::snake($basename);
         $noConfig = $this->hasOption('no-config') && $this->option('no-config');
@@ -106,7 +106,7 @@ class PepperGrindCommand extends Command
         $this->ensureGraphQLConfigExists();
         $config = new Config(null);
 
-        $this->info('Creating Http' . $basename . '...');
+        $this->info('Creating Http'.$basename.'...');
         $this->call('make:pepper:http', [
             'name' => $basename, // Class
         ]);
@@ -118,199 +118,199 @@ class PepperGrindCommand extends Command
         $config->addGlobalType('AllUnion');
 
         // Creeat new type
-        $typeName = $typeClass = $studly . 'Type';
-        $this->info('Creating ' . $typeName . '...');
+        $typeName = $typeClass = $studly.'Type';
+        $this->info('Creating '.$typeName.'...');
         $this->call('make:pepper:type', [
             'name' => $typeName, // ClassType
             'class' => $typeClass, // ClassType
-            'description' => $basename . ' type description',
+            'description' => $basename.' type description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new type aggregate
-        $typeName = $typeClass = $studly . 'AggregateType';
-        $this->info('Creating ' . $typeName . '...');
+        $typeName = $typeClass = $studly.'AggregateType';
+        $this->info('Creating '.$typeName.'...');
         $this->call('make:pepper:type:aggregate', [
             'name' => $typeName, // ClassAggregateType
             'class' => $typeClass, // ClassAggregateType
-            'description' => $basename . ' aggregate type description',
+            'description' => $basename.' aggregate type description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new field aggregate type
-        $typeName = $typeClass = $studly . 'FieldAggregateType';
-        $this->info('Creating ' . $typeName . '...');
+        $typeName = $typeClass = $studly.'FieldAggregateType';
+        $this->info('Creating '.$typeName.'...');
         $this->call('make:pepper:type:field-aggregate', [
             'name' => $typeName, // ClassFieldAggregateType
             'class' => $typeClass, // ClassFieldAggregateType
-            'description' => $basename . ' field aggregate type description',
+            'description' => $basename.' field aggregate type description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new field aggregate unresolvalbe type
-        $typeName = $typeClass = $studly . 'FieldAggregateUnresolvableType';
-        $this->info('Creating ' . $typeName . '...');
+        $typeName = $typeClass = $studly.'FieldAggregateUnresolvableType';
+        $this->info('Creating '.$typeName.'...');
         $this->call('make:pepper:type:field-aggregate-unresolvable', [
             'name' => $typeName, // ClassFieldAggregateUnresolvableType
             'class' => $typeClass, // ClassFieldAggregateUnresolvableType
-            'description' => $basename . ' field aggregate unresolvable type description',
+            'description' => $basename.' field aggregate unresolvable type description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new result aggregate type
-        $typeName = $typeClass = $studly . 'ResultAggregateType';
-        $this->info('Creating ' . $typeName . '...');
+        $typeName = $typeClass = $studly.'ResultAggregateType';
+        $this->info('Creating '.$typeName.'...');
         $this->call('make:pepper:type:result-aggregate', [
             'name' => $typeName, // ClassResultAggregateType
             'class' => $typeClass, // ClassResultAggregateType
-            'description' => $basename . ' result aggregate type description',
+            'description' => $basename.' result aggregate type description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new input
-        $inputName = $inputClass = $studly . 'Input';
-        $this->info('Creating ' . $inputName . '...');
+        $inputName = $inputClass = $studly.'Input';
+        $this->info('Creating '.$inputName.'...');
         $this->call('make:pepper:input', [
             'name' => $inputName, // ClassInput
             'class' => $inputClass, // ClassInput
-            'description' => $basename . ' input description',
+            'description' => $basename.' input description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new order input
-        $inputName = $inputClass = $studly . 'OrderInput';
-        $this->info('Creating ' . $inputName . '...');
+        $inputName = $inputClass = $studly.'OrderInput';
+        $this->info('Creating '.$inputName.'...');
         $this->call('make:pepper:input:order', [
             'name' => $inputName, // ClassOrderInput
             'class' => $inputClass, // ClassOrderInput
-            'description' => $basename . ' order input description',
+            'description' => $basename.' order input description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new mutation input
-        $inputName = $inputClass = $studly . 'MutationInput';
-        $this->info('Creating ' . $inputName . '...');
+        $inputName = $inputClass = $studly.'MutationInput';
+        $this->info('Creating '.$inputName.'...');
         $this->call('make:pepper:input:mutation', [
             'name' => $inputName, // ClassMutationInput
             'class' => $inputClass, // ClassMutationInput
-            'description' => $basename . ' mutation input description',
+            'description' => $basename.' mutation input description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new query
-        $queryName = $studly . 'Query';
+        $queryName = $studly.'Query';
         $queryClass = $snake;
-        $this->info('Creating ' . $queryClass . '...');
+        $this->info('Creating '.$queryClass.'...');
         $this->call('make:pepper:query', [
             'name' => $queryName, // ClassQuery
             'class' => $queryClass, // class
-            'description' => $basename . ' query description',
+            'description' => $basename.' query description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new query aggregate
-        $queryName = $studly . 'AggregateQuery';
-        $queryClass = $snake . '_aggregate';
-        $this->info('Creating ' . $queryClass . '...');
+        $queryName = $studly.'AggregateQuery';
+        $queryClass = $snake.'_aggregate';
+        $this->info('Creating '.$queryClass.'...');
         $this->call('make:pepper:query:aggregate', [
             'name' => $queryName, // ClassQuery
             'class' => $queryClass, // class_aggregate
-            'description' => $basename . ' query description',
+            'description' => $basename.' query description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new query by PK aggregate
-        $queryName = $studly . 'ByPkQuery';
-        $queryClass = $snake . '_by_pk';
-        $this->info('Creating ' . $queryClass . '...');
+        $queryName = $studly.'ByPkQuery';
+        $queryClass = $snake.'_by_pk';
+        $this->info('Creating '.$queryClass.'...');
         $this->call('make:pepper:query:by-pk', [
             'name' => $queryName, // ClassQuery
             'class' => $queryClass, // class_by_pk
-            'description' => $basename . ' by PK query description',
+            'description' => $basename.' by PK query description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new delete mutation
-        $mutationName = $studly . 'DeleteMutation';
-        $mutationClass = 'delete_' . $snake;
-        $this->info('Creating ' . $mutationClass . '...');
+        $mutationName = $studly.'DeleteMutation';
+        $mutationClass = 'delete_'.$snake;
+        $this->info('Creating '.$mutationClass.'...');
         $this->call('make:pepper:mutation:delete:by-pk', [
             'name' => $mutationName, // ClassDeleteByPkMutation
             'class' => $mutationClass, // delete_class
-            'description' => $basename . ' delete by PK mutation description',
+            'description' => $basename.' delete by PK mutation description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new delete mutation by PK
-        $mutationName = $studly . 'DeleteByPkMutation';
-        $mutationClass = 'delete_' . $snake . '_by_pk';
-        $this->info('Creating ' . $mutationClass . '...');
+        $mutationName = $studly.'DeleteByPkMutation';
+        $mutationClass = 'delete_'.$snake.'_by_pk';
+        $this->info('Creating '.$mutationClass.'...');
         $this->call('make:pepper:mutation:delete', [
             'name' => $mutationName, // ClassDeleteByPkMutation
             'class' => $mutationClass, // delete_class_by_pk
-            'description' => $basename . ' delete by PK mutation description',
+            'description' => $basename.' delete by PK mutation description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new insert mutation
-        $mutationName = $studly . 'InsertMutation';
-        $mutationClass = 'insert_' . $snake;
-        $this->info('Creating ' . $mutationClass . '...');
+        $mutationName = $studly.'InsertMutation';
+        $mutationClass = 'insert_'.$snake;
+        $this->info('Creating '.$mutationClass.'...');
         $this->call('make:pepper:mutation:insert', [
             'name' => $mutationName, // ClassInsertMutation
             'class' => $mutationClass, // insert_class
-            'description' => $basename . ' insert mutation description',
+            'description' => $basename.' insert mutation description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new insert one mutation
-        $mutationName = $studly . 'InsertOneMutation';
-        $mutationClass = 'insert_' . $snake . '_one';
-        $this->info('Creating ' . $mutationClass . '...');
+        $mutationName = $studly.'InsertOneMutation';
+        $mutationClass = 'insert_'.$snake.'_one';
+        $this->info('Creating '.$mutationClass.'...');
         $this->call('make:pepper:mutation:insert:one', [
             'name' => $mutationName, // ClassInsertOneMutation
             'class' => $mutationClass, // insert_class_one
-            'description' => $basename . ' insert one mutation description',
+            'description' => $basename.' insert one mutation description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new update mutation
-        $mutationName = $studly . 'UpdateMutation';
-        $mutationClass = 'update_' . $snake;
-        $this->info('Creating ' . $mutationClass . '...');
+        $mutationName = $studly.'UpdateMutation';
+        $mutationClass = 'update_'.$snake;
+        $this->info('Creating '.$mutationClass.'...');
         $this->call('make:pepper:mutation:update', [
             'name' => $mutationName, // ClassUpdateMutation
             'class' => $mutationClass, // update_class
-            'description' => $basename . ' update mutation description',
+            'description' => $basename.' update mutation description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
 
         // Create new update mutation by PK
-        $mutationName = $studly . 'UpdateByPkMutation';
-        $mutationClass = 'update_' . $snake . '_by_pk';
-        $this->info('Creating ' . $mutationClass . '...');
+        $mutationName = $studly.'UpdateByPkMutation';
+        $mutationClass = 'update_'.$snake.'_by_pk';
+        $this->info('Creating '.$mutationClass.'...');
         $this->call('make:pepper:mutation:update:by-pk', [
             'name' => $mutationName, // ClassUpdateByPkMutation
             'class' => $mutationClass, // update_class_by_pk
-            'description' => $basename . ' update by PK mutation description',
+            'description' => $basename.' update by PK mutation description',
             'model' => $model,
-            '--no-config' => $noConfig
+            '--no-config' => $noConfig,
         ]);
     }
 
@@ -322,17 +322,17 @@ class PepperGrindCommand extends Command
      */
     private function ensureGraphQLConfigExists(): void
     {
-        if (!file_exists(config_path('graphql.php'))) {
+        if (! file_exists(config_path('graphql.php'))) {
             $this->info('Publishing default graphql config...');
             $this->call('vendor:publish', [
-                '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider'
+                '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider',
             ]);
         }
 
-        if (!file_exists(config_path('pepper.php'))) {
+        if (! file_exists(config_path('pepper.php'))) {
             $this->info('Publishing default Pepper config...');
             $this->call('vendor:publish', [
-                '--provider' => 'Pepper\PepperServiceProvider'
+                '--provider' => 'Pepper\PepperServiceProvider',
             ]);
         }
     }

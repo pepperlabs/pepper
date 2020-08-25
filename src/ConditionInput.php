@@ -4,10 +4,9 @@ declare(strict_types=1);
 
 namespace Pepper;
 
-use App\GraphQL\Unions\AnyUnion;
 use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\InputType;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rebing\GraphQL\Support\InputType;
 
 class ConditionInput extends InputType
 {
@@ -90,7 +89,7 @@ class ConditionInput extends InputType
             '_time' => [
                 'type' => GraphQL::type('AnyScalar'),
                 'description' => 'Laravel whereTime() equivalent',
-            ]
+            ],
         ];
     }
 }

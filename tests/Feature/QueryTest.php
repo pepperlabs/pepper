@@ -2,9 +2,7 @@
 
 namespace Tests\Feature;
 
-
 use Tests\TestCaseDatabase;
-use Tests\Support\Models\Post;
 
 class QueryTest extends TestCaseDatabase
 {

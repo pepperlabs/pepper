@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Tests\Support\Traits;
 
-use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Events\QueryExecuted;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Including this trait will **automatically** start counting SQL queries
@@ -110,7 +110,7 @@ trait SqlAssertionTrait
                                 '= ?',
                             ],
                             $query->sql
-                        ) . ';';
+                        ).';';
                     },
                     $this->sqlQueryEvents
                 )
@@ -119,7 +119,7 @@ trait SqlAssertionTrait
 
         $this->sqlCounterReset();
 
-        if (!$msg) {
+        if (! $msg) {
             $msg = 'SQL queries mismatch';
         }
 

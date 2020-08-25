@@ -2,8 +2,8 @@
 
 namespace Tests\Unit;
 
-use Tests\TestCase;
 use Pepper\Helpers\ConfigHelper as Config;
+use Tests\TestCase;
 
 class ConfigTest extends TestCase
 {

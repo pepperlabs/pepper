@@ -39,7 +39,7 @@ class QueryMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/Stubs/query.stub';
+        return __DIR__.'/Stubs/query.stub';
     }
 
     /**
@@ -50,6 +50,6 @@ class QueryMakeCommand extends BaseMakeCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\GraphQL\Queries\Pepper';
+        return $rootNamespace.'\GraphQL\Queries\Pepper';
     }
 }
