@@ -66,9 +66,9 @@ abstract class GraphQL
     /**
      * Get new instance of the model.
      *
-     * @return object
+     * @return mixed
      */
-    public function newModel(): object
+    public function newModel()
     {
         return $this->newModelReflection()->newInstanceArgs();
     }
