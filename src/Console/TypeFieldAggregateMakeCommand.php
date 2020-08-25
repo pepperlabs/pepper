@@ -39,7 +39,7 @@ class TypeFieldAggregateMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/type_field_aggregate.stub';
+        return __DIR__ . '/Stubs/type_field_aggregate.stub';
     }
 
     /**

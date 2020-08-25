@@ -39,7 +39,7 @@ class InputMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/input.stub';
+        return __DIR__ . '/Stubs/input.stub';
     }
 
     /**

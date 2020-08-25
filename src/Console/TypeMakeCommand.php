@@ -39,7 +39,7 @@ class TypeMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/type.stub';
+        return __DIR__ . '/Stubs/type.stub';
     }
 
     /**

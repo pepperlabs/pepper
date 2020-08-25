@@ -39,7 +39,7 @@ class InputOrderMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/input_order.stub';
+        return __DIR__ . '/Stubs/input_order.stub';
     }
 
     /**

@@ -39,7 +39,7 @@ class MutationDeleteByPkMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/mutation_delete_by_pk.stub';
+        return __DIR__ . '/Stubs/mutation_delete_by_pk.stub';
     }
 
     /**

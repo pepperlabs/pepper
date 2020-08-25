@@ -39,7 +39,7 @@ class TypeResultAggregateMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/type_result_aggregate.stub';
+        return __DIR__ . '/Stubs/type_result_aggregate.stub';
     }
 
     /**

@@ -39,7 +39,7 @@ class MutationInsertMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/mutation_insert.stub';
+        return __DIR__ . '/Stubs/mutation_insert.stub';
     }
 
     /**

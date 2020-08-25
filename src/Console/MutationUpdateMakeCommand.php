@@ -39,7 +39,7 @@ class MutationUpdateMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/mutation_update.stub';
+        return __DIR__ . '/Stubs/mutation_update.stub';
     }
 
     /**

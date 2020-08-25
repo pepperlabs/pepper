@@ -39,7 +39,7 @@ class QueryMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/stubs/query.stub';
+        return __DIR__ . '/Stubs/query.stub';
     }
 
     /**
