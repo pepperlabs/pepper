@@ -4,15 +4,16 @@
 
 ## Version support
 
-PHP: ?
-Laravel: ?
+PHP: [7.1, 7.2, 7.3, 7.4]
+
+Laravel: [5.6.*, 5.7.*, 5.8.*, 6.*, 7.*]
 
 ## Installation
 
 You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/amirmasoud/pepper).
 
 ```bash
-$ composer require amirmasoud/pepper
+composer require amirmasoud/pepper
 ```
 
 ## Table of contents
