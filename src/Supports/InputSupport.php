@@ -2,7 +2,6 @@
 
 namespace Pepper\Supports;
 
-use App;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait InputSupport
@@ -16,29 +15,29 @@ trait InputSupport
             if (in_array($attribute, $relations)) {
                 $fields[$attribute] = [
                     'name' => $attribute,
-                    'type' => GraphQL::type($this->getRelatedInput($attribute))
+                    'type' => GraphQL::type($this->getRelatedInput($attribute)),
                 ];
             } else {
                 $fields[$attribute] = [
                     'name' => $attribute,
-                    'type' => GraphQL::type('ConditionInput')
+                    'type' => GraphQL::type('ConditionInput'),
                 ];
             }
         }
 
         $fields['_and'] = [
             'name' => '_and',
-            'type' => GraphQL::type($this->getInputName())
+            'type' => GraphQL::type($this->getInputName()),
         ];
 
         $fields['_or'] = [
             'name' => '_or',
-            'type' => GraphQL::type($this->getInputName())
+            'type' => GraphQL::type($this->getInputName()),
         ];
 
         $fields['_not'] = [
             'name' => '_not',
-            'type' => GraphQL::type($this->getInputName())
+            'type' => GraphQL::type($this->getInputName()),
         ];
 
         return $fields;
@@ -60,7 +59,7 @@ trait InputSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'Input';
+            return $this->getName().'Input';
         }
     }
 
@@ -75,7 +74,7 @@ trait InputSupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' input description.';
+            return $this->getName().' input description.';
         }
     }
 }

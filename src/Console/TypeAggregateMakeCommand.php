@@ -39,7 +39,7 @@ class TypeAggregateMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/Stubs/type_aggregate.stub';
+        return __DIR__.'/Stubs/type_aggregate.stub';
     }
 
     /**
@@ -50,6 +50,6 @@ class TypeAggregateMakeCommand extends BaseMakeCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\GraphQL\Types\Pepper';
+        return $rootNamespace.'\GraphQL\Types\Pepper';
     }
 }

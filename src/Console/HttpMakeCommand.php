@@ -13,11 +13,11 @@ class HttpMakeCommand extends GeneratorCommand
 
     protected function getStub()
     {
-        return __DIR__ . '/Stubs/http.stub';
+        return __DIR__.'/Stubs/http.stub';
     }
 
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\Http\Pepper';
+        return $rootNamespace.'\Http\Pepper';
     }
 }

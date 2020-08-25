@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Pepper;
 
-use Rebing\GraphQL\Support\UnionType;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rebing\GraphQL\Support\UnionType;
 
 class AllUnion extends UnionType
 {
@@ -23,6 +23,7 @@ class AllUnion extends UnionType
             $instance = new $pepper;
             $types[] = GraphQL::type($instance->getResultAggregateName());
         }
+
         return $types;
     }
 

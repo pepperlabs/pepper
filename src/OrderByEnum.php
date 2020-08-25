@@ -18,8 +18,8 @@ class OrderByEnum extends EnumType
             ],
             'desc' => [
                 'value' => 'desc',
-                'description' => 'Sort results in descending (DESC) order'
-            ]
+                'description' => 'Sort results in descending (DESC) order',
+            ],
         ],
     ];
 }

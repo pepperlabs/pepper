@@ -39,7 +39,7 @@ class MutationInsertOneMakeCommand extends BaseMakeCommand
      */
     protected function getStub()
     {
-        return __DIR__ . '/Stubs/mutation_insert_one.stub';
+        return __DIR__.'/Stubs/mutation_insert_one.stub';
     }
 
     /**
@@ -50,6 +50,6 @@ class MutationInsertOneMakeCommand extends BaseMakeCommand
      */
     protected function getDefaultNamespace($rootNamespace)
     {
-        return $rootNamespace . '\GraphQL\Mutations\Pepper';
+        return $rootNamespace.'\GraphQL\Mutations\Pepper';
     }
 }

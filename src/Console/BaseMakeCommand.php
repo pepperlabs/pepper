@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Pepper\Console;
 
-use Illuminate\Support\Facades\App;
 use Illuminate\Console\GeneratorCommand;
 use Pepper\Helpers\ConfigHelper as Config;
 use Symfony\Component\Console\Input\InputArgument;
@@ -111,7 +110,7 @@ abstract class BaseMakeCommand extends GeneratorCommand
     {
         parent::handle();
 
-        if (!$this->hasOption('no-config') || !$this->option('no-config')) {
+        if (! $this->hasOption('no-config') || ! $this->option('no-config')) {
             $this->ensureGraphQLConfigExists();
             $config = new Config(null);
             $gql = strtolower($this->gql);
@@ -136,17 +135,17 @@ abstract class BaseMakeCommand extends GeneratorCommand
      */
     private function ensureGraphQLConfigExists(): void
     {
-        if (!file_exists(config_path('graphql.php'))) {
+        if (! file_exists(config_path('graphql.php'))) {
             $this->info('Publishing default graphql config...');
             $this->call('vendor:publish', [
-                '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider'
+                '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider',
             ]);
         }
 
-        if (!file_exists(config_path('pepper.php'))) {
+        if (! file_exists(config_path('pepper.php'))) {
             $this->info('Publishing default Pepper config...');
             $this->call('vendor:publish', [
-                '--provider' => 'Pepper\PepperServiceProvider'
+                '--provider' => 'Pepper\PepperServiceProvider',
             ]);
         }
     }

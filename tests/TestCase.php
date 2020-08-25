@@ -4,17 +4,17 @@ namespace Tests;
 
 use GraphQL\Type\Schema;
 use Illuminate\Console\Command;
+use Orchestra\Testbench\TestCase as BaseTestCase;
 use Pepper\PepperServiceProvider;
+use PHPUnit\Framework\ExpectationFailedException;
 use Rebing\GraphQL\GraphQLServiceProvider;
 use Rebing\GraphQL\Support\Facades\GraphQL;
-use Orchestra\Testbench\TestCase as BaseTestCase;
-use PHPUnit\Framework\ExpectationFailedException;
 use Symfony\Component\Console\Tester\CommandTester;
 
 class TestCase extends BaseTestCase
 {
     /** @var string */
-    protected $configPath = __DIR__ . '/Stubs/graphql.stub';
+    protected $configPath = __DIR__.'/Stubs/graphql.stub';
 
     /**
      * Setup the test environment.
@@ -26,7 +26,7 @@ class TestCase extends BaseTestCase
         parent::setUp();
 
         // Hello graphql config file.
-        copy($this->configPath, $this->configPath . '.php');
+        copy($this->configPath, $this->configPath.'.php');
     }
 
     /**
@@ -39,7 +39,7 @@ class TestCase extends BaseTestCase
         parent::tearDown();
 
         // Good bye graphql config file.
-        unlink($this->configPath . '.php');
+        unlink($this->configPath.'.php');
     }
 
     protected function getEnvironmentSetUp($app)
@@ -153,15 +153,15 @@ class TestCase extends BaseTestCase
 
         $assertMessage = null;
 
-        if (!$expectErrors && isset($result['errors'])) {
+        if (! $expectErrors && isset($result['errors'])) {
             $appendErrors = '';
             if (isset($result['errors'][0]['trace'])) {
-                $appendErrors = "\n\n" . $this->formatSafeTrace($result['errors'][0]['trace']);
+                $appendErrors = "\n\n".$this->formatSafeTrace($result['errors'][0]['trace']);
             }
 
             $assertMessage = "Probably unexpected error in GraphQL response:\n"
-                . var_export($result, true)
-                . $appendErrors;
+                .var_export($result, true)
+                .$appendErrors;
         }
         unset($result['errors'][0]['trace']);
 
@@ -193,7 +193,7 @@ class TestCase extends BaseTestCase
 
         if ($expectedHttpStatusCode !== $httpStatusCode) {
             $result = $response->getData(true);
-            $msg = var_export($result, true) . "\n";
+            $msg = var_export($result, true)."\n";
             $this->assertSame($expectedHttpStatusCode, $httpStatusCode, $msg);
         }
 
@@ -218,10 +218,10 @@ class TestCase extends BaseTestCase
                     $line .= "({$row['line']}) :";
                 }
                 if (isset($row['call'])) {
-                    $line .= ' ' . $row['call'];
+                    $line .= ' '.$row['call'];
                 }
                 if (isset($row['function'])) {
-                    $line .= ' ' . $row['function'];
+                    $line .= ' '.$row['function'];
                 }
 
                 return $line;

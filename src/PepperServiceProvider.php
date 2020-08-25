@@ -4,7 +4,6 @@ namespace Pepper;
 
 use Illuminate\Support\ServiceProvider;
 use Pepper\Console\HttpMakeCommand;
-use Pepper\Console\PepperGrindCommand;
 use Pepper\Console\InputMakeCommand;
 use Pepper\Console\InputMutationMakeCommand;
 use Pepper\Console\InputOrderMakeCommand;
@@ -14,6 +13,7 @@ use Pepper\Console\MutationInsertMakeCommand;
 use Pepper\Console\MutationInsertOneMakeCommand;
 use Pepper\Console\MutationUpdateByPkMakeCommand;
 use Pepper\Console\MutationUpdateMakeCommand;
+use Pepper\Console\PepperGrindCommand;
 use Pepper\Console\QueryAggregateMakeCommand;
 use Pepper\Console\QueryByPkMakeCommand;
 use Pepper\Console\QueryMakeCommand;
@@ -33,7 +33,7 @@ class PepperServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->publishes([
-            __DIR__ . '/../config/pepper.php' => config_path('pepper.php'),
+            __DIR__.'/../config/pepper.php' => config_path('pepper.php'),
         ], 'config');
     }
 
@@ -58,7 +58,7 @@ class PepperServiceProvider extends ServiceProvider
      */
     public function registerPepper(): void
     {
-        $this->mergeConfigFrom(__DIR__ . '/../config/pepper.php', 'pepper');
+        $this->mergeConfigFrom(__DIR__.'/../config/pepper.php', 'pepper');
 
         $this->app->register(\Rebing\GraphQL\GraphQLServiceProvider::class);
     }

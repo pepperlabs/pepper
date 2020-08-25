@@ -2,16 +2,15 @@
 
 namespace Pepper;
 
-use ReflectionClass;
-
-use Pepper\Supports\AggregateSupport;
-use Pepper\Supports\MutationSupport;
 use Illuminate\Support\Facades\DB;
-use Pepper\Supports\QuerySupport;
-use Pepper\Supports\InputSupport;
-use Pepper\Supports\OrderSupport;
-use Pepper\Supports\TypeSupport;
 use Illuminate\Support\Str;
+use Pepper\Supports\AggregateSupport;
+use Pepper\Supports\InputSupport;
+use Pepper\Supports\MutationSupport;
+use Pepper\Supports\OrderSupport;
+use Pepper\Supports\QuerySupport;
+use Pepper\Supports\TypeSupport;
+use ReflectionClass;
 
 abstract class GraphQL
 {
@@ -51,7 +50,7 @@ abstract class GraphQL
         // @todo check for appended slash
         return property_exists($this, 'model')
             ? $this->model
-            : config('pepper.namespace.models') . '\\' . $this->getClassName();
+            : config('pepper.namespace.models').'\\'.$this->getClassName();
     }
 
     /**
@@ -101,6 +100,7 @@ abstract class GraphQL
                 ->getSchemaBuilder()
                 ->getColumnListing($table);
             $relations = $withRelations ? $this->getRelations() : [];
+
             return array_merge($columns, $relations);
         }
     }
@@ -137,7 +137,7 @@ abstract class GraphQL
     public function getFieldType(string $field): string
     {
         /** @todo Make it available in config */
-        $method = 'set' . $field . 'Type';
+        $method = 'set'.$field.'Type';
         if (method_exists($this, $method)) {
             return $this->overrideFieldType($field, $method);
         } else {
@@ -199,6 +199,7 @@ abstract class GraphQL
     private function getColumnType(string $column): string
     {
         $table = $this->newModel()->getTable();
+
         return DB::getSchemaBuilder()->getColumnType($table, $column);
     }
 
@@ -225,7 +226,7 @@ abstract class GraphQL
         $supported = [
             'BelongsTo', 'BelongsToMany', 'HasMany', 'HasManyThrough', 'HasOne',
             'HasOneOrMany', 'HasOneThrough', 'MorphMany', 'MorphOne',
-            'MorphOneOrMany', 'MorphPivot', 'MorphTo', 'MorphToMany'
+            'MorphOneOrMany', 'MorphPivot', 'MorphTo', 'MorphToMany',
         ];
         foreach ($this->getModelMethods() as $method) {
             $type = $method->getReturnType();
@@ -233,6 +234,7 @@ abstract class GraphQL
                 $relations[] = $method->name;
             }
         }
+
         return $relations;
     }
 
@@ -245,6 +247,7 @@ abstract class GraphQL
     {
         $excluded = array_diff($this->getRelations(), $this->getCovered());
         $included = array_intersect($excluded, $this->getExposed());
+
         return array_values($included);
     }
 
@@ -268,14 +271,15 @@ abstract class GraphQL
      */
     public function call_field_type(string $field)
     {
-        return call_user_func('\GraphQL\Type\Definition\Type::' . $this->getFieldType($field));
+        return call_user_func('\GraphQL\Type\Definition\Type::'.$this->getFieldType($field));
     }
 
     private function getRelatedModel($attribute)
     {
         $relatedModel = get_class($this->newModel()->$attribute()->getRelated());
         $class_basename = class_basename($relatedModel);
-        $httpClass = 'App\Http\Pepper\\' . $class_basename;
+        $httpClass = 'App\Http\Pepper\\'.$class_basename;
+
         return new $httpClass;
     }
 }

@@ -3,8 +3,8 @@
 namespace Pepper\Supports;
 
 use Closure;
-use GraphQL\Type\Definition\Type;
 use GraphQL\Type\Definition\ResolveInfo;
+use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait QuerySupport
@@ -20,7 +20,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'Query';
+            return $this->getName().'Query';
         }
     }
 
@@ -35,7 +35,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' query description.';
+            return $this->getName().' query description.';
         }
     }
 
@@ -56,6 +56,7 @@ trait QuerySupport
         } else {
             $model = $root;
         }
+
         return $model->when(isset($args['where']), function ($query) use (&$args) {
             foreach ($args['where'] as $field => $criteria) {
                 if ($field == '_or') {
@@ -84,6 +85,7 @@ trait QuerySupport
                     }
                 }
             }
+
             return $query;
         })
             ->when(isset($args['limit']), function ($query) use (&$args) {
@@ -101,6 +103,7 @@ trait QuerySupport
                 foreach ($args['order_by'] as $column => $direction) {
                     $query = $query->orderBy($column, $direction);
                 }
+
                 return $query;
             });
     }
@@ -213,8 +216,8 @@ trait QuerySupport
         return [
             $pk => [
                 'name' => $pk,
-                'type' => $this->call_field_type($pk)
-            ]
+                'type' => $this->call_field_type($pk),
+            ],
         ];
     }
 
@@ -224,7 +227,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . 'ByPkQuery';
+            return $this->getName().'ByPkQuery';
         }
     }
 
@@ -234,7 +237,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName() . ' query by PK description.';
+            return $this->getName().' query by PK description.';
         }
     }
 
