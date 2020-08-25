@@ -1,0 +1,10 @@
+<?php
+
+namespace DummyNamespace;
+
+use Pepper\GraphQL;
+
+class DummyClass extends GraphQL
+{
+    // ...
+}
