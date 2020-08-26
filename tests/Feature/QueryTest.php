@@ -14,14 +14,13 @@ class QueryTest extends TestCaseDatabase
             'title' => 'Title of the post',
         ]);
 
-        $graphql = <<<GRAQPHQL
+        $graphql = "
         {
             post_by_pk(id: $post->id) {
                 id
                 title
             }
-        }
-        GRAQPHQL;
+        }";
 
         $response = $this->call('GET', '/graphql', [
             'query' => $graphql,
@@ -43,14 +42,13 @@ class QueryTest extends TestCaseDatabase
     /** @test */
     public function simple_query_by_pk_not_found()
     {
-        $graphql = <<<'GRAQPHQL'
+        $graphql = '
         {
             post_by_pk(id: 0) {
                 id
                 title
             }
-        }
-        GRAQPHQL;
+        }';
 
         $response = $this->call('GET', '/graphql', [
             'query' => $graphql,
@@ -81,14 +79,13 @@ class QueryTest extends TestCaseDatabase
             ['title' => 'Title of the post #3'],
         );
 
-        $graphql = <<<'GRAQPHQL'
-            {
-                post {
-                    id
-                    title
-                }
+        $graphql = '
+        {
+            post {
+                id
+                title
             }
-            GRAQPHQL;
+        }';
 
         $response = $this->call('GET', '/graphql', [
             'query' => $graphql,
@@ -120,14 +117,13 @@ class QueryTest extends TestCaseDatabase
     /** @test */
     public function simple_query_not_found()
     {
-        $graphql = <<<'GRAQPHQL'
-                {
-                    post {
-                        id
-                        title
-                    }
-                }
-                GRAQPHQL;
+        $graphql = '
+        {
+            post {
+                id
+                title
+            }
+        }';
 
         $response = $this->call('GET', '/graphql', [
             'query' => $graphql,
@@ -158,31 +154,30 @@ class QueryTest extends TestCaseDatabase
             ['title' => 'Title of the post #3'],
         );
 
-        $graphql = <<<'GRAQPHQL'
-                query {
-                    post_aggregate {
-                        aggregate {
-                            count
-                            sum {
-                                ...aggregateOnFragment
-                            }
-                            avg {
-                                ...aggregateOnFragment
-                            }
-                            max {
-                                ...aggregateOnFragment
-                            }
-                            min {
-                                ...aggregateOnFragment
-                            }
-                        }
+        $graphql = '
+        query {
+            post_aggregate {
+                aggregate {
+                    count
+                    sum {
+                        ...aggregateOnFragment
+                    }
+                    avg {
+                        ...aggregateOnFragment
+                    }
+                    max {
+                        ...aggregateOnFragment
+                    }
+                    min {
+                        ...aggregateOnFragment
                     }
                 }
+            }
+        }
 
-                fragment aggregateOnFragment on PostResultAggregateType {
-                    id
-                }
-                GRAQPHQL;
+        fragment aggregateOnFragment on PostResultAggregateType {
+            id
+        }';
 
         $response = $this->call('GET', '/graphql', [
             'query' => $graphql,
