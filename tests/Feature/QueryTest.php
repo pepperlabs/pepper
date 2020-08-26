@@ -43,7 +43,7 @@ class QueryTest extends TestCaseDatabase
     /** @test */
     public function simple_query_by_pk_not_found()
     {
-        $graphql = <<<GRAQPHQL
+        $graphql = <<<'GRAQPHQL'
         {
             post_by_pk(id: 0) {
                 id
@@ -58,7 +58,7 @@ class QueryTest extends TestCaseDatabase
 
         $expectedResult = [
             'data' => [
-                'post_by_pk' => null
+                'post_by_pk' => null,
             ],
         ];
 
@@ -81,7 +81,7 @@ class QueryTest extends TestCaseDatabase
             ['title' => 'Title of the post #3'],
         );
 
-        $graphql = <<<GRAQPHQL
+        $graphql = <<<'GRAQPHQL'
             {
                 post {
                     id
@@ -120,7 +120,7 @@ class QueryTest extends TestCaseDatabase
     /** @test */
     public function simple_query_not_found()
     {
-        $graphql = <<<GRAQPHQL
+        $graphql = <<<'GRAQPHQL'
                 {
                     post {
                         id
@@ -135,7 +135,7 @@ class QueryTest extends TestCaseDatabase
 
         $expectedResult = [
             'data' => [
-                'post' => []
+                'post' => [],
             ],
         ];
 
@@ -158,7 +158,7 @@ class QueryTest extends TestCaseDatabase
             ['title' => 'Title of the post #3'],
         );
 
-        $graphql = <<<GRAQPHQL
+        $graphql = <<<'GRAQPHQL'
                 query {
                     post_aggregate {
                         aggregate {
@@ -205,7 +205,7 @@ class QueryTest extends TestCaseDatabase
                         'min' => [
                             'id' => min([$post_1->id, $post_2->id, $post_3->id]),
                         ],
-                    ]
+                    ],
                 ],
             ],
         ];

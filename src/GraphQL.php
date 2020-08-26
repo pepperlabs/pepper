@@ -50,7 +50,7 @@ abstract class GraphQL
         // @todo check for appended slash
         return property_exists($this, 'model')
             ? $this->model
-            : config('pepper.namespace.models') . '\\' . $this->getClassName();
+            : config('pepper.namespace.models').'\\'.$this->getClassName();
     }
 
     /**
@@ -137,7 +137,7 @@ abstract class GraphQL
     public function getFieldType(string $field): string
     {
         /** @todo Make it available in config */
-        $method = 'set' . $field . 'Type';
+        $method = 'set'.$field.'Type';
         if (method_exists($this, $method)) {
             return $this->overrideFieldType($field, $method);
         } else {
@@ -271,14 +271,14 @@ abstract class GraphQL
      */
     public function call_field_type(string $field)
     {
-        return call_user_func('\GraphQL\Type\Definition\Type::' . $this->getFieldType($field));
+        return call_user_func('\GraphQL\Type\Definition\Type::'.$this->getFieldType($field));
     }
 
     private function getRelatedModel($attribute)
     {
         $relatedModel = get_class($this->newModel()->$attribute()->getRelated());
         $class_basename = class_basename($relatedModel);
-        $httpClass = 'App\Http\Pepper\\' . $class_basename;
+        $httpClass = 'App\Http\Pepper\\'.$class_basename;
 
         return new $httpClass;
     }
