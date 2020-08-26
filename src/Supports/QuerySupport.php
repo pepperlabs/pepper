@@ -14,7 +14,7 @@ trait QuerySupport
      *
      * @return string
      */
-    public function getQueryName(): string
+    public function getQueryName() : string
     {
         $method = 'setQueryName';
         if (method_exists($this, $method)) {
@@ -29,7 +29,7 @@ trait QuerySupport
      *
      * @return string
      */
-    public function getQueryDescription(): string
+    public function getQueryDescription() : string
     {
         $method = 'setQueryDescription';
         if (method_exists($this, $method)) {
@@ -47,9 +47,9 @@ trait QuerySupport
      * @param  object $context
      * @param  ResolveInfo $resolveInfo
      * @param  Closure $getSelectFields
-     * @return object
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function getQueryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields): object
+    public function getQueryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
         if (is_null($root)) {
             $model = $this->newModel();
@@ -198,17 +198,17 @@ trait QuerySupport
      *
      * @return void
      */
-    public function getQueryType(): Type
+    public function getQueryType() : Type
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
 
-    public function getQueryByPkType(): Type
+    public function getQueryByPkType() : Type
     {
         return GraphQL::type($this->getTypeName());
     }
 
-    public function getQueryByPkFields(): array
+    public function getQueryByPkFields() : array
     {
         $model = $this->newModel();
         $pk = $model->getKeyName();
@@ -221,7 +221,7 @@ trait QuerySupport
         ];
     }
 
-    public function getQueryByPkName(): string
+    public function getQueryByPkName() : string
     {
         $method = 'setQueryByPkName';
         if (method_exists($this, $method)) {
@@ -231,7 +231,7 @@ trait QuerySupport
         }
     }
 
-    public function getQueryByPkDescription(): string
+    public function getQueryByPkDescription() : string
     {
         $method = 'setQueryByPkDescription';
         if (method_exists($this, $method)) {
