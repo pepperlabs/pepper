@@ -2,8 +2,8 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCaseDatabase;
 use Tests\Support\Models\Post;
+use Tests\TestCaseDatabase;
 
 class QueryTest extends TestCaseDatabase
 {
@@ -36,7 +36,7 @@ GRAQPHQL;
             ],
         ];
 
-        $response->dump()->assertStatus(200);
+        $response->assertSuccessful();
 
         $this->assertEquals($expectedResult, $response->json());
     }
