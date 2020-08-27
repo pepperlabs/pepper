@@ -10,10 +10,10 @@ Laravel: [5.6.*, 5.7.*, 5.8.*, 6.*, 7.*]
 
 ## Installation
 
-You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/amirmasoud/pepper).
+You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/pepperlabs/pepper).
 
 ```bash
-composer require amirmasoud/pepper
+composer require pepperlabs/pepper
 ```
 
 ## Table of contents
