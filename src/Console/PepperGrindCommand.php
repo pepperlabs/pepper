@@ -31,7 +31,7 @@ class PepperGrindCommand extends Command
      *
      * @return void
      */
-    public function handle(): void
+    public function handle() : void
     {
         $models = $this->getModels();
 
@@ -55,7 +55,7 @@ class PepperGrindCommand extends Command
      *
      * @return array
      */
-    private function getModels(): array
+    private function getModels() : array
     {
         $classes = [];
         $models = App::runningUnitTests()
@@ -76,8 +76,17 @@ class PepperGrindCommand extends Command
      * @param  array $selected
      * @return void
      */
-    private function createHttp(array $models, array $selected): void
+    private function createHttp(array $models, array $selected) : void
     {
+        $this->ensureGraphQLConfigExists();
+        $config = new Config(null);
+
+        $this->info('Adding default types to config...');
+        $config->addGlobalType('ConditionInput');
+        $config->addGlobalType('OrderByEnum');
+        $config->addGlobalType('AnyScalar');
+        $config->addGlobalType('AllUnion');
+
         if (in_array('-- select all --', $selected)) {
             foreach ($models as $model) {
                 $this->initModelHttp($model);
@@ -95,7 +104,7 @@ class PepperGrindCommand extends Command
      * @param  string $model
      * @return void
      */
-    private function initModelHttp(string $model): void
+    private function initModelHttp(string $model) : void
     {
         $basename = class_basename($model);
         $model = 'App\Http\Pepper\\'.$basename;
@@ -103,19 +112,10 @@ class PepperGrindCommand extends Command
         $snake = Str::snake($basename);
         $noConfig = $this->hasOption('no-config') && $this->option('no-config');
 
-        $this->ensureGraphQLConfigExists();
-        $config = new Config(null);
-
         $this->info('Creating Http'.$basename.'...');
         $this->call('make:pepper:http', [
             'name' => $basename, // Class
         ]);
-
-        $this->info('Adding default types to config...');
-        $config->addGlobalType('ConditionInput');
-        $config->addGlobalType('OrderByEnum');
-        $config->addGlobalType('AnyScalar');
-        $config->addGlobalType('AllUnion');
 
         // Creeat new type
         $typeName = $typeClass = $studly.'Type';
@@ -320,7 +320,7 @@ class PepperGrindCommand extends Command
      * @todo refactor to trait
      * @return void
      */
-    private function ensureGraphQLConfigExists(): void
+    private function ensureGraphQLConfigExists() : void
     {
         if (! file_exists(config_path('graphql.php'))) {
             $this->info('Publishing default graphql config...');
