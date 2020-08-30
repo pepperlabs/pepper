@@ -10,7 +10,7 @@ abstract class TestCaseDatabase extends TestCase
 {
     use SqlAssertionTrait;
 
-    protected function setUp(): void
+    protected function setUp() : void
     {
         parent::setUp();
 

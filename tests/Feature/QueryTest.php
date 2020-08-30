@@ -22,19 +22,9 @@ class QueryTest extends TestCaseDatabase
             }
         }";
 
-        $graphql = "    {
-            __schema {
-              types {
-                name
-              }
-            }
-          }";
-
         $response = $this->call('GET', '/graphql', [
             'query' => $graphql,
         ]);
-
-        $response->dump();
 
         $expectedResult = [
             'data' => [

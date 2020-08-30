@@ -23,13 +23,12 @@ trait AggregateSupport
     {
         $fields = [
             'aggregate' => [
-                'selectable' => false,
+                'name' => 'aggregate',
                 'type' => GraphQL::type($this->getAggregateName()),
-                'selectable' => false,
             ],
             'nodes' => [
+                'name' => 'nodes',
                 'type' => Type::listOf(GraphQL::type($this->getTypeName())),
-                'selectable' => false,
             ],
         ];
 
