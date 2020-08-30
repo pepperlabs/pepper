@@ -24,11 +24,11 @@ trait AggregateSupport
         $fields = [
             'aggregate' => [
                 'selectable' => false,
-                'type' => GraphQL::type('UserAggregateType'),
+                'type' => GraphQL::type($this->getAggregateName()),
                 'selectable' => false,
             ],
             'nodes' => [
-                'type' => Type::listOf(GraphQL::type('UserType')),
+                'type' => Type::listOf(GraphQL::type($this->getTypeName())),
                 'selectable' => false,
             ],
         ];
@@ -61,7 +61,7 @@ trait AggregateSupport
         return $this->getRelatedModel($attribute)->getFieldAggregateName();
     }
 
-    public function getAggregatedFields(): array
+    public function getAggregatedFields() : array
     {
         $fields = [];
 
@@ -81,7 +81,7 @@ trait AggregateSupport
         return $fields;
     }
 
-    public function getResultAggregateFields(): array
+    public function getResultAggregateFields() : array
     {
         $fields = [];
 
@@ -96,42 +96,42 @@ trait AggregateSupport
         return $fields;
     }
 
-    public function getResultAggregateName(): string
+    public function getResultAggregateName() : string
     {
         return $this->getName().'ResultAggregateType';
     }
 
-    public function getResultAggregateDescription(): string
+    public function getResultAggregateDescription() : string
     {
         return $this->getName().' result aggregate type description';
     }
 
-    public function getFieldAggregateName(): string
+    public function getFieldAggregateName() : string
     {
         return $this->getName().'FieldAggregateType';
     }
 
-    public function getFieldAggregateDescription(): string
+    public function getFieldAggregateDescription() : string
     {
         return $this->getName().' field aggregate type description';
     }
 
-    public function getAggregateUnresolvableName(): string
+    public function getAggregateUnresolvableName() : string
     {
         return $this->getName().'FieldAggregateUnresolvableType';
     }
 
-    public function getAggregateUnresolvableDescription(): string
+    public function getAggregateUnresolvableDescription() : string
     {
         return $this->getName().' unresolvable aggregate type description';
     }
 
-    public function getAggregateName(): string
+    public function getAggregateName() : string
     {
         return $this->getName().'AggregateType';
     }
 
-    public function getAggregateDescription(): string
+    public function getAggregateDescription() : string
     {
         return $this->getName().' aggregate type description';
     }
@@ -141,7 +141,7 @@ trait AggregateSupport
      *
      * @return string
      */
-    public function getAggregateQueryName(): string
+    public function getAggregateQueryName() : string
     {
         $method = 'setAggregateQueryName';
         if (method_exists($this, $method)) {
@@ -151,7 +151,7 @@ trait AggregateSupport
         }
     }
 
-    public function getAggregateQueryDescription(): string
+    public function getAggregateQueryDescription() : string
     {
         $method = 'setAggregateQueryDescription';
         if (method_exists($this, $method)) {
@@ -183,7 +183,7 @@ trait AggregateSupport
         }
 
         $result = [];
-        $result['__type'] = $this->getFragmentType($resolveInfo);
+        $result['__Union_Type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
             if (method_exists($root['root'], $root['name'])) {
                 $result[$field] = $root['root']->{$root['name']}->sum($field);
@@ -220,7 +220,7 @@ trait AggregateSupport
         }
 
         $result = [];
-        $result['__type'] = $this->getFragmentType($resolveInfo);
+        $result['__Union_Type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
             if (method_exists($root['root'], $root['name'])) {
                 $result[$field] = $root['root']->{$root['name']}->avg($field);
@@ -240,7 +240,7 @@ trait AggregateSupport
         }
 
         $result = [];
-        $result['__type'] = $this->getFragmentType($resolveInfo);
+        $result['__Union_Type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
             if (method_exists($root['root'], $root['name'])) {
                 $result[$field] = $root['root']->{$root['name']}->max($field);
@@ -260,7 +260,7 @@ trait AggregateSupport
         }
 
         $result = [];
-        $result['__type'] = $this->getFragmentType($resolveInfo);
+        $result['__Union_Type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
             if (method_exists($root['root'], $root['name'])) {
                 $result[$field] = $root['root']->{$root['name']}->min($field);
@@ -313,7 +313,7 @@ trait AggregateSupport
         ];
     }
 
-    public function getQueryAggregateType(): Type
+    public function getQueryAggregateType() : Type
     {
         return GraphQL::type($this->getStudly().'FieldAggregateUnresolvableType');
     }
