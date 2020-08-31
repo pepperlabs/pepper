@@ -48,6 +48,48 @@ GQL;
     }
 
     /** @test */
+    public function simple_update()
+    {
+        $user = factory(User::class)->create([
+            'name' => 'Old Name'
+        ]);
+
+        $graphql = <<<GQL
+mutation {
+    update_user(
+        where: {
+            id: { _eq: $user->id }
+        },
+        _set: {
+            name: "New Name"
+        }
+    ) {
+        id
+        name
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'update_user' => [
+                    [
+                        'id' => $user->id,
+                        'name' => 'New Name',
+                    ]
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /** @test */
     public function simple_insert()
     {
         $graphql = <<<GQL
