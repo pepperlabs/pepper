@@ -2,10 +2,53 @@
 
 namespace Tests\Feature;
 
+use Tests\Support\Models\User;
 use Tests\TestCaseDatabase;
 
 class MutationTest extends TestCaseDatabase
 {
+    /** @test */
+    public function simple_update_by_pk()
+    {
+        $user = factory(User::class)->create([
+            'name' => 'Old Name'
+        ]);
+
+        $graphql = <<<GQL
+mutation {
+    update_user_by_pk(
+        pk_columns: {
+            id: $user->id
+        },
+        _set: {
+            name: "New Name"
+        }
+    ) {
+        id
+        name
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'update_user_by_pk' => [
+                    [
+                        'id' => $user->id,
+                        'name' => 'New Name',
+                    ]
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
     /** @test */
     public function simple_insert()
     {

@@ -1,3 +1,5 @@
+![Test](https://github.com/pepperlabs/pepper/workflows/Test/badge.svg?branch=master)
+
 # Pepper
 
 [WIP]
