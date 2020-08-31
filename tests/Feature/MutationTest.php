@@ -10,15 +10,15 @@ class MutationTest extends TestCaseDatabase
     public function simple_insert()
     {
         $graphql = <<<GQL
-        mutation insert_example {
-            insert_user(
-              objects: [{ name: "name #1" }, { name: "name #2" }]
-            ) {
-              id
-              name
-            }
-          }
-        GQL;
+mutation {
+    insert_user(
+        objects: [{ name: "name #1" }, { name: "name #2" }]
+    ) {
+        id
+        name
+    }
+}
+GQL;
 
         $response = $this->call('POST', '/graphql', [
             'query' => $graphql,
