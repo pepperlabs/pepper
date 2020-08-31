@@ -37,10 +37,8 @@ GQL;
         $expectedResult = [
             'data' => [
                 'update_user_by_pk' => [
-                    [
-                        'id' => $user->id,
-                        'name' => 'New Name',
-                    ]
+                    'id' => $user->id,
+                    'name' => 'New Name',
                 ],
             ],
         ];

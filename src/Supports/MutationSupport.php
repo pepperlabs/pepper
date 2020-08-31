@@ -48,6 +48,16 @@ trait MutationSupport
     }
 
     /**
+     * Get mutation update by PK type.
+     *
+     * @return Type
+     */
+    public function getMutationUpdateByPkType() : Type
+    {
+        return GraphQL::type($this->getTypeName());
+    }
+
+    /**
      * Get mutation fields.
      *
      * @return array
@@ -199,17 +209,14 @@ trait MutationSupport
      */
     public function updateByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        // @todo: Not everyone are lucky enough to have a shiny id column.
-        $models = $this->getModel()::where($args['pk_columns']);
-        foreach ($models->get() as $model) {
-            $model->update($args['_set']);
-        }
+        $pk = $this->newModel()->getKeyName();
 
-        // Let the new born out in the wild.
-        $root = $models;
+        $builder = $this->getModel()::where($pk, $args['pk_columns'][$pk]);
 
-        // return types are satisfied when they are iterable enough.
-        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        $builder->update($args['_set']);
+
+        return $this->getQueryResolve($builder, $args, $context, $resolveInfo, $getSelectFields)
+                    ->first();
     }
 
     /**
@@ -376,11 +383,11 @@ trait MutationSupport
         return [
             'pk_columns' => [
                 'name' => 'pk_columns',
-                'type' => GraphQL::type($this->getStudly().'MutationInput'),
+                'type' => GraphQL::type($this->getInputMutationName()),
             ],
             '_set' => [
                 'name' => '_set',
-                'type' => GraphQL::type($this->getStudly().'MutationInput'),
+                'type' => GraphQL::type($this->getInputMutationName()),
             ],
         ];
     }
@@ -394,7 +401,7 @@ trait MutationSupport
     {
         return [
             'where' => ['type' => GraphQL::type($this->getInputName())],
-            '_set' => ['type' => GraphQL::type($this->getStudly().'MutationInput')],
+            '_set' => ['type' => GraphQL::type($this->getInputMutationName())],
         ];
     }
 
@@ -408,7 +415,7 @@ trait MutationSupport
         return [
             'object' => [
                 'name' => 'object',
-                'type' => GraphQL::type($this->getStudly().'MutationInput'),
+                'type' => GraphQL::type($this->getInputMutationName()),
             ],
         ];
     }
@@ -464,7 +471,7 @@ trait MutationSupport
         return [
             'objects' => [
                 'name' => 'objects',
-                'type' => Type::listOf(GraphQL::type($this->getStudly().'MutationInput')),
+                'type' => Type::listOf(GraphQL::type($this->getInputMutationName())),
             ],
         ];
     }

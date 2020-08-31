@@ -28,7 +28,7 @@ class DummyClass extends Mutation
 
     public function type(): Type
     {
-        return $this->instance->getMutationType();
+        return $this->instance->getMutationUpdateByPkType();
     }
 
     public function args(): array
