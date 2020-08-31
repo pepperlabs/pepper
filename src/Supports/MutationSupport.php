@@ -58,6 +58,16 @@ trait MutationSupport
     }
 
     /**
+     * Get mutation insert one type.
+     *
+     * @return Type
+     */
+    public function getMutationInsertOneType() : Type
+    {
+        return GraphQL::type($this->getTypeName());
+    }
+
+    /**
      * Get mutation fields.
      *
      * @return array
@@ -436,7 +446,8 @@ trait MutationSupport
 
         $root = $this->newModel()->whereIn('id', [$id]);
 
-        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
+                    ->first();
     }
 
     /**
