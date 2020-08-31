@@ -26,7 +26,7 @@ trait TypeSupport
      *
      * @return array
      */
-    public function getTypeFields(): array
+    public function getTypeFields() : array
     {
         $fields = [];
 
@@ -46,7 +46,7 @@ trait TypeSupport
      *
      * @return string
      */
-    public function getTypeName(): string
+    public function getTypeName() : string
     {
         $method = 'setTypeName';
         if (method_exists($this, $method)) {
@@ -61,7 +61,7 @@ trait TypeSupport
      *
      * @return string
      */
-    public function getTypeDescription(): string
+    public function getTypeDescription() : string
     {
         $method = 'setTypeDescription';
         if (method_exists($this, $method)) {
@@ -76,7 +76,7 @@ trait TypeSupport
      *
      * @return array
      */
-    public function getTypeRelations(): array
+    public function getTypeRelations() : array
     {
         $fields = [];
         foreach ($this->exposedRelations() as $relation) {
@@ -118,6 +118,6 @@ trait TypeSupport
 
     public function getRelatedType($attribute)
     {
-        return $this->getRelatedModel($attribute)->getTypeName();
+        return GraphQL::type($this->getRelatedModel($attribute)->getTypeName());
     }
 }

@@ -9,16 +9,22 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait AggregateSupport
 {
-    public function getFieldAggregateNodeType($method)
-    {
-        $override = 'set'.Str::studly($method).'FieldAggregateNodeType';
-        if (method_exists($this, $override)) {
-            return $this->$override();
-        } else {
-            return $this->getRelatedFieldAggregateType($method);
-        }
-    }
+    // public function getFieldAggregateNodeType($method)
+    // {
+    //     $override = 'set'.Str::studly($method).'FieldAggregateNodeType';
+    //     if (method_exists($this, $override)) {
+    //         return $this->$override();
+    //     } else {
+    //         return $this->getRelatedFieldAggregateType($method);
+    //     }
+    // }
 
+    /**
+     * Get field aggregate type fields.
+     *
+     * @param boolean $resolvable
+     * @return void
+     */
     public function getFieldAggregateTypeFields($resolvable = true)
     {
         $fields = [
@@ -57,7 +63,7 @@ trait AggregateSupport
 
     public function getRelatedFieldAggregateType($attribute)
     {
-        return $this->getRelatedModel($attribute)->getFieldAggregateName();
+        return GraphQL::type($this->getRelatedModel($attribute)->getFieldAggregateName());
     }
 
     public function getAggregatedFields() : array
