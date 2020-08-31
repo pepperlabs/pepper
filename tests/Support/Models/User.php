@@ -15,12 +15,14 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  */
 class User extends Model
 {
-    public function posts(): HasMany
+    protected $fillable = ['name'];
+
+    public function posts() : HasMany
     {
         return $this->hasMany(Post::class)->orderBy('posts.id');
     }
 
-    public function likes(): HasMany
+    public function likes() : HasMany
     {
         return $this->hasMany(Like::class);
     }

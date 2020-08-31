@@ -9,49 +9,58 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait AggregateSupport
 {
-    // public function getFieldAggregateNodeType($method)
-    // {
-    //     $override = 'set'.Str::studly($method).'FieldAggregateNodeType';
-    //     if (method_exists($this, $override)) {
-    //         return $this->$override();
-    //     } else {
-    //         return $this->getRelatedFieldAggregateType($method);
-    //     }
-    // }
-
     /**
      * Get field aggregate type fields.
      *
-     * @param boolean $resolvable
-     * @return void
+     * @param  bool $resolvable
+     * @return array
      */
-    public function getFieldAggregateTypeFields($resolvable = true)
+    public function getFieldAggregateTypeFields(bool $resolvable = true) : array
     {
         $fields = [
             'aggregate' => [
                 'name' => 'aggregate',
                 'type' => GraphQL::type($this->getAggregateName()),
+                'selectable' => false,
             ],
             'nodes' => [
                 'name' => 'nodes',
                 'type' => Type::listOf(GraphQL::type($this->getTypeName())),
+                'selectable' => false,
             ],
         ];
 
-        if ($resolvable) {
-            $fields['aggregate']['resolve'] = function ($root, $args, $context, ResolveInfo $resolveInfo) {
-                return $root;
-            };
+        return $resolvable
+            ? $this->setFieldAggregateTypeResolve($fields)
+            : $fields;
+    }
 
-            $fields['nodes']['resolve'] = function ($root, $args, $context, ResolveInfo $resolveInfo) {
-                return $root['root']->{$root['name']}()->get();
-            };
-        }
+    /**
+     * Add resolve key to aggregate type.
+     *
+     * @param  array $fields
+     * @return array
+     */
+    private function setFieldAggregateTypeResolve(array $fields) : array
+    {
+        $fields['aggregate']['resolve'] = function ($root, $args, $context, ResolveInfo $resolveInfo) {
+            return $root;
+        };
+
+        $fields['nodes']['resolve'] = function ($root, $args, $context, ResolveInfo $resolveInfo) {
+            return $root['root']->{$root['name']}()->get();
+        };
 
         return $fields;
     }
 
-    private function getFieldAggregateRelationType($method)
+    /**
+     * Get field aggregate relation type.
+     *
+     * @param  string $method
+     * @return \GraphQL\Type\Definition\Type
+     */
+    private function getFieldAggregateRelationType($method) : Type
     {
         $override = 'set'.Str::studly($method).'FieldAggregateRelationType';
         if (method_exists($this, $override)) {
@@ -61,11 +70,22 @@ trait AggregateSupport
         }
     }
 
-    public function getRelatedFieldAggregateType($attribute)
+    /**
+     * Get related field aggregate type.
+     *
+     * @param  string $attribute
+     * @return \GraphQL\Type\Definition\Type
+     */
+    public function getRelatedFieldAggregateType(string $attribute) : Type
     {
         return GraphQL::type($this->getRelatedModel($attribute)->getFieldAggregateName());
     }
 
+    /**
+     * Get aggregate fields.
+     *
+     * @return array
+     */
     public function getAggregatedFields() : array
     {
         $fields = [];
@@ -86,6 +106,11 @@ trait AggregateSupport
         return $fields;
     }
 
+    /**
+     * Get result aggregate fields.
+     *
+     * @return array
+     */
     public function getResultAggregateFields() : array
     {
         $fields = [];
@@ -328,6 +353,7 @@ trait AggregateSupport
         $query = $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
 
         return [
+            /** @todo refactor _aggregate preg */
             'aggregate' => ['root' => $query, 'name' => preg_replace('/_aggregate$/', '', array_reverse($resolveInfo->path)[0])],
             'nodes' => $query,
         ];

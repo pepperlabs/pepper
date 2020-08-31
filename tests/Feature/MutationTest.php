@@ -2,42 +2,39 @@
 
 namespace Tests\Feature;
 
-use Tests\Support\Models\Post;
 use Tests\TestCaseDatabase;
 
 class MutationTest extends TestCaseDatabase
 {
     /** @test */
-    public function simple_mutation_by_pk()
+    public function simple_insert()
     {
-        $post = factory(Post::class)->create([
-            'title' => 'Title of the post',
-        ]);
-
-        $graphql = "
-        {
-            update_user_by_pk(
-                pk_columns: {
-                    id: $post->id
-                  },
-                  _set: {
-                    name: '[updated] Title of the post'
-                  }
+        $graphql = <<<GQL
+        mutation insert_example {
+            insert_user(
+              objects: [{ name: "name #1" }, { name: "name #2" }]
             ) {
-                id
-                name
+              id
+              name
             }
-        }";
+          }
+        GQL;
 
-        $response = $this->call('GET', '/graphql', [
-            'mutation' => $graphql,
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
         ]);
 
         $expectedResult = [
             'data' => [
-                'update_user_by_pk' => [
-                    'id' => "$post->id",
-                    'name' => '[updated] Title of the post',
+                'insert_user' => [
+                    [
+                        'id' => 1,
+                        'name' => 'name #1',
+                    ],
+                    [
+                        'id' => 2,
+                        'name' => 'name #2',
+                    ]
                 ],
             ],
         ];
