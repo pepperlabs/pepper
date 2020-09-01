@@ -48,6 +48,16 @@ trait MutationSupport
     }
 
     /**
+     * Get delete mutation type.
+     *
+     * @return Type
+     */
+    public function getDeleteMutationType(): Type
+    {
+        return Type::listOf(GraphQL::type($this->getTypeName()));
+    }
+
+    /**
      * Get delete by PK mutation type.
      *
      * @return Type
@@ -110,6 +120,18 @@ trait MutationSupport
                 'name' => 'id',
                 'type' => $this->call_field_type('id'),
             ],
+        ];
+    }
+
+    /**
+     * Get delete mutation fields.
+     *
+     * @return array
+     */
+    public function getDeleteMutationFields(): array
+    {
+        return [
+            'where' => ['type' => GraphQL::type($this->getInputName())],
         ];
     }
 
@@ -405,11 +427,11 @@ trait MutationSupport
     {
         $models = $this->getQueryResolve($this->newModel(), $args, $context, $resolveInfo, $getSelectFields);
 
+        $results = $models->get();
+
         $models->delete();
 
-        $root = $models;
-
-        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        return $results;
     }
 
     /**

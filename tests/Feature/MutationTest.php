@@ -193,4 +193,51 @@ GQL;
         $response->assertOk();
         $this->assertEquals($expectedResult, $response->json());
     }
+
+    /** @test */
+    public function simple_delete()
+    {
+        $user_1 = factory(User::class)->create([
+            'name' => 'Name #1',
+        ]);
+
+        $user_2 = factory(User::class)->create([
+            'name' => 'Name #2',
+        ]);
+
+        $graphql = <<<GQL
+mutation {
+    delete_user(
+        where: {
+            id: { _lte: $user_2->id }
+        }
+    ) {
+        id
+        name
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'delete_user' => [
+                    [
+                        'id' => $user_1->id,
+                        'name' => 'Name #1',
+                    ],
+                    [
+                        'id' => $user_2->id,
+                        'name' => 'Name #2',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
 }
