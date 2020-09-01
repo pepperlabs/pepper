@@ -245,10 +245,10 @@ class PepperGrindCommand extends Command
         $mutationName = $studly.'DeleteMutation';
         $mutationClass = 'delete_'.$snake;
         $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:delete:by-pk', [
-            'name' => $mutationName, // ClassDeleteByPkMutation
+        $this->call('make:pepper:mutation:delete', [
+            'name' => $mutationName, // ClassDeleteMutation
             'class' => $mutationClass, // delete_class
-            'description' => $basename.' delete by PK mutation description',
+            'description' => $basename.' delete mutation description',
             'model' => $model,
             '--no-config' => $noConfig,
         ]);
@@ -257,7 +257,7 @@ class PepperGrindCommand extends Command
         $mutationName = $studly.'DeleteByPkMutation';
         $mutationClass = 'delete_'.$snake.'_by_pk';
         $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:delete', [
+        $this->call('make:pepper:mutation:delete:by-pk', [
             'name' => $mutationName, // ClassDeleteByPkMutation
             'class' => $mutationClass, // delete_class_by_pk
             'description' => $basename.' delete by PK mutation description',

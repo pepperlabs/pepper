@@ -90,6 +90,39 @@ GQL;
     }
 
     /** @test */
+    public function simple_insert_one()
+    {
+        $graphql = <<<GQL
+mutation {
+    insert_user_one(
+        object: {
+            name: "Name"
+        }
+    ) {
+        id
+        name
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'insert_user_one' => [
+                    'id' => 1,
+                    'name' => 'Name',
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /** @test */
     public function simple_insert()
     {
         $graphql = <<<GQL
@@ -118,6 +151,41 @@ GQL;
                         'id' => 2,
                         'name' => 'name #2',
                     ]
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /** @test */
+    public function simple_delete_by_pk()
+    {
+        $user = factory(User::class)->create([
+            'name' => 'Name'
+        ]);
+
+        $graphql = <<<GQL
+mutation {
+    delete_user_by_pk(
+        id: $user->id
+    ) {
+        id
+        name
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'delete_user_by_pk' => [
+                    'id' => $user->id,
+                    'name' => 'Name'
                 ],
             ],
         ];
