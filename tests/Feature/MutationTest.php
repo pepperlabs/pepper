@@ -11,7 +11,7 @@ class MutationTest extends TestCaseDatabase
     public function simple_update_by_pk()
     {
         $user = factory(User::class)->create([
-            'name' => 'Old Name'
+            'name' => 'Old Name',
         ]);
 
         $graphql = <<<GQL
@@ -51,7 +51,7 @@ GQL;
     public function simple_update()
     {
         $user = factory(User::class)->create([
-            'name' => 'Old Name'
+            'name' => 'Old Name',
         ]);
 
         $graphql = <<<GQL
@@ -80,7 +80,40 @@ GQL;
                     [
                         'id' => $user->id,
                         'name' => 'New Name',
-                    ]
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /** @test */
+    public function simple_insert_one()
+    {
+        $graphql = <<<'GQL'
+mutation {
+    insert_user_one(
+        object: {
+            name: "Name"
+        }
+    ) {
+        id
+        name
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'insert_user_one' => [
+                    'id' => 1,
+                    'name' => 'Name',
                 ],
             ],
         ];
@@ -92,7 +125,7 @@ GQL;
     /** @test */
     public function simple_insert()
     {
-        $graphql = <<<GQL
+        $graphql = <<<'GQL'
 mutation {
     insert_user(
         objects: [{ name: "name #1" }, { name: "name #2" }]
@@ -117,7 +150,89 @@ GQL;
                     [
                         'id' => 2,
                         'name' => 'name #2',
-                    ]
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /** @test */
+    public function simple_delete_by_pk()
+    {
+        $user = factory(User::class)->create([
+            'name' => 'Name',
+        ]);
+
+        $graphql = <<<GQL
+mutation {
+    delete_user_by_pk(
+        id: $user->id
+    ) {
+        id
+        name
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'delete_user_by_pk' => [
+                    'id' => $user->id,
+                    'name' => 'Name',
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /** @test */
+    public function simple_delete()
+    {
+        $user_1 = factory(User::class)->create([
+            'name' => 'Name #1',
+        ]);
+
+        $user_2 = factory(User::class)->create([
+            'name' => 'Name #2',
+        ]);
+
+        $graphql = <<<GQL
+mutation {
+    delete_user(
+        where: {
+            id: { _lte: $user_2->id }
+        }
+    ) {
+        id
+        name
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'delete_user' => [
+                    [
+                        'id' => $user_1->id,
+                        'name' => 'Name #1',
+                    ],
+                    [
+                        'id' => $user_2->id,
+                        'name' => 'Name #2',
+                    ],
                 ],
             ],
         ];

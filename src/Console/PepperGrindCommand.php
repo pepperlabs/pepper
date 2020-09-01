@@ -31,7 +31,7 @@ class PepperGrindCommand extends Command
      *
      * @return void
      */
-    public function handle() : void
+    public function handle(): void
     {
         $models = $this->getModels();
 
@@ -55,7 +55,7 @@ class PepperGrindCommand extends Command
      *
      * @return array
      */
-    private function getModels() : array
+    private function getModels(): array
     {
         $classes = [];
         $models = App::runningUnitTests()
@@ -76,7 +76,7 @@ class PepperGrindCommand extends Command
      * @param  array $selected
      * @return void
      */
-    private function createHttp(array $models, array $selected) : void
+    private function createHttp(array $models, array $selected): void
     {
         $this->ensureGraphQLConfigExists();
         $config = new Config(null);
@@ -104,7 +104,7 @@ class PepperGrindCommand extends Command
      * @param  string $model
      * @return void
      */
-    private function initModelHttp(string $model) : void
+    private function initModelHttp(string $model): void
     {
         $basename = class_basename($model);
         $model = 'App\Http\Pepper\\'.$basename;
@@ -245,10 +245,10 @@ class PepperGrindCommand extends Command
         $mutationName = $studly.'DeleteMutation';
         $mutationClass = 'delete_'.$snake;
         $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:delete:by-pk', [
-            'name' => $mutationName, // ClassDeleteByPkMutation
+        $this->call('make:pepper:mutation:delete', [
+            'name' => $mutationName, // ClassDeleteMutation
             'class' => $mutationClass, // delete_class
-            'description' => $basename.' delete by PK mutation description',
+            'description' => $basename.' delete mutation description',
             'model' => $model,
             '--no-config' => $noConfig,
         ]);
@@ -257,7 +257,7 @@ class PepperGrindCommand extends Command
         $mutationName = $studly.'DeleteByPkMutation';
         $mutationClass = 'delete_'.$snake.'_by_pk';
         $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:delete', [
+        $this->call('make:pepper:mutation:delete:by-pk', [
             'name' => $mutationName, // ClassDeleteByPkMutation
             'class' => $mutationClass, // delete_class_by_pk
             'description' => $basename.' delete by PK mutation description',
@@ -320,7 +320,7 @@ class PepperGrindCommand extends Command
      * @todo refactor to trait
      * @return void
      */
-    private function ensureGraphQLConfigExists() : void
+    private function ensureGraphQLConfigExists(): void
     {
         if (! file_exists(config_path('graphql.php'))) {
             $this->info('Publishing default graphql config...');

@@ -15,7 +15,7 @@ trait AggregateSupport
      * @param  bool $resolvable
      * @return array
      */
-    public function getFieldAggregateTypeFields(bool $resolvable = true) : array
+    public function getFieldAggregateTypeFields(bool $resolvable = true): array
     {
         $fields = [
             'aggregate' => [
@@ -41,7 +41,7 @@ trait AggregateSupport
      * @param  array $fields
      * @return array
      */
-    private function setFieldAggregateTypeResolve(array $fields) : array
+    private function setFieldAggregateTypeResolve(array $fields): array
     {
         $fields['aggregate']['resolve'] = function ($root, $args, $context, ResolveInfo $resolveInfo) {
             return $root;
@@ -60,7 +60,7 @@ trait AggregateSupport
      * @param  string $method
      * @return \GraphQL\Type\Definition\Type
      */
-    private function getFieldAggregateRelationType($method) : Type
+    private function getFieldAggregateRelationType($method): Type
     {
         $override = 'set'.Str::studly($method).'FieldAggregateRelationType';
         if (method_exists($this, $override)) {
@@ -76,7 +76,7 @@ trait AggregateSupport
      * @param  string $attribute
      * @return \GraphQL\Type\Definition\Type
      */
-    public function getRelatedFieldAggregateType(string $attribute) : Type
+    public function getRelatedFieldAggregateType(string $attribute): Type
     {
         return GraphQL::type($this->getRelatedModel($attribute)->getFieldAggregateName());
     }
@@ -86,7 +86,7 @@ trait AggregateSupport
      *
      * @return array
      */
-    public function getAggregatedFields() : array
+    public function getAggregatedFields(): array
     {
         $fields = [];
 
@@ -111,7 +111,7 @@ trait AggregateSupport
      *
      * @return array
      */
-    public function getResultAggregateFields() : array
+    public function getResultAggregateFields(): array
     {
         $fields = [];
 
@@ -126,42 +126,42 @@ trait AggregateSupport
         return $fields;
     }
 
-    public function getResultAggregateName() : string
+    public function getResultAggregateName(): string
     {
         return $this->getName().'ResultAggregateType';
     }
 
-    public function getResultAggregateDescription() : string
+    public function getResultAggregateDescription(): string
     {
         return $this->getName().' result aggregate type description';
     }
 
-    public function getFieldAggregateName() : string
+    public function getFieldAggregateName(): string
     {
         return $this->getName().'FieldAggregateType';
     }
 
-    public function getFieldAggregateDescription() : string
+    public function getFieldAggregateDescription(): string
     {
         return $this->getName().' field aggregate type description';
     }
 
-    public function getAggregateUnresolvableName() : string
+    public function getAggregateUnresolvableName(): string
     {
         return $this->getName().'FieldAggregateUnresolvableType';
     }
 
-    public function getAggregateUnresolvableDescription() : string
+    public function getAggregateUnresolvableDescription(): string
     {
         return $this->getName().' unresolvable aggregate type description';
     }
 
-    public function getAggregateName() : string
+    public function getAggregateName(): string
     {
         return $this->getName().'AggregateType';
     }
 
-    public function getAggregateDescription() : string
+    public function getAggregateDescription(): string
     {
         return $this->getName().' aggregate type description';
     }
@@ -171,7 +171,7 @@ trait AggregateSupport
      *
      * @return string
      */
-    public function getAggregateQueryName() : string
+    public function getAggregateQueryName(): string
     {
         $method = 'setAggregateQueryName';
         if (method_exists($this, $method)) {
@@ -181,7 +181,7 @@ trait AggregateSupport
         }
     }
 
-    public function getAggregateQueryDescription() : string
+    public function getAggregateQueryDescription(): string
     {
         $method = 'setAggregateQueryDescription';
         if (method_exists($this, $method)) {
@@ -343,7 +343,7 @@ trait AggregateSupport
         ];
     }
 
-    public function getQueryAggregateType() : Type
+    public function getQueryAggregateType(): Type
     {
         return GraphQL::type($this->getStudly().'FieldAggregateUnresolvableType');
     }

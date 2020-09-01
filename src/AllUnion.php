@@ -15,7 +15,7 @@ class AllUnion extends UnionType
         'description' => 'A Union of all types',
     ];
 
-    public function types() : array
+    public function types(): array
     {
         $classes = ClassFinder::getClassesInNamespace('App\Http\Pepper');
         $types = [];
