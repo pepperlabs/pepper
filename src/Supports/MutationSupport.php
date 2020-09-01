@@ -109,7 +109,7 @@ trait MutationSupport
             'id' => [
                 'name' => 'id',
                 'type' => $this->call_field_type('id'),
-            ]
+            ],
         ];
     }
 
