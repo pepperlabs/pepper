@@ -68,15 +68,15 @@ class QueryTest extends TestCaseDatabase
     public function simple_query()
     {
         $post_1 = factory(Post::class)->create([
-            'title' => 'Title of the post #1'
+            'title' => 'Title of the post #1',
         ]);
 
         $post_2 = factory(Post::class)->create([
-            'title' => 'Title of the post #2'
+            'title' => 'Title of the post #2',
         ]);
 
         $post_3 = factory(Post::class)->create([
-            'title' => 'Title of the post #3'
+            'title' => 'Title of the post #3',
         ]);
 
         $graphql = '
@@ -143,15 +143,15 @@ class QueryTest extends TestCaseDatabase
     public function simple_query_aggregate()
     {
         $post_1 = factory(Post::class)->create([
-            'title' => 'Title of the post #1'
+            'title' => 'Title of the post #1',
         ]);
 
         $post_2 = factory(Post::class)->create([
-            'title' => 'Title of the post #2'
+            'title' => 'Title of the post #2',
         ]);
 
         $post_3 = factory(Post::class)->create([
-            'title' => 'Title of the post #3'
+            'title' => 'Title of the post #3',
         ]);
 
         $graphql = '

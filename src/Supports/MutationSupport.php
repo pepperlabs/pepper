@@ -12,7 +12,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getMutationName() : string
+    public function getMutationName(): string
     {
         $method = 'setMutationName';
         if (method_exists($this, $method)) {
@@ -27,7 +27,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getMutationDescription() : string
+    public function getMutationDescription(): string
     {
         $method = 'setMutationDescription';
         if (method_exists($this, $method)) {
@@ -42,7 +42,7 @@ trait MutationSupport
      *
      * @return Type
      */
-    public function getMutationType() : Type
+    public function getMutationType(): Type
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
@@ -52,7 +52,7 @@ trait MutationSupport
      *
      * @return Type
      */
-    public function getDeleteByPKMutationType() : Type
+    public function getDeleteByPKMutationType(): Type
     {
         return GraphQL::type($this->getTypeName());
     }
@@ -62,7 +62,7 @@ trait MutationSupport
      *
      * @return Type
      */
-    public function getMutationUpdateByPkType() : Type
+    public function getMutationUpdateByPkType(): Type
     {
         return GraphQL::type($this->getTypeName());
     }
@@ -72,7 +72,7 @@ trait MutationSupport
      *
      * @return Type
      */
-    public function getMutationInsertOneType() : Type
+    public function getMutationInsertOneType(): Type
     {
         return GraphQL::type($this->getTypeName());
     }
@@ -82,7 +82,7 @@ trait MutationSupport
      *
      * @return array
      */
-    public function getMutationFields() : array
+    public function getMutationFields(): array
     {
         $fields = [];
 
@@ -102,7 +102,7 @@ trait MutationSupport
      *
      * @return array
      */
-    public function getDeleteByPkMutationFields() : array
+    public function getDeleteByPkMutationFields(): array
     {
         // @todo replace ID
         return [
@@ -133,7 +133,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getInputMutationDescription() : string
+    public function getInputMutationDescription(): string
     {
         $method = 'setInputMutationDescription';
         if (method_exists($this, $method)) {
@@ -148,7 +148,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getInsertMutationName() : string
+    public function getInsertMutationName(): string
     {
         $method = 'setInsertMutationName';
         if (method_exists($this, $method)) {
@@ -163,7 +163,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getInsertMutationDescription() : string
+    public function getInsertMutationDescription(): string
     {
         $method = 'setInsertMutationDescription';
         if (method_exists($this, $method)) {
@@ -178,7 +178,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getInsertOneMutationName() : string
+    public function getInsertOneMutationName(): string
     {
         $method = 'setInsertOneMutationName';
         if (method_exists($this, $method)) {
@@ -193,7 +193,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getInsertOneMutationDescription() : string
+    public function getInsertOneMutationDescription(): string
     {
         $method = 'setInsertOneMutationDescription';
         if (method_exists($this, $method)) {
@@ -208,7 +208,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getUpdateByPkMutationName() : string
+    public function getUpdateByPkMutationName(): string
     {
         $method = 'setUpdateByPkMutationName';
         if (method_exists($this, $method)) {
@@ -223,7 +223,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getUpdateByPkMutationDescription() : string
+    public function getUpdateByPkMutationDescription(): string
     {
         $method = 'setUpdateByPkMutationDescription';
         if (method_exists($this, $method)) {
@@ -260,7 +260,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getUpdateMutationName() : string
+    public function getUpdateMutationName(): string
     {
         $method = 'setUpdateMutationName';
         if (method_exists($this, $method)) {
@@ -275,7 +275,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getUpdateMutationDescription() : string
+    public function getUpdateMutationDescription(): string
     {
         $method = 'setUpdateMutationDescription';
         if (method_exists($this, $method)) {
@@ -312,7 +312,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getDeleteByPkMutationName() : string
+    public function getDeleteByPkMutationName(): string
     {
         $method = 'setDeleteByPkMutationName';
         if (method_exists($this, $method)) {
@@ -327,7 +327,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getDeleteByPkMutationDescription() : string
+    public function getDeleteByPkMutationDescription(): string
     {
         $method = 'setDeleteByPkMutationDescription';
         if (method_exists($this, $method)) {
@@ -366,7 +366,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getDeleteMutationName() : string
+    public function getDeleteMutationName(): string
     {
         $method = 'setDeleteMutationName';
         if (method_exists($this, $method)) {
@@ -381,7 +381,7 @@ trait MutationSupport
      *
      * @return string
      */
-    public function getDeleteMutationDescription() : string
+    public function getDeleteMutationDescription(): string
     {
         $method = 'setDeleteMutationDescription';
         if (method_exists($this, $method)) {
@@ -417,7 +417,7 @@ trait MutationSupport
      *
      * @return array
      */
-    public function getMutationUpdateByPkFields() : array
+    public function getMutationUpdateByPkFields(): array
     {
         return [
             'pk_columns' => [
@@ -436,7 +436,7 @@ trait MutationSupport
      *
      * @return array
      */
-    public function getMutationUpdateFields() : array
+    public function getMutationUpdateFields(): array
     {
         return [
             'where' => ['type' => GraphQL::type($this->getInputName())],
@@ -449,7 +449,7 @@ trait MutationSupport
      *
      * @return array
      */
-    public function getMutationInsertOneFields() : array
+    public function getMutationInsertOneFields(): array
     {
         return [
             'object' => [
@@ -506,7 +506,7 @@ trait MutationSupport
      *
      * @return array
      */
-    public function getMutationInsertFields() : array
+    public function getMutationInsertFields(): array
     {
         return [
             'objects' => [

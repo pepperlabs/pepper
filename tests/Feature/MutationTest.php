@@ -11,7 +11,7 @@ class MutationTest extends TestCaseDatabase
     public function simple_update_by_pk()
     {
         $user = factory(User::class)->create([
-            'name' => 'Old Name'
+            'name' => 'Old Name',
         ]);
 
         $graphql = <<<GQL
@@ -51,7 +51,7 @@ GQL;
     public function simple_update()
     {
         $user = factory(User::class)->create([
-            'name' => 'Old Name'
+            'name' => 'Old Name',
         ]);
 
         $graphql = <<<GQL
@@ -80,7 +80,7 @@ GQL;
                     [
                         'id' => $user->id,
                         'name' => 'New Name',
-                    ]
+                    ],
                 ],
             ],
         ];
@@ -92,7 +92,7 @@ GQL;
     /** @test */
     public function simple_insert_one()
     {
-        $graphql = <<<GQL
+        $graphql = <<<'GQL'
 mutation {
     insert_user_one(
         object: {
@@ -125,7 +125,7 @@ GQL;
     /** @test */
     public function simple_insert()
     {
-        $graphql = <<<GQL
+        $graphql = <<<'GQL'
 mutation {
     insert_user(
         objects: [{ name: "name #1" }, { name: "name #2" }]
@@ -150,7 +150,7 @@ GQL;
                     [
                         'id' => 2,
                         'name' => 'name #2',
-                    ]
+                    ],
                 ],
             ],
         ];
@@ -163,7 +163,7 @@ GQL;
     public function simple_delete_by_pk()
     {
         $user = factory(User::class)->create([
-            'name' => 'Name'
+            'name' => 'Name',
         ]);
 
         $graphql = <<<GQL
@@ -185,7 +185,7 @@ GQL;
             'data' => [
                 'delete_user_by_pk' => [
                     'id' => $user->id,
-                    'name' => 'Name'
+                    'name' => 'Name',
                 ],
             ],
         ];

@@ -77,7 +77,7 @@ return PhpCsFixer\Config::create()
         // 'phpdoc_types' => true,
         // 'phpdoc_var_without_name' => true,
         // 'pre_increment' => true,
-        'return_type_declaration' => ['space_before' => 'one'],
+        'return_type_declaration' => ['space_before' => 'none'],
         // 'self_accessor' => true,
         // 'short_scalar_cast' => true,
         'single_blank_line_before_namespace' => true,
@@ -85,7 +85,7 @@ return PhpCsFixer\Config::create()
         // 'space_after_semicolon' => true,
         // 'standardize_not_equals' => true,
         'ternary_operator_spaces' => true,
-        // 'trailing_comma_in_multiline_array' => true,
+        'trailing_comma_in_multiline_array' => true,
         'trim_array_spaces' => true,
         'unary_operator_spaces' => true,
         'whitespace_after_comma_in_array' => true,
@@ -94,6 +94,7 @@ return PhpCsFixer\Config::create()
         'no_spaces_after_function_name' => true,
         'no_spaces_inside_parenthesis' => true,
         'not_operator_with_successor_space' => true,
+        'heredoc_to_nowdoc' => true,
     ])
     //->setIndent("\t")
     ->setLineEnding("\n");

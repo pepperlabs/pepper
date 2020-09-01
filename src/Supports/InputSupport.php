@@ -6,7 +6,7 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait InputSupport
 {
-    public function getInputFields() : array
+    public function getInputFields(): array
     {
         $fields = [];
 
@@ -53,7 +53,7 @@ trait InputSupport
      *
      * @return string
      */
-    public function getInputName() : string
+    public function getInputName(): string
     {
         $method = 'setInputName';
         if (method_exists($this, $method)) {
@@ -68,7 +68,7 @@ trait InputSupport
      *
      * @return string
      */
-    public function getInputDescription() : string
+    public function getInputDescription(): string
     {
         $method = 'setInputDescription';
         if (method_exists($this, $method)) {
