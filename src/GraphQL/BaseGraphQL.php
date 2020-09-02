@@ -94,8 +94,10 @@ class BaseGraphQL
         if (property_exists($this, 'exposed')) {
             return $this->exposed;
         } else {
-            return $this->columns()
-                + $withRelations ? $this->relations() : [];
+            return array_merge(
+                $this->columns(),
+                $withRelations ? $this->relations() : []
+            );
         }
     }
 
@@ -124,6 +126,7 @@ class BaseGraphQL
     {
         $model = $this->model();
         $table = $model->getTable();
+
         return $model->getConnection()
             ->getSchemaBuilder()
             ->getColumnListing($table);
