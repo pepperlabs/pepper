@@ -4,6 +4,7 @@ namespace Pepper\GraphQL;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use Prophecy\Exception\Doubler\ClassNotFoundException;
 use ReflectionClass;
 use ReflectionException;
 
@@ -86,16 +87,22 @@ class BaseGraphQL
      * property of the class. preassumption is all fields are allowed to
      * be exposed to the public and there is no restriction for them.
      *
-     * @param  bool $withRelations whether include relation or not
+     * @param  bool $withRelations
+     * @param  bool $withFields
      * @return array
      */
-    public function exposedFields(bool $withRelations = true): array
+    public function exposedFields(bool $withRelations = true, bool $withFields = true): array
     {
         if (property_exists($this, 'exposed')) {
-            return $this->exposed;
+            return array_merge(
+                // Exposed - Relations = Columns|Empty
+                $withFields ? array_diff($this->exposed, $this->relations()) : [],
+                // Exposed - Columns = Relations|Empty
+                $withRelations ? array_diff($this->exposed, $this->columns()) : []
+            );
         } else {
             return array_merge(
-                $this->columns(),
+                $withFields ? $this->columns() : [],
                 $withRelations ? $this->relations() : []
             );
         }
@@ -120,9 +127,9 @@ class BaseGraphQL
      * of the all columns avaialble in the column. later we would also scan
      * through their types and cast their corresponsing GraphQL types.
      *
-     * @return void
+     * @return array
      */
-    private function columns()
+    private function columns(): array
     {
         $model = $this->model();
         $table = $model->getTable();
@@ -138,11 +145,17 @@ class BaseGraphQL
      * them from covered fields and relations.
      *
      * @param  bool $withRelations
+     * @param  bool $withFields
      * @return array
      */
-    public function fieldsArray(bool $withRelations = true): array
+    public function fieldsArray(bool $withRelations = true, bool $withFields = true): array
     {
-        return array_values(array_diff($this->exposedFields($withRelations), $this->coveredFields()));
+        return array_values(
+            array_diff(
+                $this->exposedFields($withRelations, $withFields),
+                $this->coveredFields()
+            )
+        );
     }
 
     /**
@@ -152,7 +165,7 @@ class BaseGraphQL
      *
      * @return array
      */
-    public function relations(): array
+    private function relations(): array
     {
         $relations = [];
         $supported = [
@@ -173,11 +186,57 @@ class BaseGraphQL
         foreach ($this->modelMethods() as $method) {
             $type = $method->getReturnType();
             if ($type && in_array(class_basename($type->getName()), $supported)) {
-                $relations[] = $method->name;
+                try {
+                    $this->relatedModel($method->name);
+                    $relations[] = $method->name;
+                } catch (ClassNotFoundException $e) {
+                }
             }
         }
 
         return $relations;
+    }
+
+    /**
+     * Get related model GraphQL class. For post, user example, this method
+     * on calling Post GraphQL class and method user would return User
+     * GraphQL model.
+     *
+     * @param  string $method
+     * @return void
+     */
+    private function relatedModelClass(string $method): string
+    {
+        $related = get_class($this->model()->$method()->getRelated());
+        $basename = class_basename($related);
+
+        return config('pepper.namespace.models').'\\'.$basename;
+    }
+
+    /**
+     * Create new reflection from the related model class.
+     *
+     * @param  string $method
+     * @return ReflectionClass
+     */
+    private function relatedModelRelflection(string $method): ReflectionClass
+    {
+        try {
+            return new ReflectionClass($this->modelClass());
+        } catch (ReflectionException $e) {
+            throw new ClassNotFoundException("Trying to get {$this->relatedModelClass($method)} failed. please check pepper.namespace.root config to be correct and if GraphQL class exists.", $this->relatedModelClass($method));
+        }
+    }
+
+    /**
+     * Get a new instance of the related model for the GraphQL class.
+     *
+     * @param  string $method
+     * @return mixed
+     */
+    public function relatedModel(string $method)
+    {
+        return $this->relatedModelRelflection($method)->newInstanceArgs();
     }
 
     /**
