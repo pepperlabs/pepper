@@ -32,4 +32,17 @@ class GraphQLBaseTest extends TestCase
         $this->assertEquals($this->test_1->studly(), 'TestGraphQL');
         $this->assertEquals($this->test_2->studly(), 'TestGraphql');
     }
+
+    /** @test */
+    public function model()
+    {
+        $this->assertEquals($this->test_1->model(), 'App\TestGraphQL');
+
+        /**
+         * custom model is set in test_2.
+         *
+         * tests private method defaultModel as well.
+         */
+        $this->assertEquals($this->test_2->model(), 'Tests\Support\Models\User');
+    }
 }
