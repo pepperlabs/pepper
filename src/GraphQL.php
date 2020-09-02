@@ -262,7 +262,7 @@ abstract class GraphQL
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName());
         } else {
-            return Str::studly($this->getClassName());
+            return $this->getStudly();
         }
     }
 

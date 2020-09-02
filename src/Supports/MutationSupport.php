@@ -8,33 +8,13 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait MutationSupport
 {
     /**
-     * Get GraphQL Mutation name.
+     * Get mutation type.
      *
-     * @return string
+     * @return Type
      */
-    public function getMutationName(): string
+    public function getInsertMutationType(): Type
     {
-        $method = 'setMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'Mutation';
-        }
-    }
-
-    /**
-     * Get mutation description.
-     *
-     * @return string
-     */
-    public function getMutationDescription(): string
-    {
-        $method = 'setMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' mutation description.';
-        }
+        return Type::listOf(GraphQL::type($this->getTypeName()));
     }
 
     /**
@@ -42,7 +22,7 @@ trait MutationSupport
      *
      * @return Type
      */
-    public function getMutationType(): Type
+    public function getUpdateMutationType(): Type
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
