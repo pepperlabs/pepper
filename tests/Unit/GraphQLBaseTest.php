@@ -2,6 +2,7 @@
 
 namespace Tests\Unit;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Tests\Support\GraphQL\test_graphql;
 use Tests\Support\GraphQL\TestGraphQL;
 use Tests\TestCase;
@@ -34,15 +35,25 @@ class GraphQLBaseTest extends TestCase
     }
 
     /** @test */
-    public function model()
+    public function model_class_is_customizable()
     {
-        $this->assertEquals($this->test_1->model(), 'App\TestGraphQL');
+        $this->assertEquals($this->test_1->modelClass(), 'App\TestGraphQL');
 
         /**
          * custom model is set in test_2.
          *
          * tests private method defaultModel as well.
          */
-        $this->assertEquals($this->test_2->model(), 'Tests\Support\Models\User');
+        $this->assertEquals($this->test_2->modelClass(), 'Tests\Support\Models\User');
+    }
+
+    /** @test */
+    public function can_get_instance_of_model()
+    {
+        $this->assertTrue($this->test_2->model() instanceof \Tests\Support\Models\User);
+
+        /** tests private method modelRelflection */
+        $this->expectException(ModelNotFoundException::class);
+        $this->assertTrue($this->test_1->model() instanceof App\TestGraphQL);
     }
 }

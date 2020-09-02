@@ -2,7 +2,10 @@
 
 namespace Pepper\GraphQL;
 
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Str;
+use ReflectionClass;
+use ReflectionException;
 
 class BaseGraphQL
 {
@@ -45,10 +48,143 @@ class BaseGraphQL
      *
      * @return string
      */
-    public function model(): string
+    public function modelClass(): string
     {
         return property_exists($this, 'model')
             ? $this->model
             : $this->defaultModel();
+    }
+
+    /**
+     * Make a new reflection from the model class. this method will be used
+     * to access the dynamic model of the GraphQL class.
+     *
+     * @return ReflectionClass
+     * @throws ReflectionException
+     */
+    private function modelRelflection(): ReflectionClass
+    {
+        try {
+            return new ReflectionClass($this->modelClass());
+        } catch (ReflectionException $e) {
+            throw new ModelNotFoundException("Trying to get {$this->modelClass()} failed. please check pepper.namespace.models config to be correct and if you have defined model in GraphQL class, make sure {$this->modelClass()} model exists.");
+        }
+    }
+
+    /**
+     * Get a new instance of the model for the GraphQL class.
+     *
+     * @return mixed
+     */
+    public function model()
+    {
+        return $this->modelRelflection()->newInstanceArgs();
+    }
+
+    /**
+     * Gets an array of allowed fields on the model defined by the exposed
+     * property of the class. preassumption is all fields are allowed to
+     * be exposed to the public and there is no restriction for them.
+     *
+     * @param  bool $withRelations whether include relation or not
+     * @return array
+     */
+    public function exposedFields(bool $withRelations = true): array
+    {
+        if (property_exists($this, 'exposed')) {
+            return $this->exposed;
+        } else {
+            return $this->columns()
+                + $withRelations ? $this->relations() : [];
+        }
+    }
+
+    /**
+     * Gets an array of the denied fields on the model defined by the covered
+     * property of the class. pre-assumption is that no fields is denied to
+     * be exposed to the public and all of have no restriction by default.
+     *
+     * @return array
+     */
+    public function coveredFields(): array
+    {
+        return property_exists($this, 'covered')
+            ? $this->covered
+            : [];
+    }
+
+    /**
+     * Using the defined model, we would query the table schema to get a listing
+     * of the all columns avaialble in the column. later we would also scan
+     * through their types and cast their corresponsing GraphQL types.
+     *
+     * @return void
+     */
+    private function columns()
+    {
+        $model = $this->model();
+        $table = $model->getTable();
+        return $model->getConnection()
+            ->getSchemaBuilder()
+            ->getColumnListing($table);
+    }
+
+    /**
+     * List of all of the avialable fields can be exposed from the model after
+     * aggregating all of the exposed fields and relations and subtracting
+     * them from covered fields and relations.
+     *
+     * @param  bool $withRelations
+     * @return array
+     */
+    public function fieldsArray(bool $withRelations = true): array
+    {
+        return array_values(array_diff($this->exposedFields($withRelations), $this->coveredFields()));
+    }
+
+    /**
+     * Extract list of avaialbe methods in a model by getting a list of all of
+     * the methods in the defined model and check the return type of the
+     * reflection class and return the array of the relations after.
+     *
+     * @return array
+     */
+    public function relations(): array
+    {
+        $relations = [];
+        $supported = [
+            'BelongsTo',
+            'HasOne',
+            'BelongsToMany',
+            'HasMany',
+            'HasOneOrMany',
+            'HasManyThrough',
+            'HasOneThrough',
+            'MorphOne',
+            'MorphMany',
+            'MorphOneOrMany',
+            'MorphPivot',
+            'MorphTo',
+            'MorphToMany',
+        ];
+        foreach ($this->modelMethods() as $method) {
+            $type = $method->getReturnType();
+            if ($type && in_array(class_basename($type->getName()), $supported)) {
+                $relations[] = $method->name;
+            }
+        }
+
+        return $relations;
+    }
+
+    /**
+     * Get a full array of the model methods. this method will be used later
+     * to extract relations defined in the model.
+     *
+     * @return array
+     */
+    private function modelMethods(): array
+    {
+        return $this->modelRelflection()->getMethods();
     }
 }
