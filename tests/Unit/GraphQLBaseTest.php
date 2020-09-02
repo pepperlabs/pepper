@@ -61,7 +61,7 @@ class GraphQLBaseTest extends TestCaseDatabase
     }
 
     /** @test */
-    public function exposed_fields_are_effective()
+    public function exposed_fields_are_working()
     {
         $columns = [
             'id',
@@ -82,16 +82,105 @@ class GraphQLBaseTest extends TestCaseDatabase
         ];
 
         // All fields
-        $this->assertEquals($this->post->exposedFields(), array_merge($columns, $relations));
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(), array_merge($columns, $relations));
 
-        // Without relations
-        $this->assertEquals($this->post->exposedFields(false), $columns);
+        // Without relations, also tests columns private method
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(false), $columns);
 
         // Limit fields to defined values in exposed array.
         $exposed = $this->post->exposed = [
             'properties',
             'flag',
         ];
-        $this->assertEquals($this->post->exposedFields(), $exposed);
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(), $exposed);
+    }
+
+    /** @test */
+    public function covered_fields_are_working()
+    {
+        $this->assertEqualsCanonicalizing($this->post->coveredFields(), []);
+
+        $covered = $this->post->covered = [
+            'properties',
+            'flag',
+        ];
+        $this->assertEqualsCanonicalizing($this->post->coveredFields(), $covered);
+    }
+
+    /** @test */
+    public function fields_array_is_properly_works_with_covered_and_exposed()
+    {
+        $columns = [
+            'id',
+            'title',
+            'body',
+            'user_id',
+            'properties',
+            'flag',
+            'published_at',
+            'created_at',
+            'updated_at',
+        ];
+
+        $relations = [
+            'user',
+            'comments',
+            'likes',
+        ];
+
+        $this->assertEqualsCanonicalizing($this->post->fieldsArray(), array_merge($columns, $relations));
+
+        // Cover column
+        $covered = $this->post->covered = ['user_id'];
+        $this->assertEqualsCanonicalizing($this->post->fieldsArray(), array_diff(array_merge($columns, $relations), $covered));
+
+        // Cover relation
+        $covered = $this->post->covered = ['likes'];
+        $this->assertEqualsCanonicalizing($this->post->fieldsArray(), array_diff(array_merge($columns, $relations), $covered));
+
+        // Cover relation and column
+        $covered = $this->post->covered = ['user_id', 'likes'];
+        $this->assertEqualsCanonicalizing($this->post->fieldsArray(), array_diff(array_merge($columns, $relations), $covered));
+
+        $covered = $this->post->covered = [];
+
+        // Expose only column
+        $exposed = $this->post->exposed = [
+            'id',
+            'title',
+            'body',
+        ];
+        $this->assertEqualsCanonicalizing($this->post->fieldsArray(), $exposed);
+
+        // Expose only relations
+        $exposed = $this->post->exposed = [
+            'comments',
+            'likes',
+        ];
+        $this->assertEqualsCanonicalizing($this->post->fieldsArray(), $exposed);
+
+        // Expose column and relations
+        $exposed = $this->post->exposed = [
+            'id',
+            'title',
+            'body',
+            'comments',
+            'likes',
+        ];
+        $this->assertEqualsCanonicalizing($this->post->fieldsArray(), $exposed);
+
+        // If user exposed some fields and for some reason also included it in covered へ‿(ツ)‿ㄏ
+        $exposed = $this->post->exposed = [
+            'id',
+            'title',
+            'body',
+            'comments',
+            'likes',
+        ];
+        $covered = $this->post->covered = [
+            'comments',
+            'title',
+        ];
+        $this->assertEqualsCanonicalizing($this->post->fieldsArray(), array_diff($exposed, $covered));
     }
 }
