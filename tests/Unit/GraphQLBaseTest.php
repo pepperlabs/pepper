@@ -37,7 +37,7 @@ class GraphQLBaseTest extends TestCaseDatabase
     }
 
     /** @test */
-    public function model_class_is_customizable()
+    public function it_can_customize_model()
     {
         // We have changed our namespace.models config value to Tests\Support\Models in setup environment method.
         $this->assertEquals($this->test_1->modelClass(), 'Tests\Support\Models\TestGraphQL');
@@ -51,7 +51,7 @@ class GraphQLBaseTest extends TestCaseDatabase
     }
 
     /** @test */
-    public function can_get_instance_of_model()
+    public function it_can_get_instance_of_model()
     {
         $this->assertTrue($this->test_2->model() instanceof \Tests\Support\Models\User);
 
@@ -61,7 +61,7 @@ class GraphQLBaseTest extends TestCaseDatabase
     }
 
     /** @test */
-    public function exposed_fields_are_working()
+    public function it_exposes_correct_fields()
     {
         $columns = [
             'id',
@@ -81,18 +81,32 @@ class GraphQLBaseTest extends TestCaseDatabase
             'likes',
         ];
 
-        // All fields
-        $this->assertEqualsCanonicalizing($this->post->exposedFields(), array_merge($columns, $relations));
+        /** When there is no exposed property */
+        // Relations + Columns = Relations AND Columns
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(true, true), array_merge($columns, $relations));
+        // Relations - Columns = Relations
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(true, false), $relations);
+        // - Relations + Columns = Columns
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(false, true), $columns);
+        // - Relations - Columns = []
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(false, false), []);
 
-        // Without relations, also tests columns private method
-        $this->assertEqualsCanonicalizing($this->post->exposedFields(false), $columns);
-
-        // Limit fields to defined values in exposed array.
+        /** When there is exposed property. */
         $exposed = $this->post->exposed = [
+            // Columns
             'properties',
             'flag',
+            // Relation
+            'comments',
         ];
-        $this->assertEqualsCanonicalizing($this->post->exposedFields(), $exposed);
+        // Relations + Columns = Relations AND Columns = exposed
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(true, true), $exposed);
+        // Relations - Columns = Relations = $exposed - columns
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(true, false), ['comments']);
+        // - Relations + Columns = Columns = $exposed - relations
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(false, true), ['properties', 'flag']);
+        // - Relations - Columns = []
+        $this->assertEqualsCanonicalizing($this->post->exposedFields(false, false), []);
     }
 
     /** @test */
@@ -108,7 +122,7 @@ class GraphQLBaseTest extends TestCaseDatabase
     }
 
     /** @test */
-    public function fields_array_is_properly_works_with_covered_and_exposed()
+    public function it_exclude_and_include_covered_and_exposed_fields_in_fields_array()
     {
         $columns = [
             'id',

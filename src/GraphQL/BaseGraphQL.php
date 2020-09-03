@@ -88,21 +88,21 @@ class BaseGraphQL
      * be exposed to the public and there is no restriction for them.
      *
      * @param  bool $withRelations
-     * @param  bool $withFields
+     * @param  bool $withColumns
      * @return array
      */
-    public function exposedFields(bool $withRelations = true, bool $withFields = true): array
+    public function exposedFields(bool $withRelations = true, bool $withColumns = true): array
     {
         if (property_exists($this, 'exposed')) {
             return array_merge(
                 // Exposed - Relations = Columns|Empty
-                $withFields ? array_diff($this->exposed, $this->relations()) : [],
+                $withColumns ? array_diff($this->exposed, $this->relations()) : [],
                 // Exposed - Columns = Relations|Empty
                 $withRelations ? array_diff($this->exposed, $this->columns()) : []
             );
         } else {
             return array_merge(
-                $withFields ? $this->columns() : [],
+                $withColumns ? $this->columns() : [],
                 $withRelations ? $this->relations() : []
             );
         }
@@ -145,14 +145,14 @@ class BaseGraphQL
      * them from covered fields and relations.
      *
      * @param  bool $withRelations
-     * @param  bool $withFields
+     * @param  bool $withColumns
      * @return array
      */
-    public function fieldsArray(bool $withRelations = true, bool $withFields = true): array
+    public function fieldsArray(bool $withRelations = true, bool $withColumns = true): array
     {
         return array_values(
             array_diff(
-                $this->exposedFields($withRelations, $withFields),
+                $this->exposedFields($withRelations, $withColumns),
                 $this->coveredFields()
             )
         );
@@ -190,6 +190,7 @@ class BaseGraphQL
                     $this->relatedModel($method->name);
                     $relations[] = $method->name;
                 } catch (ClassNotFoundException $e) {
+                    // Exclude relations which their GraphQL class does not exist.
                 }
             }
         }
