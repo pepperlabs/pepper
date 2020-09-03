@@ -18,6 +18,12 @@ You can install using [composer](https://getcomposer.org/) from [Packagist](http
 composer require pepperlabs/pepper
 ```
 
+Initial the base GraphQL classes:
+
+```bash
+php artisan pepper:grind --all
+```
+
 ## Table of contents
 
 - [Pepper](#pepper)
