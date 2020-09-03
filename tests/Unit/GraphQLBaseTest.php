@@ -12,6 +12,7 @@ class GraphQLBaseTest extends TestCaseDatabase
 {
     private $test_1;
     private $test_2;
+    private $post;
 
     protected function setUp(): void
     {
@@ -110,7 +111,7 @@ class GraphQLBaseTest extends TestCaseDatabase
     }
 
     /** @test */
-    public function covered_fields_are_working()
+    public function it_can_cover_fields()
     {
         $this->assertEqualsCanonicalizing($this->post->coveredFields(), []);
 
@@ -196,5 +197,39 @@ class GraphQLBaseTest extends TestCaseDatabase
             'title',
         ];
         $this->assertEqualsCanonicalizing($this->post->fieldsArray(), array_diff($exposed, $covered));
+    }
+
+    /** @test */
+    public function it_ignore_not_existed_graphql_relations()
+    {
+        $this->markTestSkipped('needed a fully implemented BaseGraphQL class.');
+
+        unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/User.php');
+        $this->assertTrue(! in_array('user', $this->post->fieldsArray()));
+    }
+
+    /** @test */
+    public function it_can_be_a_single_graphql_class()
+    {
+        $this->markTestSkipped('needed a fully implemented BaseGraphQL class.');
+
+        unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/Comment.php');
+        unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/User.php');
+        unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/Like.php');
+
+        $post = new \App\Http\Pepper\Post();
+
+        $columns = [
+            'id',
+            'title',
+            'body',
+            'user_id',
+            'properties',
+            'flag',
+            'published_at',
+            'created_at',
+            'updated_at',
+        ];
+        $this->assertEqualsCanonicalizing($post->fieldsArray(), $columns);
     }
 }

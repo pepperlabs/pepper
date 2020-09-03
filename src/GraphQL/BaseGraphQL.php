@@ -186,11 +186,8 @@ class BaseGraphQL
         foreach ($this->modelMethods() as $method) {
             $type = $method->getReturnType();
             if ($type && in_array(class_basename($type->getName()), $supported)) {
-                try {
-                    $this->relatedModel($method->name);
+                if ($this->RelatedGraphQLExists($method->name)) {
                     $relations[] = $method->name;
-                } catch (ClassNotFoundException $e) {
-                    // Exclude relations which their GraphQL class does not exist.
                 }
             }
         }
@@ -233,11 +230,36 @@ class BaseGraphQL
      * Get a new instance of the related model for the GraphQL class.
      *
      * @param  string $method
-     * @return mixed
+     * @return object
      */
-    public function relatedModel(string $method)
+    public function relatedModel(string $method): object
     {
         return $this->relatedModelRelflection($method)->newInstanceArgs();
+    }
+
+    /**
+     * Get class of the related GraphQL.
+     *
+     * @param  string $method
+     * @return string
+     */
+    private function RelatedGraphQLClass(string $method): string
+    {
+        $related = get_class($this->model()->$method()->getRelated());
+        $basename = class_basename($related);
+
+        return config('pepper.namespace.root').'\Http\Pepper\\'.$basename;
+    }
+
+    /**
+     * Wheter corrosponding GraphQL class for relation exists or not.
+     *
+     * @param  string $method
+     * @return bool
+     */
+    public function RelatedGraphQLExists(string $method): bool
+    {
+        return class_exists($this->RelatedGraphQLClass($method));
     }
 
     /**

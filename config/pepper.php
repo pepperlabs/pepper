@@ -1,9 +1,7 @@
 <?php
 
 return [
-
     'namespace' => [
-
         /*
         |-----------------------------------------------------------------------
         | Default Generated Classes Root Namespace
@@ -32,6 +30,5 @@ return [
         */
 
         'models' => 'App',
-
     ],
 ];
