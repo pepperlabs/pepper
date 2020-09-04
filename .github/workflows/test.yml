@@ -15,7 +15,7 @@ jobs:
       matrix:
         php: [7.1, 7.2, 7.3, 7.4]
         laravel: [5.6.*, 5.7.*, 5.8.*, 6.*, 7.*]
-        dependency-version: [prefer-lowest, prefer-stable]
+        dependency-version: [prefer-stable]
         include:
           - laravel: 5.6.*
             testbench: 3.6.*
@@ -39,11 +39,17 @@ jobs:
           - php: 7.4
             laravel: 5.8.*
 
-    name: PHP:${{ matrix.php }} / Laravel:${{ matrix.laravel }}(${{ matrix.dependency-version }}) - Ubuntu
+    name: PHP:${{ matrix.php }} / Laravel:${{ matrix.laravel }}(${{ matrix.dependency-version }}) / Ubuntu
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v1
+
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}-ubuntu
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
@@ -52,12 +58,6 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
           tools: composer:v2
           coverage: none
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache/files
-          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Install dependencies
         run: |
@@ -99,7 +99,7 @@ jobs:
           - php: 7.4
             laravel: 5.8.*
 
-    name: PHP:${{ matrix.php }} / Laravel:${{ matrix.laravel }}(${{ matrix.dependency-version }}) - Windows
+    name: PHP:${{ matrix.php }} / Laravel:${{ matrix.laravel }}(${{ matrix.dependency-version }}) / Windows
 
     steps:
       - name: Set git to use LF
@@ -110,6 +110,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v1
 
+      - name: Cache dependencies
+        uses: actions/cache@v1
+        with:
+          path: ~/.composer/cache/files
+          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}-windows
+
       - name: Setup PHP
         uses: shivammathur/setup-php@v1
         with:
@@ -118,12 +124,6 @@ jobs:
           tools: composer:v2
           coverage: none
           ini-values: memory_limit=512M
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
-        with:
-          path: ~/.composer/cache/files
-          key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
 
       - name: Install dependencies
         run: |
