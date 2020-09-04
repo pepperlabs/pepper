@@ -3,6 +3,7 @@
 namespace Pepper\GraphQL;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
 use Prophecy\Exception\Doubler\ClassNotFoundException;
 use ReflectionClass;
@@ -10,6 +11,13 @@ use ReflectionException;
 
 class BaseGraphQL
 {
+    /**
+     * An instance of GraphQL class.
+     *
+     * @var object
+     */
+    protected $instance;
+
     /**
      * Get the class basename of the GraphQL class.
      *
@@ -271,5 +279,90 @@ class BaseGraphQL
     private function modelMethods(): array
     {
         return $this->modelRelflection()->getMethods();
+    }
+
+    /**
+     * Override a method with method if it exists.
+     *
+     * @param  string  $method
+     * @param  callable  $func
+     * @param  mixed  ...$args
+     * @return mixed
+     */
+    private function overrideMethod(string $method, callable $func, ...$args)
+    {
+        $method = 'set'.Str::studly($method);
+        if (method_exists($this->instance, $method)) {
+            return $this->instance->$method($args);
+        } else {
+            return $func(...$args);
+        }
+    }
+
+    /**
+     * Get the type of the given field.
+     *
+     * @param  string  $field
+     * @return string
+     */
+    public function getFieldType(string $field): string
+    {
+        return $this->overrideMethod('FieldType', [$this, 'guessFieldType'], $field);
+    }
+
+    /**
+     * Guess field type for GraphQL.
+     *
+     * @param  string $field
+     * @return string
+     */
+    private function guessFieldType(string $field): string
+    {
+        switch ($this->getColumnType($field)) {
+            case 'smallint':
+            case 'integer':
+                return 'int';
+                break;
+            case 'float':
+                return 'float';
+                break;
+            case 'binary':
+            // case 'blob':
+            //     return 'upload';
+            case 'boolean':
+                return 'boolean';
+            case 'bigint':
+            case 'decimal':
+            case 'string':
+            case 'text':
+            case 'guid':
+            case 'date':
+            case 'datetime':
+            case 'datetimez':
+            case 'time':
+                return 'string';
+            case 'enum':
+            case 'array':
+            // case 'json_array':
+                return 'listOf';
+            // case 'object':
+            //     return 'stdObj';
+            default:
+                return 'string';
+                break;
+        }
+    }
+
+    /**
+     * Get table column type.
+     *
+     * @param  string $column
+     * @return string
+     */
+    private function getColumnType(string $column): string
+    {
+        $table = $this->model()->getTable();
+
+        return Schema::getColumnType($table, $column);
     }
 }

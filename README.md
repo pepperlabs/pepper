@@ -68,6 +68,9 @@ composer require pepperlabs/pepper
 
 ### Supported databases
 
+Because it uses ORM to run queries, any database Laravel can support, Pepper can
+support it as well.
+
 ## Background
 
 [Table of contents](#table-of-contents)

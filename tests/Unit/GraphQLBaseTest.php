@@ -3,6 +3,7 @@
 namespace Tests\Unit;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Tests\Support\GraphQL\Everything;
 use Tests\Support\GraphQL\Post;
 use Tests\Support\GraphQL\test_graphql;
 use Tests\Support\GraphQL\TestGraphQL;
@@ -231,5 +232,45 @@ class GraphQLBaseTest extends TestCaseDatabase
             'updated_at',
         ];
         $this->assertEqualsCanonicalizing($post->fieldsArray(), $columns);
+    }
+
+    /** @test */
+    public function it_guess_column_type()
+    {
+        $everything = new Everything();
+
+        $this->assertEquals($everything->getFieldType('char'), 'string');
+        $this->assertEquals($everything->getFieldType('string'), 'string');
+        $this->assertEquals($everything->getFieldType('text'), 'string');
+        $this->assertEquals($everything->getFieldType('mediumText'), 'string');
+        $this->assertEquals($everything->getFieldType('longText'), 'string');
+
+        $this->assertEquals($everything->getFieldType('integer'), 'int');
+        $this->assertEquals($everything->getFieldType('tinyInteger'), 'int');
+        $this->assertEquals($everything->getFieldType('smallInteger'), 'int');
+        $this->assertEquals($everything->getFieldType('mediumInteger'), 'int');
+        $this->assertEquals($everything->getFieldType('bigInteger'), 'int');
+        $this->assertEquals($everything->getFieldType('unsignedInteger'), 'int');
+        $this->assertEquals($everything->getFieldType('unsignedTinyInteger'), 'int');
+        $this->assertEquals($everything->getFieldType('unsignedSmallInteger'), 'int');
+        $this->assertEquals($everything->getFieldType('unsignedMediumInteger'), 'int');
+        $this->assertEquals($everything->getFieldType('unsignedBigInteger'), 'int');
+
+        $this->assertEquals($everything->getFieldType('float'), 'float');
+        $this->assertEquals($everything->getFieldType('double'), 'float');
+        $this->assertEquals($everything->getFieldType('decimal'), 'string');
+        $this->assertEquals($everything->getFieldType('unsignedFloat'), 'float');
+        $this->assertEquals($everything->getFieldType('unsignedDouble'), 'float');
+        $this->assertEquals($everything->getFieldType('unsignedDecimal'), 'string');
+
+        $this->assertEquals($everything->getFieldType('boolean'), 'boolean');
+        $this->assertEquals($everything->getFieldType('enum'), 'string');
+
+        $connection = config('database.default');
+        $driver = config("database.connections.{$connection}.driver");
+
+        if ($driver != 'sqlite') {
+            $this->assertEquals($everything->getFieldType('set'), '???');
+        }
     }
 }
