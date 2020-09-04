@@ -6,9 +6,9 @@
 
 ## Version support
 
-PHP: [7.1, 7.2, 7.3, 7.4]
+PHP: 7.1.3 or higher
 
-Laravel: [5.6.*, 5.7.*, 5.8.*, 6.*, 7.*]
+Laravel: 5.6 or higher
 
 ## Installation
 
