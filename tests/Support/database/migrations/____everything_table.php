@@ -11,8 +11,8 @@ class EverythingTable extends Migration
     public function up(): void
     {
         Schema::create('everythings', function (Blueprint $table) {
-            $connection = config('database.default');
-            $driver = config("database.connections.{$connection}.driver");
+            // In sake of cheating.
+            $table->increments('id');
 
             $table->char('char');
             $table->string('string');
@@ -33,23 +33,14 @@ class EverythingTable extends Migration
 
             $table->float('float');
             $table->double('double');
-            $table->decimal('decimal');
+            // $table->decimal('decimal');
             $table->unsignedFloat('unsignedFloat');
             $table->unsignedDouble('unsignedDouble');
-            $table->unsignedDecimal('unsignedDecimal');
+            // $table->unsignedDecimal('unsignedDecimal');
 
             $table->boolean('boolean');
-            $table->enum('enum', []);
-
-            if ($driver != 'sqlite') {
-                $table->set('set', []);
-            }
-
-            // set
-
             // json
             // jsonb
-
             // date
             // dateTime
             // dateTimeTz
