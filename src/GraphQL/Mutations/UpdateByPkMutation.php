@@ -2,20 +2,19 @@
 
 namespace Pepper\Mutations;
 
-use Closure;
-use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use Pepper\Contracts\MutationContract;
 use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class UpdateByPk extends PepperGraphQL
+class UpdateByPkMutation extends PepperGraphQL implements MutationContract
 {
     /**
      * Get update by PK mutation name.
      *
      * @return string
      */
-    public function getUpdateByPkName(): string
+    public function name(): string
     {
         return $this->getName().'UpdateByPkMutation';
     }
@@ -25,7 +24,7 @@ class UpdateByPk extends PepperGraphQL
      *
      * @return string
      */
-    public function getUpdateByPkDescription(): string
+    public function description(): string
     {
         return $this->getName().' insert mutation description.';
     }
@@ -35,7 +34,7 @@ class UpdateByPk extends PepperGraphQL
      *
      * @return Type
      */
-    public function getUpdateByPkType(): Type
+    public function type(): Type
     {
         return GraphQL::type($this->getTypeName());
     }
@@ -45,7 +44,7 @@ class UpdateByPk extends PepperGraphQL
      *
      * @return array
      */
-    public function getUpdateByPkArgs(): array
+    public function args(): array
     {
         return [
             'pk_columns' => [
@@ -65,11 +64,11 @@ class UpdateByPk extends PepperGraphQL
      * @param  object $root
      * @param  array $args
      * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @param  \Closure  $getSelectFields
      * @return object
      */
-    public function getUpdateByPkResolve($root, $args, $context, $resolveInfo, $getSelectFields)
+    public function resolve($root, $args, $context, $resolveInfo, $getSelectFields)
     {
         $pk = $this->model()->getKeyName();
 

@@ -1,13 +1,14 @@
 <?php
 
-namespace Pepper\Supports;
+namespace Pepper\Query;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Str;
+use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait AggregateSupport
+class AggregateQuery extends PepperGraphQL
 {
     /**
      * Get field aggregate type fields.

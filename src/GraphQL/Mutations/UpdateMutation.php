@@ -2,47 +2,45 @@
 
 namespace Pepper\Mutations;
 
-use Closure;
-use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Pepper\Contracts\MutationContract;
 use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class Delete extends PepperGraphQL implements MutationContract
+class UpdateMutation extends PepperGraphQL implements MutationContract
 {
     /**
-     * Get delete mutation name.
+     * Get update mutation name.
      *
      * @return string
      */
     public function getName(): string
     {
-        return $this->getName().'DeleteMutation';
+        return $this->getName().'UpdateMutation';
     }
 
     /**
-     * Get delete mutation description.
+     * Get update mutation description.
      *
      * @return string
      */
     public function getDescription(): string
     {
-        return $this->getName().' delete mutation description.';
+        return $this->getName().' update mutation description.';
     }
 
     /**
-    * Get delete mutation type.
-    *
-    * @return Type
-    */
+     * Get mutation type.
+     *
+     * @return Type
+     */
     public function getType(): Type
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
 
     /**
-     * Get delete mutation fields.
+     * Get mutation update fields.
      *
      * @return array
      */
@@ -50,27 +48,29 @@ class Delete extends PepperGraphQL implements MutationContract
     {
         return [
             'where' => ['type' => GraphQL::type($this->getInputName())],
+            '_set' => ['type' => GraphQL::type($this->getInputMutationName())],
         ];
     }
 
     /**
-     * Delete mutation.
+     * update.
      *
      * @param  object  $root
      * @param  array  $args
      * @param  object  $context
-     * @param  ResolveInfo  $resolveInfo
-     * @param  Closure  $getSelectFields
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @param  \Closure  $getSelectFields
      * @return object
      */
     public function getResolve($root, $args, $context, $resolveInfo, $getSelectFields)
     {
         $models = $this->getQueryResolve($this->model(), $args, $context, $resolveInfo, $getSelectFields);
+        foreach ($models->get() as $model) {
+            $model->update($args['_set']);
+        }
 
-        $results = $models->get();
+        $root = $models;
 
-        $models->delete();
-
-        return $results;
+        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
 }

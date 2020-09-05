@@ -1,17 +1,38 @@
 <?php
 
-namespace Pepper\Supports;
+namespace Pepper\GraphQL\Inputs;
 
+use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait InputSupport
+class Input extends PepperGraphQL
 {
+    /**
+     * Get GraphQL Input name.
+     *
+     * @return string
+     */
+    public function getInputName(): string
+    {
+        return $this->name().'Input';
+    }
+
+    /**
+     * Get GraphQL Input description.
+     *
+     * @return string
+     */
+    public function getInputDescription(): string
+    {
+        return $this->name().' input description.';
+    }
+
     public function getInputFields(): array
     {
         $fields = [];
 
-        $relations = $this->getRelations();
-        foreach ($this->getFields() as $attribute) {
+        $relations = $this->fieldsArray(true, false);
+        foreach ($this->fieldsArray() as $attribute) {
             if (in_array($attribute, $relations)) {
                 $fields[$attribute] = [
                     'name' => $attribute,
@@ -45,36 +66,6 @@ trait InputSupport
 
     public function getRelatedInput($attribute)
     {
-        return GraphQL::type($this->getRelatedModel($attribute)->getInputName());
-    }
-
-    /**
-     * Get GraphQL Input name.
-     *
-     * @return string
-     */
-    public function getInputName(): string
-    {
-        $method = 'setInputName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'Input';
-        }
-    }
-
-    /**
-     * Get GraphQL Input description.
-     *
-     * @return string
-     */
-    public function getInputDescription(): string
-    {
-        $method = 'setInputDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' input description.';
-        }
+        return GraphQL::type($this->relatedModel($attribute)->getInputName());
     }
 }

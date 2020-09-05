@@ -5,20 +5,12 @@ namespace Pepper;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
-use Pepper\Supports\AggregateSupport;
-use Pepper\Supports\InputSupport;
-use Pepper\Supports\MutationSupport;
-use Pepper\Supports\OrderSupport;
-use Pepper\Supports\QuerySupport;
-use Pepper\Supports\TypeSupport;
 use Prophecy\Exception\Doubler\ClassNotFoundException;
 use ReflectionClass;
 use ReflectionException;
 
 abstract class GraphQL
 {
-    use TypeSupport, QuerySupport, InputSupport, OrderSupport, MutationSupport, AggregateSupport;
-
     /**
      * An instance of GraphQL class.
      *
@@ -79,7 +71,7 @@ abstract class GraphQL
      * @return ReflectionClass
      * @throws ReflectionException
      */
-    private function modelRelflection(): ReflectionClass
+    public function modelRelflection(): ReflectionClass
     {
         try {
             return new ReflectionClass($this->modelClass());

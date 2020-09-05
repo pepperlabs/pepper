@@ -1,6 +1,6 @@
 <?php
 
-namespace Pepper\Supports;
+namespace Pepper\GraphQL\Types;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
@@ -17,9 +17,10 @@ use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait TypeSupport
+class Types extends PepperGraphQL
 {
     /**
      * Generate GraphQL fields with field types.
@@ -31,10 +32,10 @@ trait TypeSupport
         $fields = [];
 
         // exclude relations
-        foreach ($this->getFields(false) as $attribute) {
+        foreach ($this->fieldsArray(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => $this->call_field_type($attribute),
+                'type' => $this->callGraphQLType($attribute),
             ];
         }
 
@@ -79,8 +80,8 @@ trait TypeSupport
     public function getTypeRelations(): array
     {
         $fields = [];
-        foreach ($this->exposedRelations() as $relation) {
-            $model = $this->newModelReflection();
+        foreach ($this->fieldsArray(true, false) as $relation) {
+            $model = $this->modelRelflection();
             $relationType = $model->getMethod($relation)->getReturnType()->getName();
             $type = '';
             if ($relationType === BelongsTo::class) {

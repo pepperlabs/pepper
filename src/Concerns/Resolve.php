@@ -1,52 +1,20 @@
 <?php
 
-namespace Pepper\Supports;
+namespace Pepper\Concerns;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
-use GraphQL\Type\Definition\Type;
-use Rebing\GraphQL\Support\Facades\GraphQL;
 
-trait QuerySupport
+trait Resolve
 {
-    /**
-     * Get GraphQL Query name.
-     *
-     * @return string
-     */
-    public function getQueryName(): string
-    {
-        $method = 'setQueryName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'Query';
-        }
-    }
-
-    /**
-     * Get GraphQL Query description.
-     *
-     * @return string
-     */
-    public function getQueryDescription(): string
-    {
-        $method = 'setQueryDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' query description.';
-        }
-    }
-
     /**
      * Get GraphQL Query resolve.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|null $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  array  $args
+     * @param  object  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @param  \Closure  $getSelectFields
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getQueryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
@@ -172,85 +140,5 @@ trait QuerySupport
                     }
                 });
         }
-    }
-
-    public function getQueryArgs()
-    {
-        return [
-            // Condition
-            'where' => ['type' => GraphQL::type($this->getInputName())],
-
-            'distinct' => ['name' => 'distinct', 'type' => Type::boolean()],
-
-            // Order
-            'order_by' => ['type' => GraphQL::type($this->getOrderName())],
-
-            // Paginate
-            'limit' => ['name' => 'limit', 'type' => Type::int()],
-            'offset' => ['name' => 'offset', 'type' => Type::int()],
-            'skip' => ['name' => 'skip', 'type' => Type::int()],
-            'take' => ['name' => 'take', 'type' => Type::int()],
-        ];
-    }
-
-    /**
-     * Get GraphQL query type.
-     *
-     * @return void
-     */
-    public function getQueryType(): Type
-    {
-        return Type::listOf(GraphQL::type($this->getTypeName()));
-    }
-
-    public function getQueryByPkType(): Type
-    {
-        return GraphQL::type($this->getTypeName());
-    }
-
-    public function getQueryByPkFields(): array
-    {
-        $model = $this->newModel();
-        $pk = $model->getKeyName();
-
-        return [
-            $pk => [
-                'name' => $pk,
-                'type' => $this->call_field_type($pk),
-            ],
-        ];
-    }
-
-    public function getQueryByPkName(): string
-    {
-        $method = 'setQueryByPkName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'ByPkQuery';
-        }
-    }
-
-    public function getQueryByPkDescription(): string
-    {
-        $method = 'setQueryByPkDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' query by PK description.';
-        }
-    }
-
-    /**
-     * Resolve query by PK.
-     */
-    public function queryByPk($root, $args, $context, $resolveInfo, $getSelectFields)
-    {
-        $model = $this->newModel();
-        $pk = $model->getKeyName();
-
-        $root = $this->getModel()::where($pk, $args[$pk]);
-
-        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->first();
     }
 }
