@@ -70,6 +70,9 @@ php artisan pepper:grind --all
 
 [Table of contents](#table-of-contents)
 
+Pepper is an auto generative GraphQL based on [Laravel wrapper for Facebook's GraphQL](https://github.com/rebing/graphql-laravel).
+The goal is simplify and fasten development of GraphQL based APIs.
+
 ### Installation
 
 ### Supported databases
