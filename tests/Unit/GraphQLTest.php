@@ -9,7 +9,7 @@ use Tests\Support\GraphQL\test_graphql;
 use Tests\Support\GraphQL\TestGraphQL;
 use Tests\TestCaseDatabase;
 
-class GraphQLBaseTest extends TestCaseDatabase
+class GraphQLTest extends TestCaseDatabase
 {
     private $test_1;
     private $test_2;

@@ -2,8 +2,8 @@
 
 namespace Tests\Support\GraphQL;
 
-use Pepper\GraphQL\BaseGraphQL;
+use Pepper\GraphQL;
 
-class TestGraphQL extends BaseGraphQL
+class TestGraphQL extends GraphQL
 {
 }

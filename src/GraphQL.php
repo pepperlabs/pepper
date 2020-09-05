@@ -380,4 +380,14 @@ abstract class GraphQL
     {
         return call_user_func('\GraphQL\Type\Definition\Type::'.$this->getFieldType($field));
     }
+
+    /**
+     * Get the primary key for the model.
+     *
+     * @return string
+     */
+    public function pk(): string
+    {
+        return $this->model()->getKeyName();
+    }
 }

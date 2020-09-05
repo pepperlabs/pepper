@@ -2,9 +2,9 @@
 
 namespace Tests\Support\GraphQL;
 
-use Pepper\GraphQL\BaseGraphQL;
+use Pepper\GraphQL;
 
-class test_graphql extends BaseGraphQL
+class test_graphql extends GraphQL
 {
     public $model = \Tests\Support\Models\User::class;
 }
