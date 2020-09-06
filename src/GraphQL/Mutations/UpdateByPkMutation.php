@@ -3,12 +3,14 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Contracts\MutationContract;
+use Pepper\Concerns\Resolve;
 use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class UpdateByPkMutation extends PepperGraphQL implements MutationContract
+class UpdateByPkMutation extends PepperGraphQL
 {
+    use Resolve;
+
     /**
      * Get update by PK mutation name.
      *
@@ -36,7 +38,7 @@ class UpdateByPkMutation extends PepperGraphQL implements MutationContract
      */
     public function type(): Type
     {
-        return GraphQL::type($this->getTypeName());
+        return GraphQL::type($this->getName());
     }
 
     /**

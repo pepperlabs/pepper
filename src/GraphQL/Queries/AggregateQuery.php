@@ -5,11 +5,14 @@ namespace Pepper\Query;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Str;
+use Pepper\Concerns\Resolve;
 use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class AggregateQuery extends PepperGraphQL
 {
+    use Resolve;
+
     /**
      * Get field aggregate type fields.
      *
@@ -26,7 +29,7 @@ class AggregateQuery extends PepperGraphQL
             ],
             'nodes' => [
                 'name' => 'nodes',
-                'type' => Type::listOf(GraphQL::type($this->getTypeName())),
+                'type' => Type::listOf(GraphQL::type($this->getName())),
                 'selectable' => false,
             ],
         ];
@@ -63,12 +66,7 @@ class AggregateQuery extends PepperGraphQL
      */
     private function getFieldAggregateRelationType($method): Type
     {
-        $override = 'set'.Str::studly($method).'FieldAggregateRelationType';
-        if (method_exists($this, $override)) {
-            return $this->$override();
-        } else {
-            return $this->getRelatedFieldAggregateType($method);
-        }
+        return $this->getRelatedFieldAggregateType($method);
     }
 
     /**
@@ -79,7 +77,7 @@ class AggregateQuery extends PepperGraphQL
      */
     public function getRelatedFieldAggregateType(string $attribute): Type
     {
-        return GraphQL::type($this->getRelatedModel($attribute)->getFieldAggregateName());
+        return GraphQL::type($this->relatedModel($attribute)->getFieldAggregateName());
     }
 
     /**
@@ -91,7 +89,7 @@ class AggregateQuery extends PepperGraphQL
     {
         $fields = [];
 
-        $relations = $this->getRelations();
+        $relations = $this->fieldsArray(true, false);
         foreach ($relations as $attribute) {
             $fields[$attribute.'_aggregate'] = [
                 'name' => $attribute.'_aggregate',
@@ -346,7 +344,7 @@ class AggregateQuery extends PepperGraphQL
 
     public function getQueryAggregateType(): Type
     {
-        return GraphQL::type($this->getStudly().'FieldAggregateUnresolvableType');
+        return GraphQL::type($this->studly().'FieldAggregateUnresolvableType');
     }
 
     public function resolveQueryAggregate($root, $args, $context, $resolveInfo, $getSelectFields)

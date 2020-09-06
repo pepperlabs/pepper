@@ -12,7 +12,7 @@ class Input extends PepperGraphQL
      *
      * @return string
      */
-    public function getInputName(): string
+    public function getName(): string
     {
         return $this->name().'Input';
     }
@@ -22,12 +22,12 @@ class Input extends PepperGraphQL
      *
      * @return string
      */
-    public function getInputDescription(): string
+    public function getDescription(): string
     {
         return $this->name().' input description.';
     }
 
-    public function getInputFields(): array
+    public function getArgs(): array
     {
         $fields = [];
 
@@ -48,24 +48,24 @@ class Input extends PepperGraphQL
 
         $fields['_and'] = [
             'name' => '_and',
-            'type' => GraphQL::type($this->getInputName()),
+            'type' => GraphQL::type($this->getName()),
         ];
 
         $fields['_or'] = [
             'name' => '_or',
-            'type' => GraphQL::type($this->getInputName()),
+            'type' => GraphQL::type($this->getName()),
         ];
 
         $fields['_not'] = [
             'name' => '_not',
-            'type' => GraphQL::type($this->getInputName()),
+            'type' => GraphQL::type($this->getName()),
         ];
 
         return $fields;
     }
 
-    public function getRelatedInput($attribute)
+    private function getRelatedInput($attribute)
     {
-        return GraphQL::type($this->relatedModel($attribute)->getInputName());
+        return GraphQL::type($this->relatedModel($attribute)->getName());
     }
 }

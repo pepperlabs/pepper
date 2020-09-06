@@ -3,12 +3,14 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Contracts\MutationContract;
+use Pepper\Concerns\Resolve;
 use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class InsertMutation extends PepperGraphQL implements MutationContract
+class InsertMutation extends PepperGraphQL
 {
+    use Resolve;
+
     /**
      * Get insert mutation name.
      *
@@ -16,7 +18,7 @@ class InsertMutation extends PepperGraphQL implements MutationContract
      */
     public function getName(): string
     {
-        return $this->getName().'InsertMutation';
+        return $this->name().'InsertMutation';
     }
 
     /**
@@ -26,7 +28,7 @@ class InsertMutation extends PepperGraphQL implements MutationContract
      */
     public function getDescription(): string
     {
-        return $this->getName().' insert mutation description.';
+        return $this->name().' insert mutation description.';
     }
 
     /**
@@ -36,7 +38,7 @@ class InsertMutation extends PepperGraphQL implements MutationContract
      */
     public function getType(): Type
     {
-        return Type::listOf(GraphQL::type($this->getTypeName()));
+        return Type::listOf(GraphQL::type($this->getName()));
     }
 
     /**
@@ -73,6 +75,7 @@ class InsertMutation extends PepperGraphQL implements MutationContract
 
         $root = $this->model()->whereIn('id', $ids);
 
-        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
+                    ->get();
     }
 }

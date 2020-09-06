@@ -3,40 +3,33 @@
 namespace Pepper\Query;
 
 use GraphQL\Type\Definition\Type;
+use Pepper\Concerns\Resolve;
 use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 class ByPkQuery extends PepperGraphQL
 {
-    public function getQueryByPkName(): string
+    use Resolve;
+
+    public function getName(): string
     {
-        $method = 'setQueryByPkName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'ByPkQuery';
-        }
+        return $this->name().'ByPkQuery';
     }
 
-    public function getQueryByPkDescription(): string
+    public function getDescription(): string
     {
-        $method = 'setQueryByPkDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' query by PK description.';
-        }
+        return $this->name().' query by PK description.';
     }
 
-    public function getQueryByPkType(): Type
+    public function getType(): Type
     {
-        return GraphQL::type($this->getTypeName());
+        return GraphQL::type($this->getName());
     }
 
-    public function getQueryByPkFields(): array
+    public function getArgs(): array
     {
         $model = $this->model();
-        $pk = $model->getKeyName();
+        $pk = $this->pk();
 
         return [
             $pk => [

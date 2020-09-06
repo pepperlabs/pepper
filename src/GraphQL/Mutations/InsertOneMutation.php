@@ -3,12 +3,14 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Contracts\MutationContract;
+use Pepper\Concerns\Resolve;
 use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class InsertOneMutation extends PepperGraphQL implements MutationContract
+class InsertOneMutation extends PepperGraphQL
 {
+    use Resolve;
+
     /**
      * Get name.
      *
@@ -16,7 +18,7 @@ class InsertOneMutation extends PepperGraphQL implements MutationContract
      */
     public function getName(): string
     {
-        return $this->getName().'InsertOneMutation';
+        return $this->name().'InsertOneMutation';
     }
 
     /**
@@ -26,7 +28,7 @@ class InsertOneMutation extends PepperGraphQL implements MutationContract
      */
     public function getDescription(): string
     {
-        return $this->getName().' insert mutation description.';
+        return $this->name().' insert mutation description.';
     }
 
     /**
@@ -36,7 +38,7 @@ class InsertOneMutation extends PepperGraphQL implements MutationContract
      */
     public function getType(): Type
     {
-        return GraphQL::type($this->getTypeName());
+        return GraphQL::type($this->getName());
     }
 
     /**

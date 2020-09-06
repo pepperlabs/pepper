@@ -3,12 +3,14 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Contracts\MutationContract;
+use Pepper\Concerns\Resolve;
 use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class DeleteMutation extends PepperGraphQL implements MutationContract
+class DeleteMutation extends PepperGraphQL
 {
+    use Resolve;
+
     /**
      * Get delete mutation name.
      *
@@ -16,7 +18,7 @@ class DeleteMutation extends PepperGraphQL implements MutationContract
      */
     public function getName(): string
     {
-        return $this->getName().'DeleteMutation';
+        return $this->name().'DeleteMutation';
     }
 
     /**
@@ -26,7 +28,7 @@ class DeleteMutation extends PepperGraphQL implements MutationContract
      */
     public function getDescription(): string
     {
-        return $this->getName().' delete mutation description.';
+        return $this->name().' delete mutation description.';
     }
 
     /**
@@ -36,7 +38,7 @@ class DeleteMutation extends PepperGraphQL implements MutationContract
     */
     public function getType(): Type
     {
-        return Type::listOf(GraphQL::type($this->getTypeName()));
+        return Type::listOf(GraphQL::type($this->getName()));
     }
 
     /**

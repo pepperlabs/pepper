@@ -20,7 +20,7 @@ trait Resolve
     public function getQueryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
         if (is_null($root)) {
-            $model = $this->newModel();
+            $model = $this->model();
         } else {
             $model = $root;
         }

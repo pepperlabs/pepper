@@ -11,9 +11,9 @@ class MutationInput extends GraphQL
      *
      * @return string
      */
-    public function getInputMutationName()
+    public function getName(): string
     {
-        return $this->getName().'MutationInput';
+        return $this->name().'MutationInput';
     }
 
     /**
