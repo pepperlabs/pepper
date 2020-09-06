@@ -3,13 +3,15 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Concerns\Resolve;
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\GraphQL\Inputs\Input;
+use Pepper\GraphQL\Inputs\MutationInput;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class UpdateMutation extends PepperGraphQL
+class UpdateMutation
 {
-    use Resolve;
+    use Resolve, PepperGraphQL;
 
     /**
      * Get update mutation name.
@@ -48,9 +50,12 @@ class UpdateMutation extends PepperGraphQL
      */
     public function getArgs(): array
     {
+        $input = new Input();
+        $mutaionInput = new MutationInput();
+
         return [
-            'where' => ['type' => GraphQL::type($this->getInputName())],
-            '_set' => ['type' => GraphQL::type($this->getInputMutationName())],
+            'where' => ['type' => GraphQL::type($input->getName())],
+            '_set' => ['type' => GraphQL::type($mutaionInput->getName())],
         ];
     }
 

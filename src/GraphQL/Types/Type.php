@@ -17,11 +17,16 @@ use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\Query\AggregateQuery;
+use Pepper\Query\Query;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class Types extends PepperGraphQL
+class Types
 {
+    use PepperGraphQL, Resolve;
+
     /**
      * Generate GraphQL fields with field types.
      *
@@ -38,8 +43,9 @@ class Types extends PepperGraphQL
                 'type' => $this->callGraphQLType($attribute),
             ];
         }
+        $aggregateQuery = new AggregateQuery();
 
-        return array_merge($fields, $this->getTypeRelations(), $this->getAggregatedFields());
+        return array_merge($fields, $this->getTypeRelations(), $aggregateQuery->getAggregatedFields());
     }
 
     /**
@@ -102,11 +108,11 @@ class Types extends PepperGraphQL
             ])) {
                 $type = Type::listOf(GraphQL::type($this->getRelatedType($relation)));
             }
-
+            $query = new Query();
             $fields[$relation] = [
                 'name' => $relation,
                 'type' => $type,
-                'args' => $this->getQueryArgs(),
+                'args' => $query->args(),
                 'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) use ($relation) {
                     return $this->getQueryResolve($root->$relation(), $args, $context, $resolveInfo, function () {
                     })->get();
@@ -119,6 +125,6 @@ class Types extends PepperGraphQL
 
     public function getRelatedType($attribute)
     {
-        return GraphQL::type($this->getRelatedModel($attribute)->getTypeName());
+        return GraphQL::type($this->relatedModel($attribute)->getTypeName());
     }
 }

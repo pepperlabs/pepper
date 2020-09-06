@@ -1,15 +1,15 @@
 <?php
 
-namespace Pepper\Query;
+namespace Pepper\GraphQL\Queries;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Concerns\Resolve;
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class ByPkQuery extends PepperGraphQL
+class ByPkQuery
 {
-    use Resolve;
+    use PepperGraphQL, Resolve;
 
     public function getName(): string
     {

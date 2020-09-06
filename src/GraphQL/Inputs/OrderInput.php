@@ -2,11 +2,13 @@
 
 namespace Pepper\GraphQL\Inputs;
 
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\Supports\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class OrderInput extends PepperGraphQL
+class OrderInput
 {
+    use PepperGraphQL;
+
     /**
      * Get GraphQL Order name.
      *
@@ -14,7 +16,7 @@ class OrderInput extends PepperGraphQL
      */
     public function getOrderName(): string
     {
-        return $this->getName().'OrderInput';
+        return $this->name().'OrderInput';
     }
 
     /**
@@ -24,7 +26,7 @@ class OrderInput extends PepperGraphQL
      */
     public function getOrderDescription(): string
     {
-        return $this->getName().' order description.';
+        return $this->name().' order description.';
     }
 
     /**

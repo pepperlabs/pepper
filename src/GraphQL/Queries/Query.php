@@ -1,16 +1,18 @@
 <?php
 
-namespace Pepper\Query;
+namespace Pepper\GraphQL\Queries;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Concerns\GraphQL as ConcernsGraphQL;
-use Pepper\Concerns\Resolve;
+use Pepper\GraphQL\Inputs\Input;
+use Pepper\GraphQL\Inputs\OrderInput;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query as GraphQLQuery;
 
 class Query extends GraphQLQuery
 {
-    use ConcernsGraphQL, Resolve;
+    use PepperGraphQL, Resolve;
 
     protected $attributes = [
         'name' => 'DummyName',
@@ -49,14 +51,17 @@ class Query extends GraphQLQuery
 
     public function args(): array
     {
+        $input = new Input();
+        $order = new OrderInput();
+
         return [
             // Condition
-            'where' => ['type' => GraphQL::type($this->getInputName())],
+            'where' => ['type' => GraphQL::type($input->getName())],
 
             'distinct' => ['name' => 'distinct', 'type' => Type::boolean()],
 
             // Order
-            'order_by' => ['type' => GraphQL::type($this->getOrderName())],
+            'order_by' => ['type' => GraphQL::type($order->getName())],
 
             // Paginate
             'limit' => ['name' => 'limit', 'type' => Type::int()],

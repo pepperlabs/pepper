@@ -3,13 +3,14 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Concerns\Resolve;
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\GraphQL\Inputs\Input;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class DeleteMutation extends PepperGraphQL
+class DeleteMutation
 {
-    use Resolve;
+    use PepperGraphQL, Resolve;
 
     /**
      * Get delete mutation name.
@@ -48,8 +49,10 @@ class DeleteMutation extends PepperGraphQL
      */
     public function getArgs(): array
     {
+        $input = new Input();
+
         return [
-            'where' => ['type' => GraphQL::type($this->getInputName())],
+            'where' => ['type' => GraphQL::type($input->getName())],
         ];
     }
 

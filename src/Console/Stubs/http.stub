@@ -2,9 +2,9 @@
 
 namespace DummyNamespace;
 
-use Pepper\GraphQL;
+use Pepper\Supports\GraphQL as PepperGraphQL;
 
-class DummyClass extends GraphQL
+class DummyClass
 {
-    // ...
+    use PepperGraphQL;
 }

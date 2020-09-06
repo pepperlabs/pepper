@@ -3,13 +3,14 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Concerns\Resolve;
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\GraphQL\Inputs\MutationInput;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class InsertOneMutation extends PepperGraphQL
+class InsertOneMutation
 {
-    use Resolve;
+    use PepperGraphQL, Resolve;
 
     /**
      * Get name.
@@ -48,10 +49,12 @@ class InsertOneMutation extends PepperGraphQL
      */
     public function getArgs(): array
     {
+        $inputMutation = new MutationInput();
+
         return [
             'object' => [
                 'name' => 'object',
-                'type' => GraphQL::type($this->getInputMutationName()),
+                'type' => GraphQL::type($inputMutation->getName()),
             ],
         ];
     }

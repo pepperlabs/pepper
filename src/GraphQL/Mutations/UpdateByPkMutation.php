@@ -3,13 +3,14 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Concerns\Resolve;
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\GraphQL\Inputs\MutationInput;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class UpdateByPkMutation extends PepperGraphQL
+class UpdateByPkMutation
 {
-    use Resolve;
+    use PepperGraphQL, Resolve;
 
     /**
      * Get update by PK mutation name.
@@ -48,14 +49,16 @@ class UpdateByPkMutation extends PepperGraphQL
      */
     public function args(): array
     {
+        $inputMutation = new MutationInput();
+
         return [
             'pk_columns' => [
                 'name' => 'pk_columns',
-                'type' => GraphQL::type($this->getInputMutationName()),
+                'type' => GraphQL::type($inputMutation->getName()),
             ],
             '_set' => [
                 'name' => '_set',
-                'type' => GraphQL::type($this->getInputMutationName()),
+                'type' => GraphQL::type($inputMutation->getName()),
             ],
         ];
     }

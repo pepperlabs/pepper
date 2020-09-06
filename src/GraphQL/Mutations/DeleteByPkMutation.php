@@ -3,13 +3,13 @@
 namespace Pepper\Mutations;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\Concerns\Resolve;
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class DeleteByPkMutation extends PepperGraphQL
+class DeleteByPkMutation
 {
-    use Resolve;
+    use PepperGraphQL, Resolve;
 
     /**
      * Get delete by PK mutation name.

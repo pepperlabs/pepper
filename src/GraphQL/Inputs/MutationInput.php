@@ -2,10 +2,12 @@
 
 namespace Pepper\GraphQL\Inputs;
 
-use Pepper\GraphQL;
+use Pepper\Supports\GraphQL as PepperGraphQL;
 
-class MutationInput extends GraphQL
+class MutationInput
 {
+    use PepperGraphQL;
+
     /**
      * Get input mutation name.
      *

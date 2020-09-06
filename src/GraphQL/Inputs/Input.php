@@ -2,11 +2,13 @@
 
 namespace Pepper\GraphQL\Inputs;
 
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\Supports\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class Input extends PepperGraphQL
+class Input
 {
+    use PepperGraphQL;
+
     /**
      * Get GraphQL Input name.
      *

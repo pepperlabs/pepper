@@ -54,7 +54,7 @@ class Config
     public function addType(string $key, string $class): void
     {
         if ($this->canAdd('types.'.$key)) {
-            $class = strval('App\GraphQL\Types\Pepper\\'.$class.'::class');
+            $class = strval(config('pepper.namespace.root').'\GraphQL\Types\Pepper\\'.$class.'::class');
             $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
             $update = preg_replace($pattern, "$0'$key' => $class,\n        ", file_get_contents($this->path));
             file_put_contents($this->path, $update);
@@ -71,7 +71,7 @@ class Config
     public function addInput(string $key, string $class): void
     {
         if ($this->canAdd('types.'.$key)) {
-            $class = strval('App\GraphQL\Inputs\Pepper\\'.$class.'::class');
+            $class = strval(config('pepper.namespace.root').'\GraphQL\Inputs\Pepper\\'.$class.'::class');
             $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
             $update = preg_replace($pattern, "$0'$key' => $class,\n        ", file_get_contents($this->path));
             file_put_contents($this->path, $update);
@@ -114,7 +114,7 @@ class Config
     public function addQuery(string $key, string $class): void
     {
         if ($this->canAdd('schemas.default.query.'.$key)) {
-            $class = strval('App\GraphQL\Queries\Pepper\\'.$class.'::class');
+            $class = strval(config('pepper.namespace.root').'\GraphQL\Queries\Pepper\\'.$class.'::class');
             $pattern = '/\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*/';
             $replace = "$0'$key' => $class,\n                ";
             $update = preg_replace($pattern, $replace, file_get_contents($this->path));
@@ -133,7 +133,7 @@ class Config
     {
         if ($this->canAdd('schemas.default.mutation.'.$key)) {
             $pattern = '/(\s*["\']schemas["\']\s*=>\s*\[\s*["\']default["\']\s*=>\s*\[\s*["\']query["\']\s*=>\s*\[\s*[^"]+?(?=["\']mutation["\'])["\']mutation["\']\s*=>\s*\[\s*)/';
-            $class = strval('App\GraphQL\Mutations\Pepper\\'.$class.'::class');
+            $class = strval(config('pepper.namespace.root').'\GraphQL\Mutations\Pepper\\'.$class.'::class');
             $replace = "$0'$key' => $class,\n                ";
             $update = preg_replace($pattern, $replace, file_get_contents($this->path));
             file_put_contents($this->path, $update);

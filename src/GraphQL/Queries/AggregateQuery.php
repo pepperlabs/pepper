@@ -1,17 +1,17 @@
 <?php
 
-namespace Pepper\Query;
+namespace Pepper\GraphQL\Queries;
 
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Str;
-use Pepper\Concerns\Resolve;
-use Pepper\GraphQL as PepperGraphQL;
+use Pepper\Supports\GraphQL as PepperGraphQL;
+use Pepper\Supports\Resolve;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
-class AggregateQuery extends PepperGraphQL
+class AggregateQuery
 {
-    use Resolve;
+    use PepperGraphQL, Resolve;
 
     /**
      * Get field aggregate type fields.
@@ -89,13 +89,15 @@ class AggregateQuery extends PepperGraphQL
     {
         $fields = [];
 
+        $query = new Query();
+
         $relations = $this->fieldsArray(true, false);
         foreach ($relations as $attribute) {
             $fields[$attribute.'_aggregate'] = [
                 'name' => $attribute.'_aggregate',
                 'type' => $this->getFieldAggregateRelationType($attribute),
                 'selectable' => false,
-                'args' => $this->getQueryArgs(),
+                'args' => $query->args(),
                 'resolve' => function ($root, $args, $context, ResolveInfo $resolveInfo) use ($attribute) {
                     return ['root' => $root, 'args' => $args, 'name' => $attribute];
                 },
@@ -115,7 +117,7 @@ class AggregateQuery extends PepperGraphQL
         $fields = [];
 
         // Get fields excluded relations
-        foreach ($this->getFields(false) as $attribute) {
+        foreach ($this->fieldsArray(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
                 'type' => GraphQL::type('AnyScalar'),
