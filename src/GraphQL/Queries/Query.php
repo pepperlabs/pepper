@@ -3,13 +3,19 @@
 namespace Pepper\Query;
 
 use GraphQL\Type\Definition\Type;
+use Pepper\Concerns\GraphQL as ConcernsGraphQL;
 use Pepper\Concerns\Resolve;
-use Pepper\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rebing\GraphQL\Support\Query as GraphQLQuery;
 
-class Query extends PepperGraphQL
+class Query extends GraphQLQuery
 {
-    use Resolve;
+    use ConcernsGraphQL, Resolve;
+
+    protected $attributes = [
+        'name' => 'DummyName',
+        'description' => 'DummyDescription',
+    ];
 
     /**
      * Get GraphQL Query name.
@@ -36,12 +42,12 @@ class Query extends PepperGraphQL
      *
      * @return void
      */
-    public function getQueryType(): Type
+    public function type(): Type
     {
         return Type::listOf(GraphQL::type($this->getName()));
     }
 
-    public function getQueryArgs()
+    public function args(): array
     {
         return [
             // Condition

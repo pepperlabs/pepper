@@ -1,17 +1,18 @@
 <?php
 
-namespace Pepper\Helpers;
+namespace Pepper\Supports;
 
 use Illuminate\Config\Repository;
+use Illuminate\Support\Str;
 
 /**
  * Update configuration of GraphQL file.
  *
  * Example usage:
  *
- * $config = new ConfigHelper($GraphQLConfigPath);
+ * $config = new Config($GraphQLConfigPath);
  *
- * $config = new ConfigHelper(); // fallback to default graphql.php file
+ * $config = new Config(); // fallback to default graphql.php file
  *
  * $config->addType('key', 'class');
  *
@@ -22,7 +23,7 @@ use Illuminate\Config\Repository;
  * @author Amirmasoud Sheydaei <amirmasoud.sheydaei@gmail.com>
  * @since 1.0.0
  */
-class ConfigHelper
+class Config
 {
     /** @var string */
     public $path;
@@ -71,7 +72,16 @@ class ConfigHelper
     {
         $key = $class;
         if ($this->canAdd('types.'.$key)) {
-            $class = strval('Pepper\\'.$class.'::class');
+            if (Str::endsWith($class, 'Input')) {
+                $class = strval('Pepper\GraphQL\Inputs\\'.$class.'::class');
+            } elseif (Str::endsWith($class, 'Enum')) {
+                $class = strval('Pepper\GraphQL\Enums\\'.$class.'::class');
+            } elseif (Str::endsWith($class, 'Scalar')) {
+                $class = strval('Pepper\GraphQL\Scalars\\'.$class.'::class');
+            } elseif (Str::endsWith($class, 'Union')) {
+                $class = strval('Pepper\GraphQL\Unions\\'.$class.'::class');
+            }
+
             $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
             $update = preg_replace($pattern, "$0'$key' => $class,\n        ", file_get_contents($this->path));
             file_put_contents($this->path, $update);

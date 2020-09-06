@@ -1,6 +1,6 @@
 <?php
 
-namespace Pepper;
+namespace Pepper\Supports;
 
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Schema;
@@ -9,7 +9,7 @@ use Prophecy\Exception\Doubler\ClassNotFoundException;
 use ReflectionClass;
 use ReflectionException;
 
-abstract class GraphQL
+trait GraphQL
 {
     /**
      * An instance of GraphQL class.
@@ -359,7 +359,7 @@ abstract class GraphQL
      */
     public function getName(): string
     {
-        return $this->overrideMethod('FieldType', [$this, 'studly'], $this->name());
+        return $this->overrideMethod('Name', [$this, 'studly'], $this->name());
     }
 
     /**

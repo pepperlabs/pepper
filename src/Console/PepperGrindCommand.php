@@ -3,12 +3,13 @@
 namespace Pepper\Console;
 
 use HaydenPierce\ClassFinder\ClassFinder;
-use Illuminate\Console\Command;
+use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
-use Pepper\Helpers\ConfigHelper as Config;
+use Pepper\Supports\Config;
+use Symfony\Component\Console\Input\InputArgument;
 
-class PepperGrindCommand extends Command
+class PepperGrindCommand extends GeneratorCommand
 {
     /**
      * The name and signature of the console command.
@@ -24,7 +25,102 @@ class PepperGrindCommand extends Command
      *
      * @var string
      */
-    protected $description = 'Update or create pepper GraphQL classes';
+    protected $description = 'Create Pepper GraphQL classes.';
+
+    /**
+     * The type of class being generated.
+     *
+     * @var string
+     */
+    protected $type = 'class';
+
+    /**
+     * Type of GraphQL class.
+     *
+     * @var string
+     */
+    protected $gql = 'Queries';
+
+    /**
+     * Get the stub file for the generator.
+     *
+     * @return string
+     */
+    protected function getStub()
+    {
+        return __DIR__.'/Stubs/graphql.stub';
+    }
+
+    /**
+     * Get the default namespace for the class.
+     *
+     * @param  string  $rootNamespace
+     * @return string
+     */
+    protected function getDefaultNamespace($rootNamespace)
+    {
+        return $rootNamespace."\GraphQL\\{$this->gql}\\Pepper";
+    }
+
+    // /**
+    //  * Get the console command arguments.
+    //  *
+    //  * @return array
+    //  */
+    // protected function getArguments()
+    // {
+    //     return [
+    //         ['class', InputArgument::REQUIRED, 'The name of the class'],
+    //         ['parent', InputArgument::REQUIRED, 'The name of the parent GraphQL class'],
+    //         ['model', InputArgument::REQUIRED, 'The namespace to model'],
+    //         ['modelClass', InputArgument::REQUIRED, 'The class basename of the model'],
+    //     ];
+    // }
+
+    protected function build($name, $class, $parent, $model)
+    {
+        $stub = $this->files->get($this->getStub());
+
+        return $this->replaceNamespace($stub, $name)
+                    ->replaceClassName($stub, $class)
+                    ->replaceParent($stub, $parent)
+                    ->replaceParentClass($stub, class_basename($parent))
+                    ->replaceModel($stub, $model)
+                    ->replaceModelClass($stub, class_basename($model));
+    }
+
+    protected function replaceClassName(&$stub, $class)
+    {
+        $stub = str_replace('DummyClass', $class, $stub);
+
+        return $this;
+    }
+
+    protected function replaceParent(&$stub, $parent)
+    {
+        $stub = str_replace('DummyParent', $parent, $stub);
+
+        return $this;
+    }
+
+    protected function replaceParentClass(&$stub, $parentClass)
+    {
+        $stub = str_replace('DummyBaseParentClass', $parentClass, $stub);
+
+        return $this;
+    }
+
+    protected function replaceModel(&$stub, $model)
+    {
+        $stub = str_replace('DummyModel', $model, $stub);
+
+        return $this;
+    }
+
+    protected function replaceModelClass(&$stub, $modelClass)
+    {
+        return str_replace('DummyBaseModelClass', $modelClass, $stub);
+    }
 
     /**
      * Execute the console command.
@@ -79,13 +175,8 @@ class PepperGrindCommand extends Command
     private function createHttp(array $models, array $selected): void
     {
         $this->ensureGraphQLConfigExists();
-        $config = new Config(null);
 
-        $this->info('Adding default types to config...');
-        $config->addGlobalType('ConditionInput');
-        $config->addGlobalType('OrderByEnum');
-        $config->addGlobalType('AnyScalar');
-        $config->addGlobalType('AllUnion');
+        $this->addGlobalTypes();
 
         if (in_array('-- select all --', $selected)) {
             foreach ($models as $model) {
@@ -96,6 +187,17 @@ class PepperGrindCommand extends Command
                 $this->initModelHttp($model);
             }
         }
+    }
+
+    private function addGlobalTypes(): void
+    {
+        $config = new Config(null);
+
+        $config->addGlobalType('ConditionInput');
+        $config->addGlobalType('OrderByEnum');
+        $config->addGlobalType('AnyScalar');
+        $config->addGlobalType('AllUnion');
+        // $this->info(' Global Pepper types added.');
     }
 
     /**
@@ -110,208 +212,124 @@ class PepperGrindCommand extends Command
         $model = 'App\Http\Pepper\\'.$basename;
         $studly = Str::studly($basename);
         $snake = Str::snake($basename);
-        $noConfig = $this->hasOption('no-config') && $this->option('no-config');
+        // $noConfig = $this->hasOption('no-config') && $this->option('no-config');
 
-        $this->info('Creating Http'.$basename.'...');
-        $this->call('make:pepper:http', [
-            'name' => $basename, // Class
-        ]);
+        // $this->info('Creating Http'.$basename.'...');
+        $this->call('make:pepper:http', ['name' => $basename]);
 
-        // Creeat new type
-        $typeName = $typeClass = $studly.'Type';
-        $this->info('Creating '.$typeName.'...');
-        $this->call('make:pepper:type', [
-            'name' => $typeName, // ClassType
-            'class' => $typeClass, // ClassType
-            'description' => $basename.' type description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
+        $this->gql = 'Types';
+        foreach ([
+            'ResultAggregateType',
+            'FieldAggregateUnresolvableType',
+            'FieldAggregateType',
+            'AggregateType',
+            'Type',
+        ] as $type) {
+            $name = $this->qualifyClass($studly.$type);
+            $path = $this->getPath($name);
+            $this->makeDirectory($path);
+            $this->files->put($path, $this->sortImports(
+                $this->build(
+                    $name,
+                    $studly.$type,
+                    "Pepper\GraphQL\Types\\{$type}",
+                    'App\Http\Pepper\\'.$basename,
+                )
+            ));
+        }
 
-        // Create new type aggregate
-        $typeName = $typeClass = $studly.'AggregateType';
-        $this->info('Creating '.$typeName.'...');
-        $this->call('make:pepper:type:aggregate', [
-            'name' => $typeName, // ClassAggregateType
-            'class' => $typeClass, // ClassAggregateType
-            'description' => $basename.' aggregate type description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
+        $this->gql = 'Mutations';
+        foreach ([
+            'Update',
+            'Insert',
+            'Delete',
+        ] as $mutation) {
+            $name = $this->qualifyClass($studly.$mutation);
+            $path = $this->getPath($name);
+            $this->makeDirectory($path);
+            $this->files->put($path, $this->sortImports(
+                $this->build(
+                    $name,
+                    $studly.$mutation,
+                    "Pepper\GraphQL\Mutations\\{$mutation}",
+                    'App\Http\Pepper\\'.$basename,
+                )
+            ));
+        }
 
-        // Create new field aggregate type
-        $typeName = $typeClass = $studly.'FieldAggregateType';
-        $this->info('Creating '.$typeName.'...');
-        $this->call('make:pepper:type:field-aggregate', [
-            'name' => $typeName, // ClassFieldAggregateType
-            'class' => $typeClass, // ClassFieldAggregateType
-            'description' => $basename.' field aggregate type description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
+        foreach ([
+            'Update',
+            // 'InsertOne',
+            'Delete',
+        ] as $mutation) {
+            $name = $this->qualifyClass($studly.$mutation);
+            $path = $this->getPath($name);
+            $this->makeDirectory($path);
+            $this->files->put($path, $this->sortImports(
+                $this->build(
+                    $name,
+                    'Update'.$studly.'Pk',
+                    "Pepper\GraphQL\Mutations\\{$mutation}",
+                    'App\Http\Pepper\\'.$basename,
+                )
+            ));
+        }
 
-        // Create new field aggregate unresolvalbe type
-        $typeName = $typeClass = $studly.'FieldAggregateUnresolvableType';
-        $this->info('Creating '.$typeName.'...');
-        $this->call('make:pepper:type:field-aggregate-unresolvable', [
-            'name' => $typeName, // ClassFieldAggregateUnresolvableType
-            'class' => $typeClass, // ClassFieldAggregateUnresolvableType
-            'description' => $basename.' field aggregate unresolvable type description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
+        foreach ([
+            'Insert',
+        ] as $mutation) {
+            $name = $this->qualifyClass($studly.$mutation);
+            $path = $this->getPath($name);
+            $this->makeDirectory($path);
+            $this->files->put($path, $this->sortImports(
+                $this->build(
+                    $name,
+                    'Insert'.$studly.'One',
+                    "Pepper\GraphQL\Mutations\\{$mutation}",
+                    'App\Http\Pepper\\'.$basename,
+                )
+            ));
+        }
 
-        // Create new result aggregate type
-        $typeName = $typeClass = $studly.'ResultAggregateType';
-        $this->info('Creating '.$typeName.'...');
-        $this->call('make:pepper:type:result-aggregate', [
-            'name' => $typeName, // ClassResultAggregateType
-            'class' => $typeClass, // ClassResultAggregateType
-            'description' => $basename.' result aggregate type description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
+        $this->gql = 'Queries';
+        foreach ([
+            'ByPkQuery',
+            'AggregateQuery',
+            'Query',
+        ] as $query) {
+            $name = $this->qualifyClass($studly.$query);
+            $path = $this->getPath($name);
+            $this->makeDirectory($path);
+            $this->files->put($path, $this->sortImports(
+                $this->build(
+                    $name,
+                    $studly.$query,
+                    "Pepper\GraphQL\Queries\\{$query}",
+                    'App\Http\Pepper\\'.$basename,
+                )
+            ));
+        }
 
-        // Create new input
-        $inputName = $inputClass = $studly.'Input';
-        $this->info('Creating '.$inputName.'...');
-        $this->call('make:pepper:input', [
-            'name' => $inputName, // ClassInput
-            'class' => $inputClass, // ClassInput
-            'description' => $basename.' input description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
+        $this->gql = 'Inputs';
+        foreach ([
+            'MutationInput',
+            'OrderInput',
+            'Input',
+        ] as $query) {
+            $name = $this->qualifyClass($studly.$query);
+            $path = $this->getPath($name);
+            $this->makeDirectory($path);
+            $this->files->put($path, $this->sortImports(
+                $this->build(
+                    $name,
+                    $studly.$query,
+                    "Pepper\GraphQL\Inputs\\{$query}",
+                    'App\Http\Pepper\\'.$basename,
+                )
+            ));
+        }
 
-        // Create new order input
-        $inputName = $inputClass = $studly.'OrderInput';
-        $this->info('Creating '.$inputName.'...');
-        $this->call('make:pepper:input:order', [
-            'name' => $inputName, // ClassOrderInput
-            'class' => $inputClass, // ClassOrderInput
-            'description' => $basename.' order input description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new mutation input
-        $inputName = $inputClass = $studly.'MutationInput';
-        $this->info('Creating '.$inputName.'...');
-        $this->call('make:pepper:input:mutation', [
-            'name' => $inputName, // ClassMutationInput
-            'class' => $inputClass, // ClassMutationInput
-            'description' => $basename.' mutation input description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new query
-        $queryName = $studly.'Query';
-        $queryClass = $snake;
-        $this->info('Creating '.$queryClass.'...');
-        $this->call('make:pepper:query', [
-            'name' => $queryName, // ClassQuery
-            'class' => $queryClass, // class
-            'description' => $basename.' query description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new query aggregate
-        $queryName = $studly.'AggregateQuery';
-        $queryClass = $snake.'_aggregate';
-        $this->info('Creating '.$queryClass.'...');
-        $this->call('make:pepper:query:aggregate', [
-            'name' => $queryName, // ClassQuery
-            'class' => $queryClass, // class_aggregate
-            'description' => $basename.' query description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new query by PK aggregate
-        $queryName = $studly.'ByPkQuery';
-        $queryClass = $snake.'_by_pk';
-        $this->info('Creating '.$queryClass.'...');
-        $this->call('make:pepper:query:by-pk', [
-            'name' => $queryName, // ClassQuery
-            'class' => $queryClass, // class_by_pk
-            'description' => $basename.' by PK query description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new delete mutation
-        $mutationName = $studly.'DeleteMutation';
-        $mutationClass = 'delete_'.$snake;
-        $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:delete', [
-            'name' => $mutationName, // ClassDeleteMutation
-            'class' => $mutationClass, // delete_class
-            'description' => $basename.' delete mutation description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new delete mutation by PK
-        $mutationName = $studly.'DeleteByPkMutation';
-        $mutationClass = 'delete_'.$snake.'_by_pk';
-        $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:delete:by-pk', [
-            'name' => $mutationName, // ClassDeleteByPkMutation
-            'class' => $mutationClass, // delete_class_by_pk
-            'description' => $basename.' delete by PK mutation description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new insert mutation
-        $mutationName = $studly.'InsertMutation';
-        $mutationClass = 'insert_'.$snake;
-        $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:insert', [
-            'name' => $mutationName, // ClassInsertMutation
-            'class' => $mutationClass, // insert_class
-            'description' => $basename.' insert mutation description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new insert one mutation
-        $mutationName = $studly.'InsertOneMutation';
-        $mutationClass = 'insert_'.$snake.'_one';
-        $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:insert:one', [
-            'name' => $mutationName, // ClassInsertOneMutation
-            'class' => $mutationClass, // insert_class_one
-            'description' => $basename.' insert one mutation description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new update mutation
-        $mutationName = $studly.'UpdateMutation';
-        $mutationClass = 'update_'.$snake;
-        $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:update', [
-            'name' => $mutationName, // ClassUpdateMutation
-            'class' => $mutationClass, // update_class
-            'description' => $basename.' update mutation description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
-
-        // Create new update mutation by PK
-        $mutationName = $studly.'UpdateByPkMutation';
-        $mutationClass = 'update_'.$snake.'_by_pk';
-        $this->info('Creating '.$mutationClass.'...');
-        $this->call('make:pepper:mutation:update:by-pk', [
-            'name' => $mutationName, // ClassUpdateByPkMutation
-            'class' => $mutationClass, // update_class_by_pk
-            'description' => $basename.' update by PK mutation description',
-            'model' => $model,
-            '--no-config' => $noConfig,
-        ]);
+        // $this->info($this->type.' created successfully.');
     }
 
     /**

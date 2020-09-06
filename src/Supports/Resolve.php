@@ -1,6 +1,6 @@
 <?php
 
-namespace Pepper\Concerns;
+namespace Pepper\Supports;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
