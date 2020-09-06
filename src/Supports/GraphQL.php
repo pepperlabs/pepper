@@ -38,6 +38,11 @@ trait GraphQL
         return Str::studly($this->name());
     }
 
+    public function snake(): string
+    {
+        return Str::snake($this->name());
+    }
+
     /**
      * Default model for each GraphQL class is set to defined model namespace
      * concated with studly case of the GraphQL class. for example a class

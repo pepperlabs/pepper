@@ -21,9 +21,9 @@ abstract class TestCaseDatabase extends TestCase
         // as we are using the in-memory SQLite db we do not need RefreshDatabase
         $this->artisan('migrate');
 
-        $this->artisan('pepper:grind', [
-            '--all' => true,
-        ]);
+        // $this->artisan('pepper:grind', [
+        //     '--all' => true,
+        // ]);
 
         $this->clearCache();
 

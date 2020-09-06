@@ -3,7 +3,6 @@
 namespace Pepper\GraphQL\Queries;
 
 use GraphQL\Type\Definition\Type;
-use Pepper\GraphQL\Inputs\Input;
 use Pepper\GraphQL\Inputs\OrderInput;
 use Pepper\Supports\GraphQL as PepperGraphQL;
 use Pepper\Supports\Resolve;
@@ -14,10 +13,11 @@ class Query extends GraphQLQuery
 {
     use PepperGraphQL, Resolve;
 
-    protected $attributes = [
-        'name' => 'DummyName',
-        'description' => 'DummyDescription',
-    ];
+    public function setAttributes()
+    {
+        $this->attributes['name'] = $this->instance->snake();
+        $this->attributes['description'] = $this->instance->snake().'Description';
+    }
 
     /**
      * Get GraphQL Query name.
@@ -51,17 +51,16 @@ class Query extends GraphQLQuery
 
     public function args(): array
     {
-        $input = new Input();
         $order = new OrderInput();
 
         return [
             // Condition
-            'where' => ['type' => GraphQL::type($input->getName())],
+            'where' => ['name' => 'where', 'type' => GraphQL::type($this->instance->name().'Input')],
 
             'distinct' => ['name' => 'distinct', 'type' => Type::boolean()],
 
             // Order
-            'order_by' => ['type' => GraphQL::type($order->getName())],
+            'order_by' => ['name' => 'orderBy', 'type' => GraphQL::type($this->instance->name().'OrderInput')],
 
             // Paginate
             'limit' => ['name' => 'limit', 'type' => Type::int()],

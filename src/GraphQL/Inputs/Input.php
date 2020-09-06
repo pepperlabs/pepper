@@ -4,10 +4,13 @@ namespace Pepper\GraphQL\Inputs;
 
 use Pepper\Supports\GraphQL as PepperGraphQL;
 use Rebing\GraphQL\Support\Facades\GraphQL;
+use Rebing\GraphQL\Support\InputType;
 
-class Input
+class Input extends InputType
 {
     use PepperGraphQL;
+
+    protected $attributes = [];
 
     /**
      * Get GraphQL Input name.
@@ -16,7 +19,7 @@ class Input
      */
     public function getName(): string
     {
-        return $this->name().'Input';
+        return $this->instance->name().'Input';
     }
 
     /**
@@ -26,10 +29,10 @@ class Input
      */
     public function getDescription(): string
     {
-        return $this->name().' input description.';
+        return $this->instance->name().' input description.';
     }
 
-    public function getArgs(): array
+    public function fields(): array
     {
         $fields = [];
 

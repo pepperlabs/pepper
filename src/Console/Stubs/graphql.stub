@@ -11,6 +11,7 @@ class DummyClass extends DummyBaseParentClass
 {
     public function __construct(DummyBaseModelClass $instance)
     {
+        parent::__construct();
         $this->instance = $instance;
     }
 }

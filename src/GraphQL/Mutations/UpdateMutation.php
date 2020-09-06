@@ -54,8 +54,8 @@ class UpdateMutation
         $mutaionInput = new MutationInput();
 
         return [
-            'where' => ['type' => GraphQL::type($input->getName())],
-            '_set' => ['type' => GraphQL::type($mutaionInput->getName())],
+            'where' => ['type' => GraphQL::type($this->instance->name().'Input')],
+            '_set' => ['type' => GraphQL::type($this->instance->name().'MutationInput')],
         ];
     }
 
