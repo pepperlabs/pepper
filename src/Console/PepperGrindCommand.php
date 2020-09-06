@@ -7,7 +7,6 @@ use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Str;
 use Pepper\Supports\Config;
-use Symfony\Component\Console\Input\InputArgument;
 
 class PepperGrindCommand extends GeneratorCommand
 {
@@ -61,21 +60,6 @@ class PepperGrindCommand extends GeneratorCommand
     {
         return $rootNamespace."\GraphQL\\{$this->gql}\\Pepper";
     }
-
-    // /**
-    //  * Get the console command arguments.
-    //  *
-    //  * @return array
-    //  */
-    // protected function getArguments()
-    // {
-    //     return [
-    //         ['class', InputArgument::REQUIRED, 'The name of the class'],
-    //         ['parent', InputArgument::REQUIRED, 'The name of the parent GraphQL class'],
-    //         ['model', InputArgument::REQUIRED, 'The namespace to model'],
-    //         ['modelClass', InputArgument::REQUIRED, 'The class basename of the model'],
-    //     ];
-    // }
 
     protected function build($name, $class, $parent, $model)
     {
@@ -217,119 +201,189 @@ class PepperGrindCommand extends GeneratorCommand
         // $this->info('Creating Http'.$basename.'...');
         $this->call('make:pepper:http', ['name' => $basename]);
 
-        $this->gql = 'Types';
-        foreach ([
-            'ResultAggregateType',
-            'FieldAggregateUnresolvableType',
-            'FieldAggregateType',
-            'AggregateType',
-            'Type',
-        ] as $type) {
-            $name = $this->qualifyClass($studly.$type);
-            $path = $this->getPath($name);
-            $this->makeDirectory($path);
-            $this->files->put($path, $this->sortImports(
-                $this->build(
-                    $name,
-                    $studly.$type,
-                    "Pepper\GraphQL\Types\\{$type}",
-                    'App\Http\Pepper\\'.$basename,
-                )
-            ));
+        $classes = [
+            'Types' => [
+                '{{studly}}ResultAggregateType' => 'ResultAggregateType',
+                '{{studly}}FieldAggregateUnresolvableType' => 'FieldAggregateUnresolvableType',
+                '{{studly}}FieldAggregateType' => 'FieldAggregateType',
+                '{{studly}}AggregateType' => 'AggregateType',
+                '{{studly}}Type' => 'Type',
+            ],
+            'Mutations' => [
+                '{{snake}}_update' => 'UpdateMutation',
+                '{{snake}}_insert' => 'InsertMutation',
+                '{{snake}}_delete' => 'DeleteMutation',
+                'update_{{snake}}_by_pk' => 'UpdateByPkMutation',
+                'delete_{{snake}}_by_pk' => 'DeleteByPkMutation',
+                'insert_{{snake}}_one' => 'InsertOneMutation',
+            ],
+            'Queries' => [
+                '{{snake}}_by_pk' => 'ByPkQuery',
+                '{{snake}}_aggregate' => 'AggregateQuery',
+                '{{snake}}' => 'Query',
+            ],
+            'Inputs' => [
+                '{{studly}}MutationInput' => 'MutationInput',
+                '{{studly}}OrderInput' => 'OrderInput',
+                '{{studly}}Input' => 'Input',
+            ],
+        ];
+
+        foreach ($classes as $kind => $classes) {
+            $this->gql = $kind;
+            foreach ($classes as $key => $class) {
+                $name = $this->qualifyClass($studly.$class);
+                $path = $this->getPath($name);
+                $this->makeDirectory($path);
+                $this->files->put($path, $this->sortImports(
+                    $this->build(
+                        $name,
+                        $studly.$class,
+                        'Pepper\GraphQL\\'.$kind.'\\'.$class,
+                        'App\Http\Pepper\\'.$basename,
+                    )
+                ));
+
+                $this->addConfig(
+                    $kind,
+                    Str::of($key)->replace('{{studly}}', $studly)->replace('{{snake}}', $snake),
+                    // ex: App\GraphQL\Types\Pepper\UserByPkQuey
+                    config('pepper.namespace.root').'\GraphQL\\'.$kind.'\Pepper\\'.$studly.$class
+                );
+            }
         }
 
-        $this->gql = 'Mutations';
-        foreach ([
-            'Update',
-            'Insert',
-            'Delete',
-        ] as $mutation) {
-            $name = $this->qualifyClass($studly.$mutation);
-            $path = $this->getPath($name);
-            $this->makeDirectory($path);
-            $this->files->put($path, $this->sortImports(
-                $this->build(
-                    $name,
-                    $studly.$mutation,
-                    "Pepper\GraphQL\Mutations\\{$mutation}",
-                    'App\Http\Pepper\\'.$basename,
-                )
-            ));
-        }
+        // $this->gql = 'Types';
+        // foreach ([
+        //     'ResultAggregateType',
+        //     'FieldAggregateUnresolvableType',
+        //     'FieldAggregateType',
+        //     'AggregateType',
+        //     'Type',
+        // ] as $type) {
+        //     $name = $this->qualifyClass($studly.$type);
+        //     $path = $this->getPath($name);
+        //     $this->makeDirectory($path);
+        //     $this->files->put($path, $this->sortImports(
+        //         $this->build(
+        //             $name,
+        //             $studly.$type,
+        //             "Pepper\GraphQL\Types\\{$type}",
+        //             'App\Http\Pepper\\'.$basename,
+        //         )
+        //     ));
+        // }
 
-        foreach ([
-            'Update',
-            // 'InsertOne',
-            'Delete',
-        ] as $mutation) {
-            $name = $this->qualifyClass($studly.$mutation);
-            $path = $this->getPath($name);
-            $this->makeDirectory($path);
-            $this->files->put($path, $this->sortImports(
-                $this->build(
-                    $name,
-                    'Update'.$studly.'Pk',
-                    "Pepper\GraphQL\Mutations\\{$mutation}",
-                    'App\Http\Pepper\\'.$basename,
-                )
-            ));
-        }
+        // $this->gql = 'Mutations';
+        // foreach ([
+        //     'Update',
+        //     'Insert',
+        //     'Delete',
+        // ] as $mutation) {
+        //     $name = $this->qualifyClass($studly.$mutation);
+        //     $path = $this->getPath($name);
+        //     $this->makeDirectory($path);
+        //     $this->files->put($path, $this->sortImports(
+        //         $this->build(
+        //             $name,
+        //             $studly.$mutation,
+        //             "Pepper\GraphQL\Mutations\\{$mutation}",
+        //             'App\Http\Pepper\\'.$basename,
+        //         )
+        //     ));
+        // }
 
-        foreach ([
-            'Insert',
-        ] as $mutation) {
-            $name = $this->qualifyClass($studly.$mutation);
-            $path = $this->getPath($name);
-            $this->makeDirectory($path);
-            $this->files->put($path, $this->sortImports(
-                $this->build(
-                    $name,
-                    'Insert'.$studly.'One',
-                    "Pepper\GraphQL\Mutations\\{$mutation}",
-                    'App\Http\Pepper\\'.$basename,
-                )
-            ));
-        }
+        // foreach ([
+        //     'Update',
+        //     'Delete',
+        // ] as $mutation) {
+        //     $name = $this->qualifyClass($studly.$mutation);
+        //     $path = $this->getPath($name);
+        //     $this->makeDirectory($path);
+        //     $this->files->put($path, $this->sortImports(
+        //         $this->build(
+        //             $name,
+        //             'Update'.$studly.'Pk',
+        //             "Pepper\GraphQL\Mutations\\{$mutation}",
+        //             'App\Http\Pepper\\'.$basename,
+        //         )
+        //     ));
+        // }
 
-        $this->gql = 'Queries';
-        foreach ([
-            'ByPkQuery',
-            'AggregateQuery',
-            'Query',
-        ] as $query) {
-            $name = $this->qualifyClass($studly.$query);
-            $path = $this->getPath($name);
-            $this->makeDirectory($path);
-            $this->files->put($path, $this->sortImports(
-                $this->build(
-                    $name,
-                    $studly.$query,
-                    "Pepper\GraphQL\Queries\\{$query}",
-                    'App\Http\Pepper\\'.$basename,
-                )
-            ));
-        }
+        // foreach ([
+        //     'Insert',
+        // ] as $mutation) {
+        //     $name = $this->qualifyClass($studly.$mutation);
+        //     $path = $this->getPath($name);
+        //     $this->makeDirectory($path);
+        //     $this->files->put($path, $this->sortImports(
+        //         $this->build(
+        //             $name,
+        //             'Insert'.$studly.'One',
+        //             "Pepper\GraphQL\Mutations\\{$mutation}",
+        //             'App\Http\Pepper\\'.$basename,
+        //         )
+        //     ));
+        // }
 
-        $this->gql = 'Inputs';
-        foreach ([
-            'MutationInput',
-            'OrderInput',
-            'Input',
-        ] as $query) {
-            $name = $this->qualifyClass($studly.$query);
-            $path = $this->getPath($name);
-            $this->makeDirectory($path);
-            $this->files->put($path, $this->sortImports(
-                $this->build(
-                    $name,
-                    $studly.$query,
-                    "Pepper\GraphQL\Inputs\\{$query}",
-                    'App\Http\Pepper\\'.$basename,
-                )
-            ));
-        }
+        // $this->gql = 'Queries';
+        // foreach ([
+        //     'ByPkQuery',
+        //     'AggregateQuery',
+        //     'Query',
+        // ] as $query) {
+        //     $name = $this->qualifyClass($studly.$query);
+        //     $path = $this->getPath($name);
+        //     $this->makeDirectory($path);
+        //     $this->files->put($path, $this->sortImports(
+        //         $this->build(
+        //             $name,
+        //             $studly.$query,
+        //             "Pepper\GraphQL\Queries\\{$query}",
+        //             'App\Http\Pepper\\'.$basename,
+        //         )
+        //     ));
+        // }
+
+        // $this->gql = 'Inputs';
+        // foreach ([
+        //     'MutationInput',
+        //     'OrderInput',
+        //     'Input',
+        // ] as $query) {
+        //     $name = $this->qualifyClass($studly.$query);
+        //     $path = $this->getPath($name);
+        //     $this->makeDirectory($path);
+        //     $this->files->put($path, $this->sortImports(
+        //         $this->build(
+        //             $name,
+        //             $studly.$query,
+        //             "Pepper\GraphQL\Inputs\\{$query}",
+        //             'App\Http\Pepper\\'.$basename,
+        //         )
+        //     ));
+        // }
 
         // $this->info($this->type.' created successfully.');
+    }
+
+    public function addConfig($kind, $key, $class)
+    {
+        if (! $this->hasOption('no-config') || ! $this->option('no-config')) {
+            $this->ensureGraphQLConfigExists();
+            $config = new Config(null);
+            $gql = strtolower($this->gql);
+
+            if ($kind == 'Types') {
+                $config->addType($key, $class, $kind);
+            } elseif ($kind == 'Inputs') {
+                $config->addInput($key, $class, $kind);
+            } elseif ($kind == 'Queries') {
+                $config->addQuery($key, $class, $kind);
+            } elseif ($kind == 'Mutations') {
+                $config->addMutation($key, $class, $kind);
+            }
+        }
     }
 
     /**

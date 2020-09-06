@@ -34,7 +34,7 @@ class Config
     /**
      * Inititate config helper.
      *
-     * @param string|null $path
+     * @param  string|null  $path
      *
      * @throws ErrorException
      */
@@ -47,15 +47,31 @@ class Config
     /**
      * Add a new key to types array.
      *
-     * @param  string $key
-     * @param  string $class
-     * @param  string $gql default: type
+     * @param  string  $key
+     * @param  string  $class
      * @return void
      */
-    public function addType(string $key, string $class, string $gql = 'type'): void
+    public function addType(string $key, string $class): void
     {
         if ($this->canAdd('types.'.$key)) {
-            $class = strval(($gql == 'type' ? 'App\GraphQL\Types\Pepper\\' : 'App\GraphQL\Inputs\Pepper\\').$class.'::class');
+            $class = strval('App\GraphQL\Types\Pepper\\'.$class.'::class');
+            $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
+            $update = preg_replace($pattern, "$0'$key' => $class,\n        ", file_get_contents($this->path));
+            file_put_contents($this->path, $update);
+        }
+    }
+
+    /**
+     * Add a new key to types array.
+     *
+     * @param  string  $key
+     * @param  string  $class
+     * @return void
+     */
+    public function addInput(string $key, string $class): void
+    {
+        if ($this->canAdd('types.'.$key)) {
+            $class = strval('App\GraphQL\Inputs\Pepper\\'.$class.'::class');
             $pattern = '/[^\/]{2,}\s*["\']types["\']\s*=>\s*\[\s*/';
             $update = preg_replace($pattern, "$0'$key' => $class,\n        ", file_get_contents($this->path));
             file_put_contents($this->path, $update);
@@ -65,7 +81,7 @@ class Config
     /**
      * Add global type.
      *
-     * @param  string $class
+     * @param  string  $class
      * @return void
      */
     public function addGlobalType(string $class): void
@@ -91,8 +107,8 @@ class Config
     /**
      * Add a new key to query array.
      *
-     * @param  string $key
-     * @param  string $class
+     * @param  string  $key
+     * @param  string  $class
      * @return void
      */
     public function addQuery(string $key, string $class): void
@@ -109,8 +125,8 @@ class Config
     /**
      * Add a new key to mutation array.
      *
-     * @param  string $key
-     * @param  string $class
+     * @param  string  $key
+     * @param  string  $class
      * @return void
      */
     public function addMutation(string $key, string $class): void
@@ -128,7 +144,7 @@ class Config
      * Check if we can add the given key by checking the nullability of the
      * given key in the config file.
      *
-     * @param  string $key
+     * @param  string  $key
      * @return bool
      */
     protected function canAdd($key): bool
