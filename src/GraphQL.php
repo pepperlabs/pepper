@@ -40,6 +40,11 @@ abstract class GraphQL
         return Str::studly($this->getClassName());
     }
 
+    public function getSnake(): string
+    {
+        return Str::snake($this->getClassName());
+    }
+
     /**
      * Get model by class name.
      *
