@@ -2,7 +2,9 @@
 
 # Pepper
 
-[WIP]
+---
+
+[WIP] Pepper is subject to change anything wihtout any prior notice at this stage of development.
 
 ## Version support
 
