@@ -79,9 +79,9 @@ return [
     |
     */
     'global' => [
-        'AllUnion' => \Pepper\AllUnion::class,
-        'AnyScalar' => \Pepper\AnyScalar::class,
-        'OrderByEnum' => \Pepper\OrderByEnum::class,
-        'ConditionInput' => \Pepper\ConditionInput::class,
+        'AllUnion' => \Pepper\GraphQL\Unions\AllUnion::class,
+        'AnyScalar' => \Pepper\GraphQL\Scalars\AnyScalar::class,
+        'OrderByEnum' => \Pepper\GraphQL\Enums\OrderByEnum::class,
+        'ConditionInput' => \Pepper\GraphQL\Inputs\ConditionInput::class,
     ],
 ];

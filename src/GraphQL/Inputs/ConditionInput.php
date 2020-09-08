@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pepper;
+namespace Pepper\GraphQL\Inputs;
 
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;

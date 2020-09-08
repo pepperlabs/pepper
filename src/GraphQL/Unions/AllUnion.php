@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pepper;
+namespace Pepper\GraphQL\Unions;
 
 use HaydenPierce\ClassFinder\ClassFinder;
 use Rebing\GraphQL\Support\Facades\GraphQL;
