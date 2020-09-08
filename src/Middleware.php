@@ -6,7 +6,7 @@ use Closure;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Support\Str;
 
-class PepperMiddleware
+class Middleware
 {
     private function getPepperClasses()
     {
@@ -22,8 +22,8 @@ class PepperMiddleware
     {
         $instance = new $pepper;
         $key = Str::of($key)
-                  ->replace('{{studly}}', $instance->getStudly())
-                  ->replace('{{snake}}', $instance->getSnake());
+                  ->replace('{{studly}}', $instance->studly())
+                  ->replace('{{snake}}', $instance->snake());
 
         $graphql = MockGraphQL::graphQL($pepper, $parent);
         $graphqlClass = get_class($graphql);

@@ -15,7 +15,7 @@ trait OrderSupport
     {
         $fields = [];
 
-        foreach ($this->getFields() as $attribute) {
+        foreach ($this->fieldsArray() as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
                 'type' => GraphQL::type('OrderByEnum'),

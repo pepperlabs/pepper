@@ -81,12 +81,6 @@ class PepperGrindCommand extends Command
         $this->ensureGraphQLConfigExists();
         $config = new Config(null);
 
-        $this->info('Adding default types to config...');
-        // $config->addGlobalType('ConditionInput');
-        // $config->addGlobalType('OrderByEnum');
-        // $config->addGlobalType('AnyScalar');
-        // $config->addGlobalType('AllUnion');
-
         if (in_array('-- select all --', $selected)) {
             foreach ($models as $model) {
                 $this->initModelHttp($model);

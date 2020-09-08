@@ -67,7 +67,7 @@ class TestCase extends BaseTestCase
     {
         // Query
         // $query = $schema->getQueryType();
-        // $queryFields = $query->getFields();
+        // $queryFields = $query->fieldsArray();
         // $this->assertArrayHasKey($key, $queryFields);
 
         // $queryField = $queryFields[$key];
@@ -82,7 +82,7 @@ class TestCase extends BaseTestCase
     {
         // Mutation
         // $mutation = $schema->getMutationType();
-        // $mutationFields = $mutation->getFields();
+        // $mutationFields = $mutation->fieldsArray();
         // $this->assertArrayHasKey($key, $mutationFields);
 
         // $mutationField = $mutationFields[$key];

@@ -20,7 +20,7 @@ class PepperServiceProvider extends ServiceProvider
             __DIR__.'/../config/pepper.php' => config_path('pepper.php'),
         ], 'config');
 
-        $this->registerMiddleware('pepper', PepperMiddleware::class);
+        $this->registerMiddleware('pepper', Middleware::class);
     }
 
     /**
