@@ -11,19 +11,12 @@ use Rebing\GraphQL\Support\Query as GraphQLQuery;
 
 class Query extends GraphQLQuery
 {
-    protected $attributes = [
-        // 'name' => 'user',
-        // 'description' => '',
-    ];
+    protected $attributes = [];
 
     protected $instance;
 
-    private $class;
-
     public function __construct($pepper)
     {
-        // $this->class = new $class;
-        // $pepper = resolve($class);
         $this->instance = new $pepper;
         $this->attributes['name'] = $this->instance->getQueryName();
         $this->attributes['description'] = $this->instance->getQueryDescription();
@@ -43,9 +36,4 @@ class Query extends GraphQLQuery
     {
         return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
-
-    // public function __call($method, $arguments)
-    // {
-
-    // }
 }

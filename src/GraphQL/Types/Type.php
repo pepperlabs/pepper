@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Pepper\GraphQL\Inputs;
+namespace Pepper\GraphQL\Types;
 
-use Rebing\GraphQL\Support\InputType;
+use Rebing\GraphQL\Support\Type as GraphQLType;
 
-class Input extends InputType
+class Type extends GraphQLType
 {
     protected $attributes = [];
 
@@ -15,12 +15,12 @@ class Input extends InputType
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = $this->instance->getInputName();
+        $this->attributes['name'] = $this->instance->getTypeName();
         $this->attributes['description'] = $this->instance->getQueryDescription();
     }
 
     public function fields(): array
     {
-        return $this->instance->getInputFields();
+        return $this->instance->getTypeFields();
     }
 }

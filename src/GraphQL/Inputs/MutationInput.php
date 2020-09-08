@@ -2,23 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Inputs\Pepper;
+namespace Pepper\GraphQL\Inputs;
 
-use App;
 use Rebing\GraphQL\Support\InputType;
 
-class UserMutationInput extends InputType
+class MutationInput extends InputType
 {
-    protected $attributes = [
-        'name' => 'UserMutationInput',
-        'description' => 'User mutation input description'
-    ];
+    protected $attributes = [];
 
     protected $instance;
 
-    public function __construct()
+    public function __construct($pepper)
     {
-        $this->instance = new App\Http\Pepper\User;
+        $this->instance = new $pepper;
+        $this->attributes['name'] = $this->instance->getInputMutationName();
+        $this->attributes['description'] = $this->instance->getQueryDescription();
     }
 
     public function fields(): array

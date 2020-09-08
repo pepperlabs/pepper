@@ -20,7 +20,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName().'Query';
+            return $this->getSnake();
         }
     }
 
@@ -35,7 +35,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName().' query description.';
+            return $this->getSnake().' query description.';
         }
     }
 

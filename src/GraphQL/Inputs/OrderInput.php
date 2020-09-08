@@ -2,23 +2,21 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Inputs\Pepper;
+namespace Pepper\GraphQL\Inputs;
 
-use App;
 use Rebing\GraphQL\Support\InputType;
 
-class UserOrderInput extends InputType
+class OrderInput extends InputType
 {
-    protected $attributes = [
-        'name' => 'UserOrderInput',
-        'description' => 'User order input description'
-    ];
+    protected $attributes = [];
 
     protected $instance;
 
-    public function __construct()
+    public function __construct($pepper)
     {
-        $this->instance = new App\Http\Pepper\User;
+        $this->instance = new $pepper;
+        $this->attributes['name'] = $this->instance->getOrderName();
+        $this->attributes['description'] = $this->instance->getQueryDescription();
     }
 
     public function fields(): array

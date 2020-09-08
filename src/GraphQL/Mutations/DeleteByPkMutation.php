@@ -2,27 +2,24 @@
 
 declare(strict_types=1);
 
-namespace App\GraphQL\Mutations\Pepper;
+namespace Pepper\GraphQL\Mutations;
 
-use App;
 use Closure;
+use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Mutation;
 
-use GraphQL\Type\Definition\ResolveInfo;
-
-class UserDeleteByPkMutation extends Mutation
+class DeleteByPkMutation extends Mutation
 {
-    protected $attributes = [
-        'name' => 'delete_user_by_pk',
-        'description' => 'User delete by PK mutation description'
-    ];
+    protected $attributes = [];
 
     protected $instance;
 
-    public function __construct()
+    public function __construct($pepper)
     {
-        $this->instance = new App\Http\Pepper\User;
+        $this->instance = new $pepper;
+        $this->attributes['name'] = 'delete_'.$this->instance->getQueryName().'_by_pk';
+        $this->attributes['description'] = $this->instance->getQueryDescription();
     }
 
     public function type(): Type
