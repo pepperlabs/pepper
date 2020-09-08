@@ -24,6 +24,8 @@ Initial the base GraphQL classes:
 php artisan pepper:grind --all
 ```
 
+Add `pepper` middleware to graphql config file.
+
 ## Table of contents
 
 - [Pepper](#pepper)
@@ -81,7 +83,7 @@ The goal is simplify and fasten development of GraphQL based APIs.
 
 [Table of contents](#table-of-contents)
 
-The idea of the extension came from other open source project called [Hasura](https://hasura.io/). Hasura only supports PostgreSQL and in this projects, Pepper 
+The idea of the extension came from other open source project called [Hasura](https://hasura.io/). Hasura only supports PostgreSQL and in this projects, Pepper
 we are supporting MySQL, PostgreSQL, SQLite and SQL Server. Although most of the queries and mutation structure are similar there is no guarantee to be equal.
 
 ## Commands

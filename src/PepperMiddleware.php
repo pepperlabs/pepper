@@ -29,7 +29,9 @@ class PepperMiddleware
         $graphqlClass = get_class($graphql);
 
         $alias = $parent.'@'.$pepper.'@'.$type.'@'.$key;
-        class_alias($graphqlClass, $alias);
+        if (! class_exists($alias)) {
+            class_alias($graphqlClass, $alias);
+        }
 
         if ($type == 'Queries') {
             config(['graphql.schemas.default.query.'.$key => $alias]);

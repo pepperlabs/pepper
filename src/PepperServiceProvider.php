@@ -3,7 +3,6 @@
 namespace Pepper;
 
 use Illuminate\Routing\Router;
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\ServiceProvider;
 use Pepper\Console\HttpMakeCommand;
 use Pepper\Console\InputMakeCommand;
@@ -38,12 +37,7 @@ class PepperServiceProvider extends ServiceProvider
             __DIR__.'/../config/pepper.php' => config_path('pepper.php'),
         ], 'config');
 
-        // Event::listen('*', function ($event) {
-        //     echo $event."\n";
-        // });
-
-        // $router = $this->app->make(Router::class);
-        // $router->aliasMiddleware('pepper', PepperMiddleware::class);
+        $this->registerMiddleware('pepper', PepperMiddleware::class);
     }
 
     /**
@@ -98,5 +92,11 @@ class PepperServiceProvider extends ServiceProvider
         $this->commands(TypeFieldAggregateUnresolvableMakeCommand::class);
         $this->commands(TypeMakeCommand::class);
         $this->commands(TypeResultAggregateMakeCommand::class);
+    }
+
+    protected function registerMiddleware($name, $middleware)
+    {
+        $kernel = $this->app[Router::class];
+        $kernel->aliasMiddleware($name, $middleware);
     }
 }

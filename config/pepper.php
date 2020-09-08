@@ -50,9 +50,9 @@ return [
             '{{studly}}Type' => \Pepper\GraphQL\Types\Type::class,
         ],
         'Mutations' => [
-            '{{snake}}_update' => \Pepper\GraphQL\Mutations\UpdateMutation::class,
-            '{{snake}}_insert' => \Pepper\GraphQL\Mutations\InsertMutation::class,
-            '{{snake}}_delete' => \Pepper\GraphQL\Mutations\DeleteMutation::class,
+            'update_{{snake}}' => \Pepper\GraphQL\Mutations\UpdateMutation::class,
+            'insert_{{snake}}' => \Pepper\GraphQL\Mutations\InsertMutation::class,
+            'delete_{{snake}}' => \Pepper\GraphQL\Mutations\DeleteMutation::class,
             'update_{{snake}}_by_pk' => \Pepper\GraphQL\Mutations\UpdateByPkMutation::class,
             'delete_{{snake}}_by_pk' => \Pepper\GraphQL\Mutations\DeleteByPkMutation::class,
             'insert_{{snake}}_one' => \Pepper\GraphQL\Mutations\InsertOneMutation::class,

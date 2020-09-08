@@ -60,6 +60,7 @@ abstract class TestCaseDatabase extends TestCase
             'database' => ':memory:',
             'prefix' => '',
         ]);
+        $app['config']->set('graphql.schemas.default.middleware', 'pepper');
 
         // $this->artisan('vendor:publish', ['--provider' => 'Rebing\GraphQL\GraphQLServiceProvider']);
         // $this->artisan('vendor:publish', ['--provider' => 'Pepper\PepperServiceProvider']);
