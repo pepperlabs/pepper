@@ -257,7 +257,7 @@ abstract class GraphQL
      * @return string
      * @throws ClassNotFoundException
      */
-    private function relatedGraphQLClass(string $method): string
+    private function relatedGraphQLClass(string $method)
     {
         $relatedModel = $this->relatedModel($method);
 
@@ -265,14 +265,24 @@ abstract class GraphQL
         $related = get_class($this->model()->$method()->getRelated());
         $basename = class_basename($related);
         $relatedGraphQLClass = config('pepper.namespace.root').'\Http\Pepper\\'.$basename;
-        $relatedGraphQLInstance = new $relatedGraphQLClass;
-        $relatedGraphQLModel = $relatedGraphQLInstance->model();
-        if ($relatedGraphQLModel instanceof $relatedModel) {
+
+        if (file_exists(app('path')."/Http/Pepper/{$basename}.php") && class_exists(config('pepper.namespace.root').'\Http\Pepper\\'.$basename)) {
             return $relatedGraphQLClass;
+        } else {
+            return false;
         }
 
+        // Is it necessary to check this?
+        // --
+        // $relatedGraphQLInstance = new $relatedGraphQLClass;
+        // $relatedGraphQLModel = $relatedGraphQLInstance->model();
+        // if ($relatedGraphQLModel instanceof $relatedModel) {
+        //     return $relatedGraphQLClass;
+        // }
+
         // Searching for model implementation
-        // This is not a good idea.
+        // This is not a good idea. leads to huge execution time penalty.
+        // --
         // foreach ($this->allGraphQLClasses() as $pepper) {
         //     $relatedGraphQLInstance = new $pepper;
         //     $relatedGraphQLModel = $relatedGraphQLInstance->model();
@@ -281,7 +291,7 @@ abstract class GraphQL
         //     }
         // }
 
-        throw new ClassNotFoundException("Could not find any Pepper GraphQL class that relates to {$related}.", $relatedGraphQLClass);
+        // throw new ClassNotFoundException("Could not find any Pepper GraphQL class that relates to {$related}.", $relatedGraphQLClass);
     }
 
     private function allGraphQLClasses(): array
@@ -303,11 +313,9 @@ abstract class GraphQL
      */
     public function relatedGraphQLExists(string $method): bool
     {
-        try {
-            return $this->relatedGraphQLClass($method);
-        } catch (ClassNotFoundException $e) {
-            return false;
-        }
+        return $this->relatedGraphQLClass($method) != ''
+            ? true
+            : false;
     }
 
     public function relatedGraphQL(string $method)

@@ -2,9 +2,10 @@
 
 namespace Tests\Unit;
 
+use App\Http\Pepper\Comment;
+use App\Http\Pepper\Everything;
+use App\Http\Pepper\Post;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Tests\Support\GraphQL\Everything;
-use Tests\Support\GraphQL\Post;
 use Tests\Support\GraphQL\test_graphql;
 use Tests\Support\GraphQL\TestGraphQL;
 use Tests\TestCaseDatabase;
@@ -14,6 +15,7 @@ class GraphQLTest extends TestCaseDatabase
     private $test_1;
     private $test_2;
     private $post;
+    private $comment;
 
     protected function setUp(): void
     {
@@ -22,13 +24,7 @@ class GraphQLTest extends TestCaseDatabase
         $this->test_1 = new TestGraphQL();
         $this->test_2 = new test_graphql();
         $this->post = new Post();
-    }
-
-    /** @test */
-    public function base_classname()
-    {
-        $this->assertEquals($this->test_1->name(), 'TestGraphQL');
-        $this->assertEquals($this->test_2->name(), 'test_graphql');
+        $this->comment = new Comment();
     }
 
     /** @test */
@@ -203,22 +199,23 @@ class GraphQLTest extends TestCaseDatabase
     /** @test */
     public function it_ignore_not_existed_graphql_relations()
     {
-        $this->markTestSkipped('needed a fully implemented BaseGraphQL class.');
+        unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/Comment.php');
 
-        unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/User.php');
-        $this->assertTrue(! in_array('user', $this->post->fieldsArray()));
+        $this->assertTrue(! in_array('comment', $this->post->fieldsArray()));
     }
 
     /** @test */
     public function it_can_be_a_single_graphql_class()
     {
-        $this->markTestSkipped('needed a fully implemented BaseGraphQL class.');
-
-        unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/Comment.php');
         unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/User.php');
         unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/Like.php');
+        unlink(__DIR__.'/../../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/Comment.php');
 
         $post = new \App\Http\Pepper\Post();
+
+        spl_autoload_unregister([\App\Http\Pepper\Comment::class, 'autoload']);
+        spl_autoload_unregister([\App\Http\Pepper\User::class, 'autoload']);
+        spl_autoload_unregister([\App\Http\Pepper\Like::class, 'autoload']);
 
         $columns = [
             'id',
