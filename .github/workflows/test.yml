@@ -63,7 +63,7 @@ jobs:
           coverage: none
 
       - name: Exclude laravel/legacy-factories
-        run: composer remove laravel/legacy-factories --no-interaction --no-progress --dev
+        run: composer remove laravel/legacy-factories --no-interaction --no-progress --dev --no-update
         if: ${{ matrix.laravel }} != 8.*
 
       - name: Install dependencies
