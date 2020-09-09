@@ -44,7 +44,6 @@ GQL;
         ];
 
         $response->assertOk();
-        $response->dump();
         $this->assertEquals($expectedResult, $response->json());
     }
 
