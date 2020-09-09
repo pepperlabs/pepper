@@ -4,7 +4,6 @@ namespace Pepper;
 
 use Closure;
 use HaydenPierce\ClassFinder\ClassFinder;
-use Illuminate\Support\Str;
 
 class Middleware
 {
@@ -21,9 +20,8 @@ class Middleware
     private function registerPepperGraphQLClass(string $parent, string $pepper, string $type, string $key)
     {
         $instance = new $pepper;
-        $key = Str::of($key)
-                  ->replace('{{studly}}', $instance->studly())
-                  ->replace('{{snake}}', $instance->snake());
+        $key = str_replace('{{studly}}', $instance->studly(), $key);
+        $key = str_replace('{{snake}}', $instance->snake(), $key);
 
         $graphql = MockGraphQL::graphQL($pepper, $parent);
         $graphqlClass = get_class($graphql);
