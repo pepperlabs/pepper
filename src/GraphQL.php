@@ -243,9 +243,9 @@ abstract class GraphQL
      * Get a new instance of the related model for the GraphQL class.
      *
      * @param  string $method
-     * @return object
+     * @return mixed
      */
-    public function relatedModel(string $method): object
+    public function relatedModel(string $method)
     {
         return $this->relatedModelRelflection($method)->newInstanceArgs();
     }
