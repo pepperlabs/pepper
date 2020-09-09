@@ -62,10 +62,14 @@ jobs:
           tools: composer:v2
           coverage: none
 
+      - name: Exclude laravel/legacy-factories
+        run: composer remove laravel/legacy-factories --no-interaction --no-progress
+        if: ${{ matrix.laravel != 8.* }}
+
       - name: Install dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --dev --ignore-platform-reqs
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --no-progress --ignore-platform-reqs
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --dev
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Run Tests
         run: vendor/bin/phpunit
