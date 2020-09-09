@@ -34,8 +34,8 @@ class EverythingTable extends Migration
             $table->float('float');
             $table->double('double');
             // $table->decimal('decimal');
-            $table->unsignedFloat('unsignedFloat');
-            $table->unsignedDouble('unsignedDouble');
+            $table->float('unsignedFloat')->unsigned();
+            $table->double('unsignedDouble')->unsigned();
             // $table->unsignedDecimal('unsignedDecimal');
 
             $table->boolean('boolean');
