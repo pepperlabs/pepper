@@ -7,7 +7,7 @@ use Tests\TestCase;
 
 class ConfigTest extends TestCase
 {
-    /** @var Pepper\Helpers\ConfigHelper */
+    /** @var Config */
     private $config;
 
     /**

@@ -10,8 +10,8 @@ trait InputSupport
     {
         $fields = [];
 
-        $relations = $this->getRelations();
-        foreach ($this->getFields() as $attribute) {
+        $relations = $this->relations();
+        foreach ($this->fieldsArray() as $attribute) {
             if (in_array($attribute, $relations)) {
                 $fields[$attribute] = [
                     'name' => $attribute,
@@ -45,7 +45,7 @@ trait InputSupport
 
     public function getRelatedInput($attribute)
     {
-        return GraphQL::type($this->getRelatedModel($attribute)->getInputName());
+        return GraphQL::type($this->relatedGraphQL($attribute)->getInputName());
     }
 
     /**

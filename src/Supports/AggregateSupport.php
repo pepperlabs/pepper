@@ -78,7 +78,7 @@ trait AggregateSupport
      */
     public function getRelatedFieldAggregateType(string $attribute): Type
     {
-        return GraphQL::type($this->getRelatedModel($attribute)->getFieldAggregateName());
+        return GraphQL::type($this->relatedGraphQL($attribute)->getFieldAggregateName());
     }
 
     /**
@@ -90,7 +90,7 @@ trait AggregateSupport
     {
         $fields = [];
 
-        $relations = $this->getRelations();
+        $relations = $this->relations();
         foreach ($relations as $attribute) {
             $fields[$attribute.'_aggregate'] = [
                 'name' => $attribute.'_aggregate',
@@ -116,7 +116,7 @@ trait AggregateSupport
         $fields = [];
 
         // Get fields excluded relations
-        foreach ($this->getFields(false) as $attribute) {
+        foreach ($this->fieldsArray(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
                 'type' => GraphQL::type('AnyScalar'),
@@ -345,7 +345,7 @@ trait AggregateSupport
 
     public function getQueryAggregateType(): Type
     {
-        return GraphQL::type($this->getStudly().'FieldAggregateUnresolvableType');
+        return GraphQL::type($this->studly().'FieldAggregateUnresolvableType');
     }
 
     public function resolveQueryAggregate($root, $args, $context, $resolveInfo, $getSelectFields)

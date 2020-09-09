@@ -20,7 +20,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName().'Query';
+            return $this->snake();
         }
     }
 
@@ -35,7 +35,7 @@ trait QuerySupport
         if (method_exists($this, $method)) {
             $this->$method($this->getClassName);
         } else {
-            return $this->getName().' query description.';
+            return $this->snake().' query description.';
         }
     }
 
@@ -52,7 +52,7 @@ trait QuerySupport
     public function getQueryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
         if (is_null($root)) {
-            $model = $this->newModel();
+            $model = $this->model();
         } else {
             $model = $root;
         }
@@ -210,13 +210,13 @@ trait QuerySupport
 
     public function getQueryByPkFields(): array
     {
-        $model = $this->newModel();
+        $model = $this->model();
         $pk = $model->getKeyName();
 
         return [
             $pk => [
                 'name' => $pk,
-                'type' => $this->call_field_type($pk),
+                'type' => $this->callGraphQLType($pk),
             ],
         ];
     }
@@ -246,10 +246,10 @@ trait QuerySupport
      */
     public function queryByPk($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        $model = $this->newModel();
+        $model = $this->model();
         $pk = $model->getKeyName();
 
-        $root = $this->getModel()::where($pk, $args[$pk]);
+        $root = $this->modelClass()::where($pk, $args[$pk]);
 
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->first();
     }

@@ -31,10 +31,10 @@ trait TypeSupport
         $fields = [];
 
         // exclude relations
-        foreach ($this->getFields(false) as $attribute) {
+        foreach ($this->fieldsArray(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => $this->call_field_type($attribute),
+                'type' => $this->callGraphQLType($attribute),
             ];
         }
 
@@ -79,8 +79,8 @@ trait TypeSupport
     public function getTypeRelations(): array
     {
         $fields = [];
-        foreach ($this->exposedRelations() as $relation) {
-            $model = $this->newModelReflection();
+        foreach ($this->fieldsArray(true, false) as $relation) {
+            $model = $this->modelRelflection();
             $relationType = $model->getMethod($relation)->getReturnType()->getName();
             $type = '';
             if ($relationType === BelongsTo::class) {
@@ -116,8 +116,8 @@ trait TypeSupport
         return $fields;
     }
 
-    public function getRelatedType($attribute)
+    public function getRelatedType($method)
     {
-        return GraphQL::type($this->getRelatedModel($attribute)->getTypeName());
+        return GraphQL::type($this->relatedGraphQL($method)->getTypeName());
     }
 }

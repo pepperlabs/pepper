@@ -97,10 +97,10 @@ trait MutationSupport
         $fields = [];
 
         // Get fields excluded relations
-        foreach ($this->getFields(false) as $attribute) {
+        foreach ($this->fieldsArray(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => $this->call_field_type($attribute),
+                'type' => $this->callGraphQLType($attribute),
             ];
         }
 
@@ -118,7 +118,7 @@ trait MutationSupport
         return [
             'id' => [
                 'name' => 'id',
-                'type' => $this->call_field_type('id'),
+                'type' => $this->callGraphQLType('id'),
             ],
         ];
     }
@@ -267,9 +267,9 @@ trait MutationSupport
      */
     public function updateByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        $pk = $this->newModel()->getKeyName();
+        $pk = $this->model()->getKeyName();
 
-        $builder = $this->getModel()::where($pk, $args['pk_columns'][$pk]);
+        $builder = $this->modelClass()::where($pk, $args['pk_columns'][$pk]);
 
         $builder->update($args['_set']);
 
@@ -319,7 +319,7 @@ trait MutationSupport
      */
     public function updateMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        $models = $this->getQueryResolve($this->newModel(), $args, $context, $resolveInfo, $getSelectFields);
+        $models = $this->getQueryResolve($this->model(), $args, $context, $resolveInfo, $getSelectFields);
         foreach ($models->get() as $model) {
             $model->update($args['_set']);
         }
@@ -371,9 +371,9 @@ trait MutationSupport
      */
     public function deleteByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        $pk = $this->newModel()->getKeyName();
+        $pk = $this->model()->getKeyName();
 
-        $builder = $this->getModel()::where($pk, $args[$pk]);
+        $builder = $this->modelClass()::where($pk, $args[$pk]);
 
         $resolve = $this->getQueryResolve($builder, $args, $context, $resolveInfo, $getSelectFields)
                     ->first();
@@ -425,7 +425,7 @@ trait MutationSupport
      */
     public function deleteMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        $models = $this->getQueryResolve($this->newModel(), $args, $context, $resolveInfo, $getSelectFields);
+        $models = $this->getQueryResolve($this->model(), $args, $context, $resolveInfo, $getSelectFields);
 
         $results = $models->get();
 
@@ -493,9 +493,9 @@ trait MutationSupport
      */
     public function resolveMutationInsertOne($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        $id = $this->getModel()::create($args['object'])->id;
+        $id = $this->modelClass()::create($args['object'])->id;
 
-        $root = $this->newModel()->whereIn('id', [$id]);
+        $root = $this->model()->whereIn('id', [$id]);
 
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
                     ->first();
@@ -515,10 +515,10 @@ trait MutationSupport
     {
         $ids = [];
         foreach ($args['objects'] as $obj) {
-            $ids[] = $this->getModel()::create($obj)->id;
+            $ids[] = $this->modelClass()::create($obj)->id;
         }
 
-        $root = $this->newModel()->whereIn('id', $ids);
+        $root = $this->model()->whereIn('id', $ids);
 
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }

@@ -4,7 +4,7 @@ on:
   push:
   pull_request:
   schedule:
-    - cron: '0 0 * * *'
+    - cron: "0 0 * * *"
 
 jobs:
   build:
@@ -12,8 +12,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [7.1, 7.2, 7.3, 7.4]
-        laravel: [5.6.*, 5.7.*, 5.8.*, 6.*, 7.*]
+        php: [7.4, 7.3, 7.2, 7.1]
+        laravel: [7.*, 6.*, 5.8.*, 5.7.*, 5.6.*]
         dependency-version: [prefer-stable]
         include:
           - laravel: 5.6.*
@@ -65,3 +65,10 @@ jobs:
 
       - name: Run Tests
         run: vendor/bin/phpunit
+
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v2
+        if: failure()
+        with:
+          name: logs
+          path: vendor/orchestra/testbench-core/laravel/storage/logs/laravel.log
