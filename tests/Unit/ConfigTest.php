@@ -2,12 +2,12 @@
 
 namespace Tests\Unit;
 
-use Pepper\Supports\Config;
+use Pepper\Helpers\ConfigHelper as Config;
 use Tests\TestCase;
 
 class ConfigTest extends TestCase
 {
-    /** @var Pepper\Supports\Config */
+    /** @var Config */
     private $config;
 
     /**

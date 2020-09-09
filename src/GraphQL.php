@@ -272,15 +272,16 @@ abstract class GraphQL
         }
 
         // Searching for model implementation
-        foreach ($this->allGraphQLClasses() as $pepper) {
-            $relatedGraphQLInstance = new $pepper;
-            $relatedGraphQLModel = $relatedGraphQLInstance->model();
-            if ($relatedGraphQLModel instanceof $relatedModel) {
-                return $relatedGraphQLClass;
-            }
-        }
+        // This is not a good idea.
+        // foreach ($this->allGraphQLClasses() as $pepper) {
+        //     $relatedGraphQLInstance = new $pepper;
+        //     $relatedGraphQLModel = $relatedGraphQLInstance->model();
+        //     if ($relatedGraphQLModel instanceof $relatedModel) {
+        //         return $relatedGraphQLClass;
+        //     }
+        // }
 
-        throw new ClassNotFoundException("Could not find any Pepper GraphQL class that relates to ${$related}.", $relatedGraphQLClass);
+        throw new ClassNotFoundException("Could not find any Pepper GraphQL class that relates to {$related}.", $relatedGraphQLClass);
     }
 
     private function allGraphQLClasses(): array
