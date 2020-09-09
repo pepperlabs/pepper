@@ -321,6 +321,7 @@ abstract class GraphQL
     public function relatedGraphQL(string $method)
     {
         $related = $this->relatedGraphQLClass($method);
+
         return new $related;
     }
 

@@ -14,6 +14,7 @@ class Middleware
         foreach (ClassFinder::getClassesInNamespace($peppers) as $class) {
             $classes[] = $class;
         }
+
         return $classes;
     }
 
