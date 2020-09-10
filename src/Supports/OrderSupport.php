@@ -26,21 +26,6 @@ trait OrderSupport
     }
 
     /**
-     * Get GraphQL Order name.
-     *
-     * @return string
-     */
-    public function getOrderName(): string
-    {
-        $method = 'setOrderName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'OrderInput';
-        }
-    }
-
-    /**
      * Get GraphQL order description.
      *
      * @return string

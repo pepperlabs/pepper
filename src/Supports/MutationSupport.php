@@ -8,21 +8,6 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait MutationSupport
 {
     /**
-     * Get GraphQL Mutation name.
-     *
-     * @return string
-     */
-    public function getMutationName(): string
-    {
-        $method = 'setMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'Mutation';
-        }
-    }
-
-    /**
      * Get mutation description.
      *
      * @return string

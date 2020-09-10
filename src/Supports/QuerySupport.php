@@ -168,7 +168,7 @@ trait QuerySupport
             'distinct' => ['name' => 'distinct', 'type' => Type::boolean()],
 
             // Order
-            'order_by' => ['type' => GraphQL::type($this->getOrderName())],
+            'order_by' => ['type' => GraphQL::type($this->getOrderInputName())],
 
             // Paginate
             'limit' => ['name' => 'limit', 'type' => Type::int()],
