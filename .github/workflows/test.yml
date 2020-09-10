@@ -78,6 +78,10 @@ jobs:
         if: ${{ matrix.laravel != '8.*' }}
         run: composer remove laravel/legacy-factories --no-interaction --no-progress --dev --no-update
 
+      - name: Fake PHP version
+        if: ${{ matrix.laravel == '8.*' }}
+        run: composer config platform.php 8.0
+
       - name: Install dependencies
         run: |
           composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --dev
