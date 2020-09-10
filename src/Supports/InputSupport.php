@@ -2,10 +2,16 @@
 
 namespace Pepper\Supports;
 
+use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait InputSupport
 {
+    /**
+     * Get input fields.
+     *
+     * @return array
+     */
     public function getInputFields(): array
     {
         $fields = [];
@@ -43,7 +49,13 @@ trait InputSupport
         return $fields;
     }
 
-    public function getRelatedInput($attribute)
+    /**
+     * Get related input.
+     *
+     * @param  string  $attribute
+     * @return \GraphQL\Type\Definition\Type
+     */
+    public function getRelatedInput(string $attribute): Type
     {
         return GraphQL::type($this->relatedGraphQL($attribute)->getInputName());
     }

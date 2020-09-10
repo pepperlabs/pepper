@@ -62,12 +62,7 @@ trait AggregateSupport
      */
     private function getFieldAggregateRelationType($method): Type
     {
-        $override = 'set'.Str::studly($method).'FieldAggregateRelationType';
-        if (method_exists($this, $override)) {
-            return $this->$override();
-        } else {
-            return $this->getRelatedFieldAggregateType($method);
-        }
+        return $this->getRelatedFieldAggregateType($method);
     }
 
     /**
