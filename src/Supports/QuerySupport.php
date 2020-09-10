@@ -10,36 +10,6 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait QuerySupport
 {
     /**
-     * Get GraphQL Query name.
-     *
-     * @return string
-     */
-    public function getQueryName(): string
-    {
-        $method = 'setQueryName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->snake();
-        }
-    }
-
-    /**
-     * Get GraphQL Query description.
-     *
-     * @return string
-     */
-    public function getQueryDescription(): string
-    {
-        $method = 'setQueryDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->snake().' query description.';
-        }
-    }
-
-    /**
      * Get GraphQL Query resolve.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|null $root
@@ -183,7 +153,7 @@ trait QuerySupport
             'distinct' => ['name' => 'distinct', 'type' => Type::boolean()],
 
             // Order
-            'order_by' => ['type' => GraphQL::type($this->getOrderName())],
+            'order_by' => ['type' => GraphQL::type($this->getOrderInputName())],
 
             // Paginate
             'limit' => ['name' => 'limit', 'type' => Type::int()],
@@ -219,26 +189,6 @@ trait QuerySupport
                 'type' => $this->callGraphQLType($pk),
             ],
         ];
-    }
-
-    public function getQueryByPkName(): string
-    {
-        $method = 'setQueryByPkName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'ByPkQuery';
-        }
-    }
-
-    public function getQueryByPkDescription(): string
-    {
-        $method = 'setQueryByPkDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' query by PK description.';
-        }
     }
 
     /**

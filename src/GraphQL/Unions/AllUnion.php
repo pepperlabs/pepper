@@ -21,7 +21,7 @@ class AllUnion extends UnionType
         $types = [];
         foreach ($classes as $pepper) {
             $instance = new $pepper;
-            $types[] = GraphQL::type($instance->getResultAggregateName());
+            $types[] = GraphQL::type($instance->getResultAggregateTypeName());
         }
 
         return $types;

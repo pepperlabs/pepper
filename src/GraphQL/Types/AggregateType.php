@@ -15,7 +15,7 @@ class AggregateType extends GraphQLType
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = $this->instance->getAggregateName();
+        $this->attributes['name'] = $this->instance->getAggregateTypeName();
         $this->attributes['description'] = $this->instance->getQueryDescription();
     }
 

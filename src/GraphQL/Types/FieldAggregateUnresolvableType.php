@@ -15,7 +15,7 @@ class FieldAggregateUnresolvableType extends GraphQLType
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = $this->instance->getAggregateUnresolvableName();
+        $this->attributes['name'] = $this->instance->getFieldAggregateUnresolvableTypeName();
         $this->attributes['description'] = $this->instance->getQueryDescription();
     }
 

@@ -42,14 +42,14 @@ return [
     |
     */
     'available' => [
-        'Types' => [
+        'type' => [
             '{{studly}}ResultAggregateType' => \Pepper\GraphQL\Types\ResultAggregateType::class,
             '{{studly}}FieldAggregateUnresolvableType' => \Pepper\GraphQL\Types\FieldAggregateUnresolvableType::class,
             '{{studly}}FieldAggregateType' => \Pepper\GraphQL\Types\FieldAggregateType::class,
             '{{studly}}AggregateType' => \Pepper\GraphQL\Types\AggregateType::class,
             '{{studly}}Type' => \Pepper\GraphQL\Types\Type::class,
         ],
-        'Mutations' => [
+        'mutation' => [
             'update_{{snake}}' => \Pepper\GraphQL\Mutations\UpdateMutation::class,
             'insert_{{snake}}' => \Pepper\GraphQL\Mutations\InsertMutation::class,
             'delete_{{snake}}' => \Pepper\GraphQL\Mutations\DeleteMutation::class,
@@ -57,12 +57,12 @@ return [
             'delete_{{snake}}_by_pk' => \Pepper\GraphQL\Mutations\DeleteByPkMutation::class,
             'insert_{{snake}}_one' => \Pepper\GraphQL\Mutations\InsertOneMutation::class,
         ],
-        'Queries' => [
+        'query' => [
             '{{snake}}_by_pk' => \Pepper\GraphQL\Queries\ByPkQuery::class,
             '{{snake}}_aggregate' => \Pepper\GraphQL\Queries\AggregateQuery::class,
             '{{snake}}' => \Pepper\GraphQL\Queries\Query::class,
         ],
-        'Inputs' => [
+        'input' => [
             '{{studly}}MutationInput' => \Pepper\GraphQL\Inputs\MutationInput::class,
             '{{studly}}OrderInput' => \Pepper\GraphQL\Inputs\OrderInput::class,
             '{{studly}}Input' => \Pepper\GraphQL\Inputs\Input::class,
