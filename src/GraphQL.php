@@ -29,16 +29,31 @@ abstract class GraphQL
     /** @var array */
     // protected $covered = [];
 
+    /**
+     * Get class basename.
+     *
+     * @return string
+     */
     private function name(): string
     {
         return class_basename($this);
     }
 
+    /**
+     * Get studly case of the class basename.
+     *
+     * @return string
+     */
     public function studly(): string
     {
         return Str::studly($this->name());
     }
 
+    /**
+     * Get snake case of the class basename.
+     *
+     * @return string
+     */
     public function snake(): string
     {
         return Str::snake($this->name());
@@ -53,8 +68,6 @@ abstract class GraphQL
      */
     private function defaultModel(): string
     {
-        // App\Http\Pepper\Test --> App\Test
-        // App\Http\Pepper\test_class --> App\TestClass
         return config('pepper.namespace.models').'\\'.$this->studly();
     }
 
@@ -103,8 +116,8 @@ abstract class GraphQL
      * property of the class. preassumption is all fields are allowed to
      * be exposed to the public and there is no restriction for them.
      *
-     * @param  bool $withRelations
-     * @param  bool $withColumns
+     * @param  bool  $withRelations
+     * @param  bool  $withColumns
      * @return array
      */
     public function exposedFields(bool $withRelations = true, bool $withColumns = true): array
@@ -160,8 +173,8 @@ abstract class GraphQL
      * aggregating all of the exposed fields and relations and subtracting
      * them from covered fields and relations.
      *
-     * @param  bool $withRelations
-     * @param  bool $withColumns
+     * @param  bool  $withRelations
+     * @param  bool  $withColumns
      * @return array
      */
     public function fieldsArray(bool $withRelations = true, bool $withColumns = true): array
@@ -216,7 +229,7 @@ abstract class GraphQL
      * on calling Post GraphQL class and method user would return User
      * GraphQL model.
      *
-     * @param  string $method
+     * @param  string  $method
      * @return void
      */
     private function relatedModelClass(string $method): string
@@ -227,7 +240,7 @@ abstract class GraphQL
     /**
      * Create new reflection from the related model class.
      *
-     * @param  string $method
+     * @param  string  $method
      * @return ReflectionClass
      */
     private function relatedModelRelflection(string $method): ReflectionClass
@@ -242,7 +255,7 @@ abstract class GraphQL
     /**
      * Get a new instance of the related model for the GraphQL class.
      *
-     * @param  string $method
+     * @param  string  $method
      * @return mixed
      */
     public function relatedModel(string $method)
@@ -253,7 +266,7 @@ abstract class GraphQL
     /**
      * Get class of the related GraphQL.
      *
-     * @param  string $method
+     * @param  string  $method
      * @return string
      * @throws ClassNotFoundException
      */
@@ -294,6 +307,11 @@ abstract class GraphQL
         // throw new ClassNotFoundException("Could not find any Pepper GraphQL class that relates to {$related}.", $relatedGraphQLClass);
     }
 
+    /**
+     * Get all GraphQL classes.
+     *
+     * @return array
+     */
     private function allGraphQLClasses(): array
     {
         $classes = [];
@@ -308,7 +326,7 @@ abstract class GraphQL
     /**
      * Wheter corrosponding GraphQL class for relation exists or not.
      *
-     * @param  string $method
+     * @param  string  $method
      * @return bool
      */
     public function relatedGraphQLExists(string $method): bool
@@ -318,6 +336,12 @@ abstract class GraphQL
             : false;
     }
 
+    /**
+     * Instance of the related GraphQL class.
+     *
+     * @param  string  $method
+     * @return mixed
+     */
     public function relatedGraphQL(string $method)
     {
         $related = $this->relatedGraphQLClass($method);
@@ -368,7 +392,7 @@ abstract class GraphQL
     /**
      * Guess field type for GraphQL.
      *
-     * @param  string $field
+     * @param  string  $field
      * @return string
      */
     private function guessFieldType(string $field): string
@@ -397,7 +421,7 @@ abstract class GraphQL
     /**
      * Get table column type.
      *
-     * @param  string $column
+     * @param  string  $column
      * @return string
      */
     private function getColumnType(string $column): string
