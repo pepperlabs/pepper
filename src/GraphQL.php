@@ -516,6 +516,7 @@ abstract class GraphQL
         if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Name')) {
             $needle = Str::replaceFirst('get', '', $method);
             $needle = Str::replaceLast('Name', '', $needle);
+
             return $this->overrideMethod(
                 Str::replaceFirst('get', 'set', $method),
                 [$this, 'generateName'],
@@ -526,6 +527,7 @@ abstract class GraphQL
         if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Description')) {
             $needle = Str::replaceFirst('get', '', $method);
             $needle = Str::replaceLast('Description', '', $needle);
+
             return $this->overrideMethod(
                 Str::replaceFirst('get', 'set', $method),
                 [$this, 'generateDescription'],
