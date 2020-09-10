@@ -12,8 +12,8 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [7.4, 7.3, 7.2, 7.1]
-        laravel: [7.*, 6.*, 5.8.*, 5.7.*, 5.6.*]
+        php: [7.1, 7.2, 7.3, 7.4]
+        laravel: [5.6.*, 5.7.*, 5.8.*, 6.*, 7.*, 8.*]
         dependency-version: [prefer-stable]
         include:
           - laravel: 5.6.*
@@ -26,7 +26,13 @@ jobs:
             testbench: 4.*
           - laravel: 7.*
             testbench: 5.*
+          - laravel: 8.*
+            testbench: 6.*
         exclude:
+          - php: 7.1
+            laravel: 8.*
+          - php: 7.2
+            laravel: 8.*
           - php: 7.1
             laravel: 6.*
           - php: 7.1
@@ -38,7 +44,7 @@ jobs:
           - php: 7.4
             laravel: 5.8.*
 
-    name: PHP:${{ matrix.php }} / Laravel:${{ matrix.laravel }}(${{ matrix.dependency-version }})
+    name: PHP:${{ matrix.php }}-Laravel:${{ matrix.laravel }}(${{ matrix.dependency-version }})
 
     steps:
       - name: Checkout code
@@ -57,6 +63,10 @@ jobs:
           extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
           tools: composer:v2
           coverage: none
+
+      - name: Exclude laravel/legacy-factories
+        if: ${{ matrix.laravel != '8.*' }}
+        run: composer remove laravel/legacy-factories --no-interaction --no-progress --dev --no-update
 
       - name: Install dependencies
         run: |
