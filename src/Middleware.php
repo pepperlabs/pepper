@@ -7,7 +7,12 @@ use HaydenPierce\ClassFinder\ClassFinder;
 
 class Middleware
 {
-    private function getPepperClasses()
+    /**
+     * Get all classes in the Pepper root namespace.
+     *
+     * @return array
+     */
+    private function getPepperClasses(): array
     {
         $classes = [];
         $peppers = config('pepper.namespace.root').'\Http\Pepper';
@@ -18,6 +23,15 @@ class Middleware
         return $classes;
     }
 
+    /**
+     * Register each GraphQL class.
+     *
+     * @param  string  $parent
+     * @param  string  $pepper
+     * @param  string  $type
+     * @param  string  $key
+     * @return void
+     */
     private function registerPepperGraphQLClass(string $parent, string $pepper, string $type, string $key)
     {
         $instance = new $pepper;
