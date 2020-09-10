@@ -10,21 +10,6 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait QuerySupport
 {
     /**
-     * Get GraphQL Query description.
-     *
-     * @return string
-     */
-    public function getQueryDescription(): string
-    {
-        $method = 'setQueryDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->snake().' query description.';
-        }
-    }
-
-    /**
      * Get GraphQL Query resolve.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|null $root
@@ -204,16 +189,6 @@ trait QuerySupport
                 'type' => $this->callGraphQLType($pk),
             ],
         ];
-    }
-
-    public function getQueryByPkDescription(): string
-    {
-        $method = 'setQueryByPkDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' query by PK description.';
-        }
     }
 
     /**

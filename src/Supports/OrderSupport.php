@@ -24,19 +24,4 @@ trait OrderSupport
 
         return $fields;
     }
-
-    /**
-     * Get GraphQL order description.
-     *
-     * @return string
-     */
-    public function getOrderDescription(): string
-    {
-        $method = 'setOrderDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' order description.';
-        }
-    }
 }

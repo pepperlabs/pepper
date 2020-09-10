@@ -8,21 +8,6 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait MutationSupport
 {
     /**
-     * Get mutation description.
-     *
-     * @return string
-     */
-    public function getMutationDescription(): string
-    {
-        $method = 'setMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' mutation description.';
-        }
-    }
-
-    /**
      * Get mutation type.
      *
      * @return Type
@@ -121,126 +106,6 @@ trait MutationSupport
     }
 
     /**
-     * Get input mutation name.
-     *
-     * @return string
-     */
-    public function getInputMutationName()
-    {
-        $method = 'setInputMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'MutationInput';
-        }
-    }
-
-    /**
-     * Get input mutation description.
-     *
-     * @return string
-     */
-    public function getInputMutationDescription(): string
-    {
-        $method = 'setInputMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' input mutation description.';
-        }
-    }
-
-    /**
-     * Get insert mutation name.
-     *
-     * @return string
-     */
-    public function getInsertMutationName(): string
-    {
-        $method = 'setInsertMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'InsertMutation';
-        }
-    }
-
-    /**
-     * Get insert mutation description.
-     *
-     * @return string
-     */
-    public function getInsertMutationDescription(): string
-    {
-        $method = 'setInsertMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' insert mutation description.';
-        }
-    }
-
-    /**
-     * Get insert one mutation name.
-     *
-     * @return string
-     */
-    public function getInsertOneMutationName(): string
-    {
-        $method = 'setInsertOneMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'InsertOneMutation';
-        }
-    }
-
-    /**
-     * Get insert one mutation description.
-     *
-     * @return string
-     */
-    public function getInsertOneMutationDescription(): string
-    {
-        $method = 'setInsertOneMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' insert mutation description.';
-        }
-    }
-
-    /**
-     * Get update by PK mutation name.
-     *
-     * @return string
-     */
-    public function getUpdateByPkMutationName(): string
-    {
-        $method = 'setUpdateByPkMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'UpdateByPkMutation';
-        }
-    }
-
-    /**
-     * Get update by PK mutation description.
-     *
-     * @return string
-     */
-    public function getUpdateByPkMutationDescription(): string
-    {
-        $method = 'setUpdateByPkMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' insert mutation description.';
-        }
-    }
-
-    /**
      * Update by PK mutation.
      *
      * @param  object $root
@@ -260,36 +125,6 @@ trait MutationSupport
 
         return $this->getQueryResolve($builder, $args, $context, $resolveInfo, $getSelectFields)
                     ->first();
-    }
-
-    /**
-     * Get update mutation name.
-     *
-     * @return string
-     */
-    public function getUpdateMutationName(): string
-    {
-        $method = 'setUpdateMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'UpdateMutation';
-        }
-    }
-
-    /**
-     * Get update mutation description.
-     *
-     * @return string
-     */
-    public function getUpdateMutationDescription(): string
-    {
-        $method = 'setUpdateMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' update mutation description.';
-        }
     }
 
     /**
@@ -315,36 +150,6 @@ trait MutationSupport
     }
 
     /**
-     * Get delete by PK mutation name.
-     *
-     * @return string
-     */
-    public function getDeleteByPkMutationName(): string
-    {
-        $method = 'setDeleteByPkMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'DeleteByPkMutation';
-        }
-    }
-
-    /**
-     * Get delete by PK mutation description.
-     *
-     * @return string
-     */
-    public function getDeleteByPkMutationDescription(): string
-    {
-        $method = 'setDeleteByPkMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' DeleteByPk mutation description.';
-        }
-    }
-
-    /**
      * Delete by PK mutation.
      *
      * @param  object $root
@@ -366,36 +171,6 @@ trait MutationSupport
         $builder->delete();
 
         return $resolve;
-    }
-
-    /**
-     * Get delete mutation name.
-     *
-     * @return string
-     */
-    public function getDeleteMutationName(): string
-    {
-        $method = 'setDeleteMutationName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'DeleteMutation';
-        }
-    }
-
-    /**
-     * Get delete mutation description.
-     *
-     * @return string
-     */
-    public function getDeleteMutationDescription(): string
-    {
-        $method = 'setDeleteMutationDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' Delete mutation description.';
-        }
     }
 
     /**
@@ -429,11 +204,11 @@ trait MutationSupport
         return [
             'pk_columns' => [
                 'name' => 'pk_columns',
-                'type' => GraphQL::type($this->getInputMutationName()),
+                'type' => GraphQL::type($this->getMutationInputName()),
             ],
             '_set' => [
                 'name' => '_set',
-                'type' => GraphQL::type($this->getInputMutationName()),
+                'type' => GraphQL::type($this->getMutationInputName()),
             ],
         ];
     }
@@ -447,7 +222,7 @@ trait MutationSupport
     {
         return [
             'where' => ['type' => GraphQL::type($this->getInputName())],
-            '_set' => ['type' => GraphQL::type($this->getInputMutationName())],
+            '_set' => ['type' => GraphQL::type($this->getMutationInputName())],
         ];
     }
 
@@ -461,7 +236,7 @@ trait MutationSupport
         return [
             'object' => [
                 'name' => 'object',
-                'type' => GraphQL::type($this->getInputMutationName()),
+                'type' => GraphQL::type($this->getMutationInputName()),
             ],
         ];
     }
@@ -518,7 +293,7 @@ trait MutationSupport
         return [
             'objects' => [
                 'name' => 'objects',
-                'type' => Type::listOf(GraphQL::type($this->getInputMutationName())),
+                'type' => Type::listOf(GraphQL::type($this->getMutationInputName())),
             ],
         ];
     }

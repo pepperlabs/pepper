@@ -20,7 +20,7 @@ trait AggregateSupport
         $fields = [
             'aggregate' => [
                 'name' => 'aggregate',
-                'type' => GraphQL::type($this->getAggregateName()),
+                'type' => GraphQL::type($this->getAggregateTypeName()),
                 'selectable' => false,
             ],
             'nodes' => [
@@ -78,7 +78,7 @@ trait AggregateSupport
      */
     public function getRelatedFieldAggregateType(string $attribute): Type
     {
-        return GraphQL::type($this->relatedGraphQL($attribute)->getFieldAggregateName());
+        return GraphQL::type($this->relatedGraphQL($attribute)->getFieldAggregateTypeName());
     }
 
     /**
@@ -124,71 +124,6 @@ trait AggregateSupport
         }
 
         return $fields;
-    }
-
-    // public function getResultAggregateTypeName(): string
-    // {
-    //     return $this->getName().'ResultAggregateType';
-    // }
-
-    public function getResultAggregateDescription(): string
-    {
-        return $this->getName().' result aggregate type description';
-    }
-
-    public function getFieldAggregateName(): string
-    {
-        return $this->getName().'FieldAggregateType';
-    }
-
-    public function getFieldAggregateDescription(): string
-    {
-        return $this->getName().' field aggregate type description';
-    }
-
-    public function getAggregateUnresolvableName(): string
-    {
-        return $this->getName().'FieldAggregateUnresolvableType';
-    }
-
-    public function getAggregateUnresolvableDescription(): string
-    {
-        return $this->getName().' unresolvable aggregate type description';
-    }
-
-    public function getAggregateName(): string
-    {
-        return $this->getName().'AggregateType';
-    }
-
-    public function getAggregateDescription(): string
-    {
-        return $this->getName().' aggregate type description';
-    }
-
-    /**
-     * Get GraphQL Query name.
-     *
-     * @return string
-     */
-    public function getAggregateQueryName(): string
-    {
-        $method = 'setAggregateQueryName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'AggregateQuery';
-        }
-    }
-
-    public function getAggregateQueryDescription(): string
-    {
-        $method = 'setAggregateQueryDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' aggregate query description.';
-        }
     }
 
     public function resolveCountAggregate($root, $args, $context, $resolveInfo)

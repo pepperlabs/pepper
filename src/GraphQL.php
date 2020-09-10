@@ -482,15 +482,54 @@ abstract class GraphQL
         }
     }
 
+    /**
+     * Generate description of GraphQL class based on config.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function generateDescription(string $name): string
+    {
+        $studly = config('pepper.available.type.{{studly}}'.$name, false);
+        $snake = config('pepper.available.type.{{snake}}'.$name, false);
+        if (
+            Str::endsWith($name, 'Type') && $studly ||
+            Str::endsWith($name, 'Mutation') && $studly ||
+            Str::endsWith($name, 'Query') && $studly ||
+            Str::endsWith($name, 'Input') && $studly
+        ) {
+            return $this->studly().$name.' description.';
+        } elseif (
+            Str::endsWith($name, 'Type') && $snake ||
+            Str::endsWith($name, 'Mutation') && $snake ||
+            Str::endsWith($name, 'Query') && $snake ||
+            Str::endsWith($name, 'Input') && $snake
+        ) {
+            return $this->snake().$name.' description.';
+        } else {
+            return $this->studly().$name.' description.';
+        }
+    }
+
     public function __call(string $method, array $params)
     {
         if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Name')) {
-            $getWhat = Str::replaceFirst('get', '', $method);
-            $getWhat = Str::replaceLast('Name', '', $getWhat);
+            $needle = Str::replaceFirst('get', '', $method);
+            $needle = Str::replaceLast('Name', '', $needle);
             return $this->overrideMethod(
                 Str::replaceFirst('get', 'set', $method),
                 [$this, 'generateName'],
-                $getWhat
+                $needle
+            );
+        }
+
+        if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Description')) {
+            $needle = Str::replaceFirst('get', '', $method);
+            $needle = Str::replaceLast('Description', '', $needle);
+            return $this->overrideMethod(
+                Str::replaceFirst('get', 'set', $method),
+                [$this, 'generateDescription'],
+                $needle
             );
         }
 

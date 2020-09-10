@@ -42,21 +42,6 @@ trait TypeSupport
     }
 
     /**
-     * Get GraphQL type description.
-     *
-     * @return string
-     */
-    public function getTypeDescription(): string
-    {
-        $method = 'setTypeDescription';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().' type description.';
-        }
-    }
-
-    /**
      * Get graphQL query relations.
      *
      * @return array
