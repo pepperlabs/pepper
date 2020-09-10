@@ -2,6 +2,7 @@
 
 namespace Pepper;
 
+use BadMethodCallException;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Schema;
@@ -450,5 +451,53 @@ abstract class GraphQL
     public function callGraphQLType(string $field)
     {
         return call_user_func('\GraphQL\Type\Definition\Type::'.$this->getFieldType($field));
+    }
+
+    /**
+     * Generate name of GraphQL name based on config.
+     *
+     * @param  string  $name
+     * @return string
+     */
+    protected function generateName(string $name): string
+    {
+        $studly = config('pepper.available.type.{{studly}}'.$name, false);
+        $snake = config('pepper.available.type.{{snake}}'.$name, false);
+        if (
+            Str::endsWith($name, 'Type') && $studly ||
+            Str::endsWith($name, 'Mutation') && $studly ||
+            Str::endsWith($name, 'Query') && $studly ||
+            Str::endsWith($name, 'Input') && $studly
+        ) {
+            return $this->studly().$name;
+        } elseif (
+            Str::endsWith($name, 'Type') && $snake ||
+            Str::endsWith($name, 'Mutation') && $snake ||
+            Str::endsWith($name, 'Query') && $snake ||
+            Str::endsWith($name, 'Input') && $snake
+        ) {
+            return $this->snake().$name;
+        } else {
+            return $this->studly().$name;
+        }
+    }
+
+    public function __call(string $method, array $params)
+    {
+        if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Name')) {
+            $getWhat = Str::replaceFirst('get', '', $method);
+            $getWhat = Str::replaceLast('Name', '', $getWhat);
+            return $this->overrideMethod(
+                Str::replaceFirst('get', 'set', $method),
+                [$this, 'generateName'],
+                $getWhat
+            );
+        }
+
+        throw new BadMethodCallException(sprintf(
+            'Method %s::%s does not exist.',
+            static::class,
+            $method
+        ));
     }
 }

@@ -62,12 +62,12 @@ class Middleware
         /**
          * Add the key and value of the newly created class to config('graphql').
          */
-        if ($type == 'Queries') {
+        if ($type == 'query') {
             config(['graphql.schemas.default.query.'.$key => $alias]);
-        } elseif ($type == 'Mutations') {
+        } elseif ($type == 'mutation') {
             config(['graphql.schemas.default.mutation.'.$key => $alias]);
         } else {
-            // Types, Inputs, Enums, Unions, Scalars
+            // type, Input, enum, union, scalar
             config(['graphql.types.'.$key => $alias]);
         }
 

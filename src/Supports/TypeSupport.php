@@ -42,21 +42,6 @@ trait TypeSupport
     }
 
     /**
-     * Get GraphQL Type name.
-     *
-     * @return string
-     */
-    public function getTypeName(): string
-    {
-        $method = 'setTypeName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'Type';
-        }
-    }
-
-    /**
      * Get GraphQL type description.
      *
      * @return string

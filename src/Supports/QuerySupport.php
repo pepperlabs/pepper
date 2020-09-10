@@ -10,21 +10,6 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait QuerySupport
 {
     /**
-     * Get GraphQL Query name.
-     *
-     * @return string
-     */
-    public function getQueryName(): string
-    {
-        $method = 'setQueryName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->snake();
-        }
-    }
-
-    /**
      * Get GraphQL Query description.
      *
      * @return string
@@ -219,16 +204,6 @@ trait QuerySupport
                 'type' => $this->callGraphQLType($pk),
             ],
         ];
-    }
-
-    public function getQueryByPkName(): string
-    {
-        $method = 'setQueryByPkName';
-        if (method_exists($this, $method)) {
-            $this->$method($this->getClassName);
-        } else {
-            return $this->getName().'ByPkQuery';
-        }
     }
 
     public function getQueryByPkDescription(): string

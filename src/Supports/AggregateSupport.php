@@ -126,10 +126,10 @@ trait AggregateSupport
         return $fields;
     }
 
-    public function getResultAggregateName(): string
-    {
-        return $this->getName().'ResultAggregateType';
-    }
+    // public function getResultAggregateTypeName(): string
+    // {
+    //     return $this->getName().'ResultAggregateType';
+    // }
 
     public function getResultAggregateDescription(): string
     {

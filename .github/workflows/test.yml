@@ -74,11 +74,13 @@ jobs:
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Run Tests
-        run: vendor/bin/phpunit
+        run: vendor/bin/phpunit --log-junit "log-junit.xml"
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
         if: failure()
         with:
           name: logs
-          path: vendor/orchestra/testbench-core/laravel/storage/logs/laravel.log
+          path: |
+            vendor/orchestra/testbench-core/laravel/storage/logs/laravel.log
+            log-junit.xml
