@@ -10,7 +10,7 @@ trait MutationSupport
     /**
      * Get mutation type.
      *
-     * @return Type
+     * @return \GraphQL\Type\Definition\Type
      */
     public function getMutationType(): Type
     {
@@ -20,7 +20,7 @@ trait MutationSupport
     /**
      * Get delete mutation type.
      *
-     * @return Type
+     * @return \GraphQL\Type\Definition\Type
      */
     public function getDeleteMutationType(): Type
     {
@@ -30,7 +30,7 @@ trait MutationSupport
     /**
      * Get delete by PK mutation type.
      *
-     * @return Type
+     * @return \GraphQL\Type\Definition\Type
      */
     public function getDeleteByPKMutationType(): Type
     {
@@ -40,7 +40,7 @@ trait MutationSupport
     /**
      * Get mutation update by PK type.
      *
-     * @return Type
+     * @return \GraphQL\Type\Definition\Type
      */
     public function getMutationUpdateByPkType(): Type
     {
@@ -50,7 +50,7 @@ trait MutationSupport
     /**
      * Get mutation insert one type.
      *
-     * @return Type
+     * @return \GraphQL\Type\Definition\Type
      */
     public function getMutationInsertOneType(): Type
     {
@@ -108,11 +108,11 @@ trait MutationSupport
     /**
      * Update by PK mutation.
      *
-     * @param  object $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  object  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
      * @return object
      */
     public function updateByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields)
@@ -130,11 +130,11 @@ trait MutationSupport
     /**
      * Update mutation.
      *
-     * @param  object $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  object  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
      * @return object
      */
     public function updateMutation($root, $args, $context, $resolveInfo, $getSelectFields)
@@ -152,11 +152,11 @@ trait MutationSupport
     /**
      * Delete by PK mutation.
      *
-     * @param  object $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  object  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
      * @return object
      */
     public function deleteByPkMutation($root, $args, $context, $resolveInfo, $getSelectFields)
@@ -176,11 +176,11 @@ trait MutationSupport
     /**
      * Delete mutation.
      *
-     * @param  object $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  object  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
      * @return object
      */
     public function deleteMutation($root, $args, $context, $resolveInfo, $getSelectFields)
@@ -244,11 +244,11 @@ trait MutationSupport
     /**
      * Resolve mutation insert one.
      *
-     * @param  object $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  object  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
      * @return object
      */
     public function resolveMutationInsertOne($root, $args, $context, $resolveInfo, $getSelectFields)
@@ -264,11 +264,11 @@ trait MutationSupport
     /**
      * Resolve mutation insert.
      *
-     * @param  object $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  object  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
      * @return object
      */
     public function resolveMutationInsert($root, $args, $context, $resolveInfo, $getSelectFields)
@@ -301,11 +301,11 @@ trait MutationSupport
     /**
      * Resolve mutation.
      *
-     * @param  object $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  object  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
      * @return object
      */
     public function resolveMutation($root, $args, $context, $resolveInfo, $getSelectFields)
