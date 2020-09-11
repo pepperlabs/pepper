@@ -16,7 +16,7 @@ class MutationInput extends InputType
     {
         $this->instance = new $pepper;
         $this->attributes['name'] = $this->instance->getMutationInputName();
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['description'] = $this->instance->getMutationInputDescription();
     }
 
     public function fields(): array

@@ -18,8 +18,8 @@ class UpdateMutation extends Mutation
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = 'update_'.$this->instance->getQueryName();
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['name'] = $this->instance->getUpdateMutationName();
+        $this->attributes['description'] = $this->instance->getUpdateMutationDescription();
     }
 
     public function type(): Type

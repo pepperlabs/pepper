@@ -10,7 +10,7 @@ class OrderByEnum extends EnumType
 {
     protected $attributes = [
         'name' => 'OrderByEnum',
-        'description' => 'Order by enum.',
+        'description' => 'Sort results in ascending or descending order.',
         'values' => [
             'asc' => [
                 'value' => 'asc',

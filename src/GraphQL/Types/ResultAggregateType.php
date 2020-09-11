@@ -16,7 +16,7 @@ class ResultAggregateType extends GraphQLType
     {
         $this->instance = new $pepper;
         $this->attributes['name'] = $this->instance->getResultAggregateTypeName();
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['description'] = $this->instance->getResultAggregateTypeDescription();
     }
 
     public function fields(): array

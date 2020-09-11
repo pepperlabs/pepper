@@ -16,7 +16,7 @@ class OrderInput extends InputType
     {
         $this->instance = new $pepper;
         $this->attributes['name'] = $this->instance->getOrderInputName();
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['description'] = $this->instance->getOrderInputDescription();
     }
 
     public function fields(): array

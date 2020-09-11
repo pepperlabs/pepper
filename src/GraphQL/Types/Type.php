@@ -16,7 +16,7 @@ class Type extends GraphQLType
     {
         $this->instance = new $pepper;
         $this->attributes['name'] = $this->instance->getTypeName();
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['description'] = $this->instance->getTypeDescription();
     }
 
     public function fields(): array

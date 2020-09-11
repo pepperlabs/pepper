@@ -18,8 +18,8 @@ class ByPkQuery extends Query
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = $this->instance->getQueryName().'_by_pk';
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['name'] = $this->instance->getByPkQueryName();
+        $this->attributes['description'] = $this->instance->getByPkQueryDescription();
     }
 
     public function type(): Type

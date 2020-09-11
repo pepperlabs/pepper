@@ -18,8 +18,8 @@ class DeleteMutation extends Mutation
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = 'delete_'.$this->instance->getQueryName();
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['name'] = $this->instance->getDeleteMutationName();
+        $this->attributes['description'] = $this->instance->getDeleteMutationDescription();
     }
 
     public function type(): Type
