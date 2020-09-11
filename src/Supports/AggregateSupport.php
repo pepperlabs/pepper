@@ -281,10 +281,13 @@ trait AggregateSupport
     public function resolveQueryAggregate($root, $args, $context, $resolveInfo, $getSelectFields)
     {
         $query = $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        $name = Str::replaceLast('_aggregate', '', array_reverse($resolveInfo->path)[0]);
 
         return [
-            /** @todo refactor _aggregate preg */
-            'aggregate' => ['root' => $query, 'name' => preg_replace('/_aggregate$/', '', array_reverse($resolveInfo->path)[0])],
+            'aggregate' => [
+                'root' => $query,
+                'name' => $name,
+            ],
             'nodes' => $query,
         ];
     }
