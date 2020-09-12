@@ -121,7 +121,16 @@ trait AggregateSupport
         return $fields;
     }
 
-    public function resolveCountAggregate($root, $args, $context, $resolveInfo)
+    /**
+     * Resolve count function aggregate.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|null  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @return array
+     */
+    public function resolveCountAggregate($root, $args, $context, $resolveInfo): array
     {
         $method = 'resolve'.Str::studly($root['name']).'CountAggregate';
         if (method_exists($this, $method)) {
@@ -135,7 +144,16 @@ trait AggregateSupport
         }
     }
 
-    public function resolveSumAggregate($root, $args, $context, $resolveInfo)
+    /**
+     * Resolve sum function aggregate.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|null  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @return array
+     */
+    public function resolveSumAggregate($root, $args, $context, $resolveInfo): array
     {
         $method = 'resolve'.Str::studly($root['name']).'SumAggregate';
         if (method_exists($this, $method)) {
@@ -155,7 +173,13 @@ trait AggregateSupport
         return $result;
     }
 
-    private function getFragmentType($resolveInfo)
+    /**
+     * Get framgmen type.
+     *
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @return string
+     */
+    private function getFragmentType($resolveInfo): string
     {
         $operation = $resolveInfo->operation;
         $pos = is_object($operation->name)
@@ -172,7 +196,16 @@ trait AggregateSupport
         return $resolveInfo->fragments[$fragmentName]->typeCondition->name->value;
     }
 
-    public function resolveAvgAggregate($root, $args, $context, $resolveInfo)
+    /**
+     * Resolve avg function aggregate.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|null  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @return array
+     */
+    public function resolveAvgAggregate($root, $args, $context, $resolveInfo): array
     {
         $method = 'resolve'.Str::studly($root['name']).'AvgAggregate';
         if (method_exists($this, $method)) {
@@ -192,7 +225,16 @@ trait AggregateSupport
         return $result;
     }
 
-    public function resolveMaxAggregate($root, $args, $context, $resolveInfo)
+    /**
+     * Resolve max function aggregate.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|null  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @return array
+     */
+    public function resolveMaxAggregate($root, $args, $context, $resolveInfo): array
     {
         $method = 'resolve'.Str::studly($root['name']).'MaxAggregate';
         if (method_exists($this, $method)) {
@@ -212,7 +254,16 @@ trait AggregateSupport
         return $result;
     }
 
-    public function resolveMinAggregate($root, $args, $context, $resolveInfo)
+    /**
+     * Resolve min function aggregate.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|null  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @return array
+     */
+    public function resolveMinAggregate($root, $args, $context, $resolveInfo): array
     {
         $method = 'resolve'.Str::studly($root['name']).'MinAggregate';
         if (method_exists($this, $method)) {
@@ -232,7 +283,12 @@ trait AggregateSupport
         return $result;
     }
 
-    public function getAvailableAggregators()
+    /**
+     * Get available aggregators.
+     *
+     * @return array
+     */
+    public function getAvailableAggregators(): array
     {
         return [
             'count' => [
@@ -273,12 +329,27 @@ trait AggregateSupport
         ];
     }
 
+    /**
+     * Get query aggregate type.
+     *
+     * @return \GraphQL\Type\Definition\Type
+     */
     public function getQueryAggregateType(): Type
     {
         return GraphQL::type($this->studly().'FieldAggregateUnresolvableType');
     }
 
-    public function resolveQueryAggregate($root, $args, $context, $resolveInfo, $getSelectFields)
+    /**
+     * Resolve aggregae query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|null  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
+     * @return array
+     */
+    public function resolveQueryAggregate($root, $args, $context, $resolveInfo, $getSelectFields): array
     {
         $query = $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
         $name = Str::replaceLast('_aggregate', '', array_reverse($resolveInfo->path)[0]);
