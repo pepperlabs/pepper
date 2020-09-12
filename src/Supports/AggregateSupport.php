@@ -128,9 +128,9 @@ trait AggregateSupport
      * @param  array  $args
      * @param  object  $context
      * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
-     * @return array
+     * @return int
      */
-    public function resolveCountAggregate($root, $args, $context, $resolveInfo): array
+    public function resolveCountAggregate($root, $args, $context, $resolveInfo): int
     {
         $method = 'resolve'.Str::studly($root['name']).'CountAggregate';
         if (method_exists($this, $method)) {
