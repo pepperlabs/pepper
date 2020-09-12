@@ -12,11 +12,11 @@ trait QuerySupport
     /**
      * Get GraphQL Query resolve.
      *
-     * @param  \Illuminate\Database\Eloquent\Builder|null $root
-     * @param  array $args
-     * @param  object $context
-     * @param  ResolveInfo $resolveInfo
-     * @param  Closure $getSelectFields
+     * @param  \Illuminate\Database\Eloquent\Builder|null  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
      * @return \Illuminate\Database\Eloquent\Builder
      */
     public function getQueryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
@@ -32,26 +32,26 @@ trait QuerySupport
                 if ($field == '_or') {
                     foreach ($criteria as $f => $c) {
                         foreach ($c as $operation => $value) {
-                            $query = $this->executeCondition($query, $operation, $f, $value, 'or');
+                            $query = $this->runCondition($query, $operation, $f, $value, 'or');
                         }
                     }
                 } elseif ($field == '_and') {
                     foreach ($criteria as $f => $c) {
                         foreach ($c as $operation => $value) {
-                            $query = $this->executeCondition($query, $operation, $f, $value, 'and');
+                            $query = $this->runCondition($query, $operation, $f, $value, 'and');
                         }
                     }
                 } elseif ($field == '_not') {
                     $notQuery = clone $query;
                     foreach ($criteria as $f => $c) {
                         foreach ($c as $operation => $value) {
-                            $notQuery = $this->executeCondition($notQuery, $operation, $f, $value, 'and');
+                            $notQuery = $this->runCondition($notQuery, $operation, $f, $value, 'and');
                         }
                     }
                     $query = $query->whereNotIn('id', $notQuery->pluck('id')->toArray());
                 } else {
                     foreach ($criteria as $operation => $value) {
-                        $query = $this->executeCondition($query, $operation, $field, $value);
+                        $query = $this->runCondition($query, $operation, $field, $value);
                     }
                 }
             }
@@ -78,7 +78,17 @@ trait QuerySupport
             });
     }
 
-    private function executeCondition($query, $operation, $field, $value, $exp = 'and')
+    /**
+     * Run conditions.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  string  $operation
+     * @param  string  $field
+     * @param  string|array  $value
+     * @param  string  $exp
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function runCondition($query, $operation, $field, $value, $exp = 'and')
     {
         switch ($operation) {
             case '_eq':
@@ -138,12 +148,17 @@ trait QuerySupport
             default:
                 return $query->whereHas($field, function ($q) use ($value, $operation, $exp) {
                     foreach ($value as $nestedOperation => $nestedValue) {
-                        $this->executeCondition($q, $nestedOperation, $operation, $nestedValue, $exp);
+                        $this->runCondition($q, $nestedOperation, $operation, $nestedValue, $exp);
                     }
                 });
         }
     }
 
+    /**
+     * Available query arguments.
+     *
+     * @return array
+     */
     public function getQueryArgs()
     {
         return [
@@ -166,18 +181,28 @@ trait QuerySupport
     /**
      * Get GraphQL query type.
      *
-     * @return void
+     * @return \GraphQL\Type\Definition\Type
      */
     public function getQueryType(): Type
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
 
+    /**
+     * Get query by primary key type.
+     *
+     * @return \GraphQL\Type\Definition\Type
+     */
     public function getQueryByPkType(): Type
     {
         return GraphQL::type($this->getTypeName());
     }
 
+    /**
+     * Get query by primary key fields.
+     *
+     * @return array
+     */
     public function getQueryByPkFields(): array
     {
         $model = $this->model();
@@ -193,6 +218,8 @@ trait QuerySupport
 
     /**
      * Resolve query by PK.
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function queryByPk($root, $args, $context, $resolveInfo, $getSelectFields)
     {

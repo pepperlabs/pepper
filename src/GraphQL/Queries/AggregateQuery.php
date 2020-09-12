@@ -18,8 +18,8 @@ class AggregateQuery extends Query
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = $this->instance->getQueryName().'_aggregate';
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['name'] = $this->instance->getAggregateQueryName();
+        $this->attributes['description'] = $this->instance->getAggregateQueryDescription();
     }
 
     public function type(): Type

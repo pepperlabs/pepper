@@ -18,8 +18,8 @@ class DeleteByPkMutation extends Mutation
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = 'delete_'.$this->instance->getQueryName().'_by_pk';
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['name'] = $this->instance->getDeleteByPkMutationName();
+        $this->attributes['description'] = $this->instance->getDeleteByPkMutationDescription();
     }
 
     public function type(): Type

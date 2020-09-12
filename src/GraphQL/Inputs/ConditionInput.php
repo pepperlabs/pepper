@@ -12,7 +12,7 @@ class ConditionInput extends InputType
 {
     protected $attributes = [
         'name' => 'ConditionInput',
-        'description' => 'Available conditions',
+        'description' => 'Conditions to filter results.',
     ];
 
     public function fields(): array
@@ -72,23 +72,23 @@ class ConditionInput extends InputType
             ],
             '_date' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Laravel whereDate() equivalent',
+                'description' => 'Laravel =whereDate() equivalent',
             ],
             '_month' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Laravel whereMonth() equivalent',
+                'description' => 'Laravel =whereMonth() equivalent',
             ],
             '_day' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Laravel whereDay() equivalent',
+                'description' => 'Laravel =whereDay() equivalent',
             ],
             '_year' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Laravel whereYear() equivalent',
+                'description' => 'Laravel =whereYear() equivalent',
             ],
             '_time' => [
                 'type' => GraphQL::type('AnyScalar'),
-                'description' => 'Laravel whereTime() equivalent',
+                'description' => 'Laravel =whereTime() equivalent',
             ],
         ];
     }

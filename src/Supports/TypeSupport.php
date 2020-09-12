@@ -30,7 +30,7 @@ trait TypeSupport
     {
         $fields = [];
 
-        // exclude relations
+        // Only fields without relations
         foreach ($this->fieldsArray(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
@@ -38,7 +38,11 @@ trait TypeSupport
             ];
         }
 
-        return array_merge($fields, $this->getTypeRelations(), $this->getAggregatedFields());
+        return array_merge(
+            $fields,
+            $this->getTypeRelations(),
+            $this->getAggregatedFields()
+        );
     }
 
     /**
@@ -86,7 +90,13 @@ trait TypeSupport
         return $fields;
     }
 
-    public function getRelatedType($method)
+    /**
+     * Related field type.
+     *
+     * @param  string  $method
+     * @return \GraphQL\Type\Definition\Type
+     */
+    public function getRelatedType(string $method): Type
     {
         return GraphQL::type($this->relatedGraphQL($method)->getTypeName());
     }

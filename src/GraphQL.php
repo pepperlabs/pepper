@@ -511,6 +511,11 @@ abstract class GraphQL
         }
     }
 
+    public function getAttribute(string $name, string $default): string
+    {
+        return '';
+    }
+
     public function __call(string $method, array $params)
     {
         if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Name')) {

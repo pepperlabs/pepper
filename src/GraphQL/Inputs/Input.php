@@ -16,7 +16,7 @@ class Input extends InputType
     {
         $this->instance = new $pepper;
         $this->attributes['name'] = $this->instance->getInputName();
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['description'] = $this->instance->getInputDescription();
     }
 
     public function fields(): array

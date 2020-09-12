@@ -18,8 +18,8 @@ class InsertMutation extends Mutation
     public function __construct($pepper)
     {
         $this->instance = new $pepper;
-        $this->attributes['name'] = 'insert_'.$this->instance->getQueryName();
-        $this->attributes['description'] = $this->instance->getQueryDescription();
+        $this->attributes['name'] = $this->instance->getInsertMutationName();
+        $this->attributes['description'] = $this->instance->getInsertMutationDescription();
     }
 
     public function type(): Type
