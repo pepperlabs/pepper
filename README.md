@@ -542,6 +542,19 @@ mutation delete_example {
 
 Not supported.
 
+## Roadmap
+
+* JWT Authentication
+* Validations
+* Authorization
+* File upload
+* JSON type support
+* GIS support
+* MySQL/PostgreSQL/SQLServer/SQLite custom fields support
+* Subscription support
+* Automatic result cache
+* ReactAdmin support
+
 ## Acknowledgement
 
 [Table of contents](#table-of-contents)
