@@ -62,6 +62,7 @@ Add `pepper` middleware to graphql config file.
       - [delete_by_pk](#delete_by_pk)
       - [delete](#delete)
     - [Subscription](#subscription)
+  - [Roadmap](#roadmap)
   - [Acknowledgement](#acknowledgement)
   - [Contribution](#contribution)
     - [Report bugs](#report-bugs)
@@ -544,6 +545,8 @@ Not supported.
 
 ## Roadmap
 
+[Table of contents](#table-of-contents)
+
 * JWT Authentication
 * Validations
 * Authorization
@@ -554,6 +557,7 @@ Not supported.
 * Subscription support
 * Automatic result cache
 * ReactAdmin support
+* Route hashing
 
 ## Acknowledgement
 
