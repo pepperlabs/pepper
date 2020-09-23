@@ -3,6 +3,7 @@
 namespace Pepper;
 
 use BadMethodCallException;
+use Closure;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Schema;
@@ -514,6 +515,18 @@ abstract class GraphQL
     public function getAttribute(string $name, string $default): string
     {
         return '';
+    }
+
+    /**
+     * [FOR TEST ONLY] add new method to class during the runtime.
+     *
+     * @param  string  $name
+     * @param  Closure $func
+     * @return void
+     */
+    public function _add_method($name, Closure $func)
+    {
+        $this->methods[$name] = Closure::bind($func, $this, get_class());
     }
 
     public function __call(string $method, array $params)
