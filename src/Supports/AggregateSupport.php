@@ -132,11 +132,6 @@ trait AggregateSupport
      */
     public function resolveCountAggregate($root, $args, $context, $resolveInfo): int
     {
-        $method = 'resolve'.Str::studly($root['name']).'CountAggregate';
-        if (method_exists($this, $method)) {
-            return $this->$method($root, $args, $context, $resolveInfo);
-        }
-
         if (method_exists($root['root'], $root['name'])) {
             return $root['root']->{$root['name']}->count();
         } else {
@@ -155,11 +150,6 @@ trait AggregateSupport
      */
     public function resolveSumAggregate($root, $args, $context, $resolveInfo): array
     {
-        $method = 'resolve'.Str::studly($root['name']).'SumAggregate';
-        if (method_exists($this, $method)) {
-            return $this->$method($root, $args, $context, $resolveInfo);
-        }
-
         $result = [];
         $result['__Union_Type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
@@ -207,11 +197,6 @@ trait AggregateSupport
      */
     public function resolveAvgAggregate($root, $args, $context, $resolveInfo): array
     {
-        $method = 'resolve'.Str::studly($root['name']).'AvgAggregate';
-        if (method_exists($this, $method)) {
-            return $this->$method($root, $args, $context, $resolveInfo);
-        }
-
         $result = [];
         $result['__Union_Type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
@@ -236,11 +221,6 @@ trait AggregateSupport
      */
     public function resolveMaxAggregate($root, $args, $context, $resolveInfo): array
     {
-        $method = 'resolve'.Str::studly($root['name']).'MaxAggregate';
-        if (method_exists($this, $method)) {
-            return $this->$method($root, $args, $context, $resolveInfo);
-        }
-
         $result = [];
         $result['__Union_Type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {
@@ -265,11 +245,6 @@ trait AggregateSupport
      */
     public function resolveMinAggregate($root, $args, $context, $resolveInfo): array
     {
-        $method = 'resolve'.Str::studly($root['name']).'MinAggregate';
-        if (method_exists($this, $method)) {
-            return $this->$method($root, $args, $context, $resolveInfo);
-        }
-
         $result = [];
         $result['__Union_Type'] = $this->getFragmentType($resolveInfo);
         foreach ($resolveInfo->getFieldSelection() as $field => $key) {

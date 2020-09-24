@@ -62,6 +62,12 @@ Add `pepper` middleware to graphql config file.
       - [delete_by_pk](#delete_by_pk)
       - [delete](#delete)
     - [Subscription](#subscription)
+  - [Customization](#customization)
+    - [Override `count` method](#override-count-method)
+    - [Override `avg` method](#override-avg-method)
+    - [Override `sum` method](#override-sum-method)
+    - [Override `max` method](#override-max-method)
+    - [Override `min` method](#override-min-method)
   - [Roadmap](#roadmap)
   - [Acknowledgement](#acknowledgement)
   - [Contribution](#contribution)
@@ -542,6 +548,65 @@ mutation delete_example {
 [Table of contents](#table-of-contents)
 
 Not supported.
+
+## Customization
+
+[Table of contents](#table-of-contents)
+
+### Override `count` method
+
+In your pepper class, add the following method. the return type must be integer.
+
+```php
+public function resolveCountAggregate($root, $args, $context, $resolveInfo): int
+{
+    // override calculation of the count
+}
+```
+
+### Override `avg` method
+
+In your pepper class, add the following method. The return type must be an array.
+
+```php
+public function resolveAvgAggregate($root, $args, $context, $resolveInfo): array
+{
+    // override calculation of the avg
+}
+```
+
+### Override `sum` method
+
+In your pepper class, add the following method. The return type must be an array.
+
+```php
+public function resolveSumAggregate($root, $args, $context, $resolveInfo): array
+{
+    // override calculation of the sum
+}
+```
+
+### Override `max` method
+
+In your pepper class, add the following method. The return type must be an array.
+
+```php
+public function resolveMaxAggregate($root, $args, $context, $resolveInfo): array
+{
+    // override calculation of the max
+}
+```
+
+### Override `min` method
+
+In your pepper class, add the following method. The return type must be an array.
+
+```php
+public function resolveMinAggregate($root, $args, $context, $resolveInfo): array
+{
+    // override calculation of the min
+}
+```
 
 ## Roadmap
 
