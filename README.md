@@ -68,6 +68,7 @@ Add `pepper` middleware to graphql config file.
     - [Override `sum` method](#override-sum-method)
     - [Override `max` method](#override-max-method)
     - [Override `min` method](#override-min-method)
+  - [Roadmap](#roadmap)
   - [Acknowledgement](#acknowledgement)
   - [Contribution](#contribution)
     - [Report bugs](#report-bugs)
@@ -606,6 +607,22 @@ public function resolveMinAggregate($root, $args, $context, $resolveInfo): array
     // override calculation of the min
 }
 ```
+
+## Roadmap
+
+[Table of contents](#table-of-contents)
+
+* JWT Authentication
+* Validations
+* Authorization
+* File upload
+* JSON type support
+* GIS support
+* MySQL/PostgreSQL/SQLServer/SQLite custom fields support
+* Subscription support
+* Automatic result cache
+* ReactAdmin support
+* Route hashing
 
 ## Acknowledgement
 
