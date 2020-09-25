@@ -69,12 +69,6 @@ Add `pepper` middleware to graphql config file.
     - [Override `max` method](#override-max-method)
     - [Override `min` method](#override-min-method)
   - [Roadmap](#roadmap)
-  - [Acknowledgement](#acknowledgement)
-  - [Contribution](#contribution)
-    - [Report bugs](#report-bugs)
-    - [Feature request](#feature-request)
-    - [Pull request](#pull-request)
-  - [Support](#support)
   - [License](#license)
 
 ## Introducation
@@ -623,30 +617,6 @@ public function resolveMinAggregate($root, $args, $context, $resolveInfo): array
 * Automatic result cache
 * ReactAdmin support
 * Route hashing
-
-## Acknowledgement
-
-[Table of contents](#table-of-contents)
-
-## Contribution
-
-[Table of contents](#table-of-contents)
-
-### Report bugs
-
-[Table of contents](#table-of-contents)
-
-### Feature request
-
-[Table of contents](#table-of-contents)
-
-### Pull request
-
-[Table of contents](#table-of-contents)
-
-## Support
-
-[Table of contents](#table-of-contents)
 
 ## License
 
