@@ -62,6 +62,9 @@ Add `pepper` middleware to graphql config file.
       - [delete_by_pk](#delete_by_pk)
       - [delete](#delete)
     - [Subscription](#subscription)
+  - [Authorization](#authorization)
+    - [Override authorize](#override-authorize)
+    - [override authorization message](#override-authorization-message)
   - [Customization](#customization)
     - [Override `count` method](#override-count-method)
     - [Override `avg` method](#override-avg-method)
@@ -70,12 +73,6 @@ Add `pepper` middleware to graphql config file.
     - [Override `min` method](#override-min-method)
     - [Override `description`](#override-description)
   - [Roadmap](#roadmap)
-  - [Acknowledgement](#acknowledgement)
-  - [Contribution](#contribution)
-    - [Report bugs](#report-bugs)
-    - [Feature request](#feature-request)
-    - [Pull request](#pull-request)
-  - [Support](#support)
   - [License](#license)
 
 ## Introducation
@@ -549,6 +546,58 @@ mutation delete_example {
 [Table of contents](#table-of-contents)
 
 Not supported.
+
+## Authorization
+
+[Table of contents](#table-of-contents)
+
+### Override authorize
+
+For defining authorization for each exposed GraphQL queries and mutation add a method of `set[NameOfOperation]Authorize` to its repective Pepper class:
+
+```php
+public function setQueryAuthorize(...$params)
+{
+    return ! Auth::guest();
+}
+```
+
+The `...params` consist of `$root`, `array $args`, `$ctx`, `ResolveInfo $resolveInfo = null` and, `Closure $getSelectFields = null`. [Read more about params](https://github.com/rebing/graphql-laravel#authorization)
+
+Available operations are:
+
+- UpdateMutation
+- InsertMutation
+- DeleteMutation
+- UpdateByPkMutation
+- DeleteByPkMutation
+- InsertOneMutation
+- ByPkQuery
+- AggregateQuery
+- Query
+
+### override authorization message
+
+For defining authorization message for each exposed GraphQL queries and mutation add a method of `set[NameOfOperation]AuthorizationMessage` to its repective Pepper class, the return must should be string:
+
+```php
+public function setQueryAuthorizationMessage()
+{
+    return '(403) Not Authorized';
+}
+```
+
+Available operations are:
+
+- UpdateMutation
+- InsertMutation
+- DeleteMutation
+- UpdateByPkMutation
+- DeleteByPkMutation
+- InsertOneMutation
+- ByPkQuery
+- AggregateQuery
+- Query
 
 ## Customization
 
