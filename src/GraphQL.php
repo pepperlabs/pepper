@@ -519,7 +519,7 @@ abstract class GraphQL
      * Generate authorize.
      *
      * @param  mixed ...$params
-     * @return boolean
+     * @return bool
      */
     public function generateAuthorize(...$params): bool
     {
