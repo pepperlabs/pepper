@@ -36,4 +36,14 @@ class Query extends GraphQLQuery
     {
         return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
     }
+
+    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    {
+        return $this->instance->getQueryAuthorize($root, $args, $ctx, $resolveInfo, $getSelectFields);
+    }
+
+    public function getAuthorizationMessage(): string
+    {
+        return $this->instance->getQueryAuthorizationMessage();
+    }
 }

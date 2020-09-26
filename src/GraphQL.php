@@ -3,7 +3,6 @@
 namespace Pepper;
 
 use BadMethodCallException;
-use Closure;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Schema;
@@ -516,25 +515,30 @@ abstract class GraphQL
         }
     }
 
-    public function getAttribute(string $name, string $default): string
+    /**
+     * Generate authorize.
+     *
+     * @param  mixed ...$params
+     * @return boolean
+     */
+    public function generateAuthorize(...$params): bool
     {
-        return '';
+        return true;
     }
 
     /**
-     * [FOR TEST ONLY] add new method to class during the runtime.
+     * Generate default authorization message.
      *
-     * @param  string  $name
-     * @param  Closure $func
-     * @return void
+     * @return string
      */
-    public function _add_method($name, Closure $func)
+    public function generateAuthorizationMessage(): string
     {
-        $this->methods[$name] = Closure::bind($func, $this, get_class());
+        return 'You are not authorized to perform this action';
     }
 
     public function __call(string $method, array $params)
     {
+        // Get name
         if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Name')) {
             $needle = Str::replaceFirst('get', '', $method);
             $needle = Str::replaceLast('Name', '', $needle);
@@ -546,6 +550,7 @@ abstract class GraphQL
             );
         }
 
+        // Get description
         if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Description')) {
             $needle = Str::replaceFirst('get', '', $method);
             $needle = Str::replaceLast('Description', '', $needle);
@@ -553,7 +558,25 @@ abstract class GraphQL
             return $this->overrideMethod(
                 Str::replaceFirst('get', 'set', $method),
                 [$this, 'generateDescription'],
-                $needle
+                $needle,
+            );
+        }
+
+        // Get authorization
+        if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Authorize')) {
+            return $this->overrideMethod(
+                Str::replaceFirst('get', 'set', $method),
+                [$this, 'generateAuthorize'],
+                $params
+            );
+        }
+
+        // Get authorization message
+        if (Str::startsWith($method, 'get') && Str::endsWith($method, 'AuthorizationMessage')) {
+            return $this->overrideMethod(
+                Str::replaceFirst('get', 'set', $method),
+                [$this, 'generateAuthorizationMessage'],
+                $params
             );
         }
 

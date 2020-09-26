@@ -36,4 +36,14 @@ class DeleteMutation extends Mutation
     {
         return $this->instance->deleteMutation($root, $args, $context, $resolveInfo, $getSelectFields);
     }
+
+    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    {
+        return $this->instance->getDeleteMutationAuthorize($root, $args, $ctx, $resolveInfo, $getSelectFields);
+    }
+
+    public function getAuthorizationMessage(): string
+    {
+        return $this->instance->getDeleteMutationAuthorizationMessage();
+    }
 }
