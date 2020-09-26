@@ -14,15 +14,14 @@ class PepperGrindCommand extends Command
      * @var string
      */
     protected $signature = 'pepper:grind
-                            {--N|no-config : Do not update the config file}
-                            {--A|all : Include all models}';
+                            {--A|all : Include all models without asking}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Update or create pepper GraphQL classes';
+    protected $description = 'Generate Pepper GraphQL classes';
 
     /**
      * Execute the console command.
@@ -35,7 +34,7 @@ class PepperGrindCommand extends Command
 
         if (! $this->hasOption('all') || ! $this->option('all')) {
             $selected = $this->choice(
-                'Select models to be included',
+                'Select models:',
                 array_merge(['-- select all --'], $models),
                 null,
                 null,
@@ -115,7 +114,7 @@ class PepperGrindCommand extends Command
     private function ensureGraphQLConfigExists(): void
     {
         if (! file_exists(config_path('graphql.php'))) {
-            $this->info('Publishing default graphql config...');
+            $this->info('Publishing default GraphQL config...');
             $this->call('vendor:publish', [
                 '--provider' => 'Rebing\GraphQL\GraphQLServiceProvider',
             ]);

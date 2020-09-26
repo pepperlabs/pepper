@@ -68,7 +68,11 @@ Add `pepper` middleware to graphql config file.
     - [Override `sum` method](#override-sum-method)
     - [Override `max` method](#override-max-method)
     - [Override `min` method](#override-min-method)
+<<<<<<< HEAD
     - [Override `description`](#override-description)
+=======
+  - [Roadmap](#roadmap)
+>>>>>>> de895639ad23a8aade326141b26f2fdd9d3f3418
   - [Acknowledgement](#acknowledgement)
   - [Contribution](#contribution)
     - [Report bugs](#report-bugs)
@@ -608,6 +612,7 @@ public function resolveMinAggregate($root, $args, $context, $resolveInfo): array
 }
 ```
 
+<<<<<<< HEAD
 ### Override `description`
 
 Create a new method called `set[operation]Description` and return a string to override description. available `operations` are:
@@ -636,6 +641,23 @@ public function setQueryDescription()
     return 'new desription';
 }
 ```
+=======
+## Roadmap
+
+[Table of contents](#table-of-contents)
+
+* JWT Authentication
+* Validations
+* Authorization
+* File upload
+* JSON type support
+* GIS support
+* MySQL/PostgreSQL/SQLServer/SQLite custom fields support
+* Subscription support
+* Automatic result cache
+* ReactAdmin support
+* Route hashing
+>>>>>>> de895639ad23a8aade326141b26f2fdd9d3f3418
 
 ## Acknowledgement
 
