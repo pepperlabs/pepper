@@ -550,7 +550,6 @@ abstract class GraphQL
             $needle = Str::replaceFirst('get', '', $method);
             $needle = Str::replaceLast('Description', '', $needle);
 
-            logger(Str::replaceFirst('get', 'set', $method));
             return $this->overrideMethod(
                 Str::replaceFirst('get', 'set', $method),
                 [$this, 'generateDescription'],
