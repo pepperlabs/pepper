@@ -372,7 +372,7 @@ abstract class GraphQL
      */
     public function overrideMethod(string $method, callable $func, ...$args)
     {
-        $method = 'set'.Str::studly($method);
+        $method = Str::studly($method);
         if (method_exists($this, $method)) {
             return $this->$method($args);
         } else {
@@ -388,7 +388,11 @@ abstract class GraphQL
      */
     public function getFieldType(string $field): string
     {
-        return $this->overrideMethod('FieldType', [$this, 'guessFieldType'], $field);
+        return $this->overrideMethod(
+            'set'.Str::studly($field).'Type',
+            [$this, 'guessFieldType'],
+            $field
+        );
     }
 
     /**
@@ -440,7 +444,7 @@ abstract class GraphQL
      */
     public function getName(): string
     {
-        return $this->overrideMethod('Name', [$this, 'studly'], $this->name());
+        return $this->overrideMethod('setName', [$this, 'studly'], $this->name());
     }
 
     /**
