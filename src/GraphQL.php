@@ -558,7 +558,7 @@ abstract class GraphQL
             return $this->overrideMethod(
                 Str::replaceFirst('get', 'set', $method),
                 [$this, 'generateDescription'],
-                $needle,
+                $needle
             );
         }
 
