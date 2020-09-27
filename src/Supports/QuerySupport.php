@@ -27,37 +27,49 @@ trait QuerySupport
             $model = $root;
         }
 
-        return $model->when(isset($args['where']), function ($query) use (&$args) {
-            foreach ($args['where'] as $field => $criteria) {
-                if ($field == '_or') {
-                    foreach ($criteria as $f => $c) {
-                        foreach ($c as $operation => $value) {
-                            $query = $this->runCondition($query, $operation, $f, $value, 'or');
+        $fields = $getSelectFields();
+        $select = is_null($fields) ? [] : $fields->getSelect();
+        $with = is_null($fields) ? [] : $fields->getRelations();
+        // ->select($select)->with('user')
+
+        return $model
+            ->when(true, function ($query) use ($select) {
+                return $query->select('*');
+            })
+            ->when(! empty($with), function ($query) use ($with) {
+                return $query->with($with);
+            })
+            ->when(isset($args['where']), function ($query) use (&$args) {
+                foreach ($args['where'] as $field => $criteria) {
+                    if ($field == '_or') {
+                        foreach ($criteria as $f => $c) {
+                            foreach ($c as $operation => $value) {
+                                $query = $this->runCondition($query, $operation, $f, $value, 'or');
+                            }
                         }
-                    }
-                } elseif ($field == '_and') {
-                    foreach ($criteria as $f => $c) {
-                        foreach ($c as $operation => $value) {
-                            $query = $this->runCondition($query, $operation, $f, $value, 'and');
+                    } elseif ($field == '_and') {
+                        foreach ($criteria as $f => $c) {
+                            foreach ($c as $operation => $value) {
+                                $query = $this->runCondition($query, $operation, $f, $value, 'and');
+                            }
                         }
-                    }
-                } elseif ($field == '_not') {
-                    $notQuery = clone $query;
-                    foreach ($criteria as $f => $c) {
-                        foreach ($c as $operation => $value) {
-                            $notQuery = $this->runCondition($notQuery, $operation, $f, $value, 'and');
+                    } elseif ($field == '_not') {
+                        $notQuery = clone $query;
+                        foreach ($criteria as $f => $c) {
+                            foreach ($c as $operation => $value) {
+                                $notQuery = $this->runCondition($notQuery, $operation, $f, $value, 'and');
+                            }
                         }
-                    }
-                    $query = $query->whereNotIn('id', $notQuery->pluck('id')->toArray());
-                } else {
-                    foreach ($criteria as $operation => $value) {
-                        $query = $this->runCondition($query, $operation, $field, $value);
+                        $query = $query->whereNotIn('id', $notQuery->pluck('id')->toArray());
+                    } else {
+                        foreach ($criteria as $operation => $value) {
+                            $query = $this->runCondition($query, $operation, $field, $value);
+                        }
                     }
                 }
-            }
 
-            return $query;
-        })
+                return $query;
+            })
             ->when(isset($args['limit']), function ($query) use (&$args) {
                 return $query->limit($args['limit']);
             })
