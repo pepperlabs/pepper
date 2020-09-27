@@ -63,7 +63,7 @@ trait TypeSupport
             $relationType = $model->getMethod($relation)->getReturnType()->getName();
             $type = '';
             if ($relationType === BelongsTo::class) {
-                $type = Type::listOf(GraphQL::type($this->getTypeName()));
+                $type = Type::listOf(GraphQL::type($this->getRelatedType($relation)));
             } elseif (in_array($relationType, [
                 BelongsToMany::class,
                 HasMany::class,
