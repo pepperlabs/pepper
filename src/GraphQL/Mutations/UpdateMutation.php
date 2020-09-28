@@ -36,4 +36,14 @@ class UpdateMutation extends Mutation
     {
         return $this->instance->updateMutation($root, $args, $context, $resolveInfo, $getSelectFields);
     }
+
+    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    {
+        return $this->instance->getUpdateMutationAuthorize($root, $args, $ctx, $resolveInfo, $getSelectFields);
+    }
+
+    public function getAuthorizationMessage(): string
+    {
+        return $this->instance->getUpdateMutationAuthorizationMessage();
+    }
 }

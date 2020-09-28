@@ -36,4 +36,14 @@ class InsertOneMutation extends Mutation
     {
         return $this->instance->resolveMutationInsertOne($root, $args, $context, $resolveInfo, $getSelectFields);
     }
+
+    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    {
+        return $this->instance->getInsertOneMutationAuthorize($root, $args, $ctx, $resolveInfo, $getSelectFields);
+    }
+
+    public function getAuthorizationMessage(): string
+    {
+        return $this->instance->getInsertOneMutationAuthorizationMessage();
+    }
 }

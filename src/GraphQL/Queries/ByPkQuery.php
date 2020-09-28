@@ -36,4 +36,14 @@ class ByPkQuery extends Query
     {
         return $this->instance->queryByPk($root, $args, $context, $resolveInfo, $getSelectFields);
     }
+
+    public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
+    {
+        return $this->instance->getQueryByPkAuthorize($root, $args, $ctx, $resolveInfo, $getSelectFields);
+    }
+
+    public function getAuthorizationMessage(): string
+    {
+        return $this->instance->getQueryByPkAuthorizationMessage();
+    }
 }
