@@ -27,18 +27,7 @@ trait QuerySupport
             $model = $root;
         }
 
-        $fields = $getSelectFields();
-        $select = is_null($fields) ? [] : $fields->getSelect();
-        $with = is_null($fields) ? [] : $fields->getRelations();
-        // ->select($select)->with('user')
-
         return $model
-            ->when(true, function ($query) use ($select) {
-                return $query->select('*');
-            })
-            ->when(! empty($with), function ($query) use ($with) {
-                return $query->with($with);
-            })
             ->when(isset($args['where']), function ($query) use (&$args) {
                 foreach ($args['where'] as $field => $criteria) {
                     if ($field == '_or') {
@@ -81,7 +70,8 @@ trait QuerySupport
             })
             ->when(isset($args['take']), function ($query) use (&$args) {
                 return $query->take($args['take']);
-            })->when(isset($args['order_by']), function ($query) use (&$args) {
+            })
+            ->when(isset($args['order_by']), function ($query) use (&$args) {
                 foreach ($args['order_by'] as $column => $direction) {
                     $query = $query->orderBy($column, $direction);
                 }
