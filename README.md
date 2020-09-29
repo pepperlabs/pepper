@@ -65,6 +65,7 @@ Add `pepper` middleware to graphql config file.
   - [Authorization](#authorization)
     - [Override authorize](#override-authorize)
     - [override authorization message](#override-authorization-message)
+  - [Privacy](#privacy)
   - [Customization](#customization)
     - [Override `count` method](#override-count-method)
     - [Override `avg` method](#override-avg-method)
@@ -598,6 +599,19 @@ Available operations are:
 - ByPkQuery
 - AggregateQuery
 - Query
+
+## Privacy
+
+[Table of contents](#table-of-contents)
+
+You can define privacy for individual fields as follow, `set[FieldName]Privacy` in Pepper class for each model:
+
+```php
+public function setEmailPrivacy($args)
+{
+    return false;
+}
+```
 
 ## Customization
 

@@ -17,6 +17,7 @@ use Illuminate\Database\Eloquent\Relations\MorphOneOrMany;
 use Illuminate\Database\Eloquent\Relations\MorphPivot;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Support\Str;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait TypeSupport
@@ -35,6 +36,10 @@ trait TypeSupport
             $fields[$attribute] = [
                 'name' => $attribute,
                 'type' => $this->callGraphQLType($attribute),
+                'privacy' => function (array $args) use ($attribute): bool {
+                    $method = 'get'.Str::studly($attribute).'Privacy';
+                    return $this->$method($args);
+                },
             ];
         }
 
