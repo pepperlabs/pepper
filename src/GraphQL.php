@@ -536,6 +536,17 @@ abstract class GraphQL
         return 'You are not authorized to perform this action';
     }
 
+    /**
+     * Generate privacy.
+     *
+     * @param  mixed  ...$args
+     * @return bool
+     */
+    public function generatePrivacy(...$args): bool
+    {
+        return true;
+    }
+
     public function __call(string $method, array $params)
     {
         // Get name
@@ -576,6 +587,15 @@ abstract class GraphQL
             return $this->overrideMethod(
                 Str::replaceFirst('get', 'set', $method),
                 [$this, 'generateAuthorizationMessage'],
+                $params
+            );
+        }
+
+        // Get privacy
+        if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Privacy')) {
+            return $this->overrideMethod(
+                Str::replaceFirst('get', 'set', $method),
+                [$this, 'generatePrivacy'],
                 $params
             );
         }

@@ -28,6 +28,14 @@ trait QuerySupport
         }
 
         return $model
+            ->tap(function ($query) use ($getSelectFields) {
+                $fields = $getSelectFields();
+                $select = is_null($fields) ? '*' : $fields->getSelect();
+
+                return is_null($fields)
+                    ? $query->select($select)
+                    : $query->select($select)->with($fields->getRelations());
+            })
             ->when(isset($args['where']), function ($query) use (&$args) {
                 foreach ($args['where'] as $field => $criteria) {
                     if ($field == '_or') {
