@@ -31,6 +31,7 @@ trait QuerySupport
             ->tap(function ($query) use ($getSelectFields) {
                 $fields = $getSelectFields();
                 $select = is_null($fields) ? '*' : $fields->getSelect();
+
                 return is_null($fields)
                     ? $query->select($select)
                     : $query->select($select)->with($fields->getRelations());

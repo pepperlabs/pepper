@@ -38,6 +38,7 @@ trait TypeSupport
                 'type' => $this->callGraphQLType($attribute),
                 'privacy' => function (array $args) use ($attribute): bool {
                     $method = 'get'.Str::studly($attribute).'Privacy';
+
                     return $this->$method($args);
                 },
             ];
