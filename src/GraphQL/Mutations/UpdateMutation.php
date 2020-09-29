@@ -46,4 +46,9 @@ class UpdateMutation extends Mutation
     {
         return $this->instance->getUpdateMutationAuthorizationMessage();
     }
+
+    protected function rules(array $args = []): array
+    {
+        return $this->instance->getUpdateMutationRules();
+    }
 }
