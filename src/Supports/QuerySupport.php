@@ -5,6 +5,7 @@ namespace Pepper\Supports;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use Illuminate\Support\Str;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait QuerySupport
@@ -28,7 +29,7 @@ trait QuerySupport
         }
 
         return $model
-            ->tap(function ($query) use ($getSelectFields) {
+            ->when(! Str::endsWith($resolveInfo->path[0], '_aggregate'), function ($query) use ($getSelectFields) {
                 $fields = $getSelectFields();
                 $select = is_null($fields) ? '*' : $fields->getSelect();
 
