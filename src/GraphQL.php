@@ -547,6 +547,17 @@ abstract class GraphQL
         return true;
     }
 
+    /**
+     * Generate rules.
+     *
+     * @param  mixed  ...$params
+     * @return array
+     */
+    public function generateRules(...$params): array
+    {
+        return [];
+    }
+
     public function __call(string $method, array $params)
     {
         // Get name
@@ -596,6 +607,15 @@ abstract class GraphQL
             return $this->overrideMethod(
                 Str::replaceFirst('get', 'set', $method),
                 [$this, 'generatePrivacy'],
+                $params
+            );
+        }
+
+        // Get rules
+        if (Str::startsWith($method, 'get') && Str::endsWith($method, 'Rules')) {
+            return $this->overrideMethod(
+                Str::replaceFirst('get', 'set', $method),
+                [$this, 'generateRules'],
                 $params
             );
         }

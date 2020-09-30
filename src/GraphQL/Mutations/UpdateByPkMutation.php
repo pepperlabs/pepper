@@ -46,4 +46,9 @@ class UpdateByPkMutation extends Mutation
     {
         return $this->instance->getUpdateByPkMutationAuthorizationMessage();
     }
+
+    protected function rules(array $args = []): array
+    {
+        return $this->instance->getUpdateByPkMutationRules();
+    }
 }

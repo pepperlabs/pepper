@@ -46,4 +46,9 @@ class InsertOneMutation extends Mutation
     {
         return $this->instance->getInsertOneMutationAuthorizationMessage();
     }
+
+    protected function rules(array $args = []): array
+    {
+        return $this->instance->getInsertOneMutationRules();
+    }
 }
