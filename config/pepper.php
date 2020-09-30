@@ -79,6 +79,7 @@ return [
     |
     */
     'global' => [
+        'Upload' => \Rebing\GraphQL\Support\UploadType::class,
         'AllUnion' => \Pepper\GraphQL\Unions\AllUnion::class,
         'AnyScalar' => \Pepper\GraphQL\Scalars\AnyScalar::class,
         'OrderByEnum' => \Pepper\GraphQL\Enums\OrderByEnum::class,
