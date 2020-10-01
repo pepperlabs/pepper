@@ -12,22 +12,6 @@ PHP: 7.1.3 or higher
 
 Laravel: 5.6 or higher
 
-## Installation
-
-You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/pepperlabs/pepper).
-
-```bash
-composer require pepperlabs/pepper
-```
-
-Initial the base GraphQL classes:
-
-```bash
-php artisan pepper:grind --all
-```
-
-Add `pepper` middleware to graphql config file.
-
 ## Table of contents
 
 - [Pepper](#pepper)
@@ -85,7 +69,23 @@ The goal is simplify and fasten development of GraphQL based APIs.
 
 ### Installation
 
+You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/pepperlabs/pepper).
+
+```bash
+composer require pepperlabs/pepper
+```
+
+Initial the base GraphQL classes:
+
+```bash
+php artisan pepper:grind --all
+```
+
+Add `pepper` middleware to graphql config file.
+
 ### Supported databases
+
+As it uses Laravel Eloquent only, it would support SQLite, MySQL, PostgreSQL and, SQLServer
 
 ## Background
 
