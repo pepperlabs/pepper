@@ -205,8 +205,6 @@ class QueryTest extends TestCaseDatabase
             ],
         ];
 
-        $response->dump();
-
         $response->assertOk();
         $this->assertEquals($expectedResult, $response->json());
     }
