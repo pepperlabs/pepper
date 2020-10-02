@@ -29,6 +29,10 @@ class AllUnion extends UnionType
 
     public function resolveType($root)
     {
-        return GraphQL::type($root['__Union_Type']);
+        $type = array_key_exists('__Union_Type', $root)
+            ? $root['__Union_Type']
+            : $this->types[0];
+
+        return GraphQL::type($type);
     }
 }
