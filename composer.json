@@ -14,7 +14,8 @@
         "doctrine/dbal": "~2.6.0|~2.7.0|~2.8.0|~2.9.0|^2.10",
         "haydenpierce/class-finder": "^0.4.2",
         "rebing/graphql-laravel": "^5.1",
-        "ext-json": "*"
+        "ext-json": "*",
+        "tymon/jwt-auth": "^1.0"
     },
     "require-dev": {
         "orchestra/testbench": "~3.6.0|~3.7.0|~3.8.0|^4.0|^5.0|^6.0",

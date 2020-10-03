@@ -2,43 +2,18 @@
 
 # Pepper
 
----
-
-[WIP] Pepper is subject to change anything wihtout any prior notice at this stage of development.
-
-## Version support
-
-PHP: 7.1.3 or higher
-
-Laravel: 5.6 or higher
-
-## Installation
-
-You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/pepperlabs/pepper).
-
-```bash
-composer require pepperlabs/pepper
-```
-
-Initial the base GraphQL classes:
-
-```bash
-php artisan pepper:grind --all
-```
-
-Add `pepper` middleware to graphql config file.
+Pepper is a Laravel package that can expose GraphQL endpoint for your defined models with zero configuration.
 
 ## Table of contents
 
 - [Pepper](#pepper)
-  - [Version support](#version-support)
-  - [Installation](#installation)
   - [Table of contents](#table-of-contents)
   - [Introducation](#introducation)
-    - [Installation](#installation-1)
-    - [Supported databases](#supported-databases)
+    - [Version support](#version-support)
+  - [Installation](#installation)
   - [Background](#background)
   - [Commands](#commands)
+    - [Generate Pepper GraphQL classes](#generate-pepper-graphql-classes)
   - [API](#api)
     - [Query](#query)
       - [`query` syntax](#query-syntax)
@@ -83,9 +58,27 @@ Add `pepper` middleware to graphql config file.
 Pepper is an auto generative GraphQL based on [Laravel wrapper for Facebook's GraphQL](https://github.com/rebing/graphql-laravel).
 The goal is simplify and fasten development of GraphQL based APIs.
 
-### Installation
+### Version support
 
-### Supported databases
+PHP: 7.1.3 or higher
+
+Laravel: 5.6 or higher
+
+## Installation
+
+You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/pepperlabs/pepper).
+
+```bash
+composer require pepperlabs/pepper
+```
+
+Initial the base GraphQL classes:
+
+```bash
+php artisan pepper:grind --all
+```
+
+Add `pepper` middleware to graphql config file.
 
 ## Background
 
@@ -97,6 +90,16 @@ we are supporting MySQL, PostgreSQL, SQLite and SQL Server. Although most of the
 ## Commands
 
 [Table of contents](#table-of-contents)
+
+### Generate Pepper GraphQL classes
+
+Run following command to generate Pepper GraphQL class for interactively:
+
+```bash
+php artisan pepper:grind
+```
+
+or supply `--all` option to generate for all models.
 
 ## API
 
