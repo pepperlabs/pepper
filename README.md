@@ -705,8 +705,8 @@ public function setQueryDescription()
 [Table of contents](#table-of-contents)
 
 * JWT Authentication
-* Validations
-* Authorization
+* ~~Validations~~
+* ~~Authorization~~
 * File upload
 * JSON type support
 * GIS support
