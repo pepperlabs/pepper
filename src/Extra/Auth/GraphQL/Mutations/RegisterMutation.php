@@ -44,9 +44,7 @@ class RegisterMutation extends Mutation
 
         event(new Registered($user));
 
-        $token = auth()->login($user);
-        logger($user);
-        return ['token' => $token];
+        return ['token' => auth()->attempt($args)];
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
