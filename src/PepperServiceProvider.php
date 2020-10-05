@@ -16,9 +16,8 @@ class PepperServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__.'/../config/pepper.php' => config_path('pepper.php'),
-        ], 'config');
+        $this->publishes([__DIR__.'/../config/base.php' => config_path('pepper/base.php')], 'config');
+        $this->publishes([__DIR__.'/../config/auth.php' => config_path('pepper/auth.php')], 'config');
 
         $this->registerMiddleware('pepper', Middleware::class);
     }
@@ -44,7 +43,8 @@ class PepperServiceProvider extends ServiceProvider
      */
     public function registerPepper(): void
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/pepper.php', 'pepper');
+        $this->mergeConfigFrom(__DIR__.'/../config/base.php', 'pepper.base');
+        $this->mergeConfigFrom(__DIR__.'/../config/auth.php', 'pepper.auth');
 
         $this->app->register(\Tymon\JWTAuth\Providers\LaravelServiceProvider::class);
         $this->app->register(\Rebing\GraphQL\GraphQLServiceProvider::class);
