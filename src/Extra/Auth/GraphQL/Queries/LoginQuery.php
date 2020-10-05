@@ -32,13 +32,12 @@ class LoginQuery extends Query
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        dd(auth()->attempt($args));
-        return auth()->attempt($args);
+        return ['token' => auth()->attempt($args)];
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
     {
-        return auth()->attempt($args);
+        return auth()->validate($args);
     }
 
     public function getAuthorizationMessage(): string
