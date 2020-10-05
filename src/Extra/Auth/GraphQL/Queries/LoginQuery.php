@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Pepper\GraphQL\Queries;
+namespace Pepper\Extra\Auth\GraphQL\Queries;
 
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
@@ -19,7 +19,7 @@ class LoginQuery extends Query
 
     public function type(): Type
     {
-        return GraphQL::type('LoginType');
+        return GraphQL::type('JWTType');
     }
 
     public function args(): array
@@ -32,7 +32,8 @@ class LoginQuery extends Query
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return $this->respondWithToken(auth()->attempt($args));
+        dd(auth()->attempt($args));
+        return auth()->attempt($args);
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
