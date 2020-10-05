@@ -81,6 +81,10 @@ php artisan pepper:grind --all
 
 Add `pepper` middleware to graphql config file.
 
+### Supported databases
+
+As it uses Laravel Eloquent only, it would support SQLite, MySQL, PostgreSQL and, SQLServer
+
 ## Background
 
 [Table of contents](#table-of-contents)
@@ -781,8 +785,8 @@ public function setQueryDescription()
 [Table of contents](#table-of-contents)
 
 * JWT Authentication
-* Validations
-* Authorization
+* ~~Validations~~
+* ~~Authorization~~
 * File upload
 * JSON type support
 * GIS support
