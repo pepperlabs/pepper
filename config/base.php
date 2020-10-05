@@ -99,6 +99,6 @@ return [
     |
     */
     'extra' => [
-        'auth' => true,
+        'auth' => false,
     ],
 ];

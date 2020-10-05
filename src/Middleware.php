@@ -96,8 +96,6 @@ class Middleware
             $available = array_merge_recursive(config('pepper.auth.available'), $available);
         }
 
-        logger($available);
-
         // register global classes
         foreach ($global as $key => $value) {
             config(['graphql.types.'.$key => $value]);
