@@ -50,6 +50,8 @@ return [
             '{{studly}}Type' => \Pepper\GraphQL\Types\Type::class,
         ],
         'mutation' => [
+            'register' => \Pepper\Extra\Auth\GraphQL\Mutations\RegisterMutation::class,
+
             'update_{{snake}}' => \Pepper\GraphQL\Mutations\UpdateMutation::class,
             'insert_{{snake}}' => \Pepper\GraphQL\Mutations\InsertMutation::class,
             'delete_{{snake}}' => \Pepper\GraphQL\Mutations\DeleteMutation::class,
@@ -58,6 +60,8 @@ return [
             'insert_{{snake}}_one' => \Pepper\GraphQL\Mutations\InsertOneMutation::class,
         ],
         'query' => [
+            'login' => \Pepper\Extra\Auth\GraphQL\Queries\LoginQuery::class,
+
             '{{snake}}_by_pk' => \Pepper\GraphQL\Queries\ByPkQuery::class,
             '{{snake}}_aggregate' => \Pepper\GraphQL\Queries\AggregateQuery::class,
             '{{snake}}' => \Pepper\GraphQL\Queries\Query::class,
@@ -79,7 +83,11 @@ return [
     |
     */
     'global' => [
+        // Autentication
+        'JWTType' => \Pepper\Extra\Auth\GraphQL\Types\JWTType::class,
+        // Upload
         'Upload' => \Rebing\GraphQL\Support\UploadType::class,
+        // Common
         'AllUnion' => \Pepper\GraphQL\Unions\AllUnion::class,
         'AnyScalar' => \Pepper\GraphQL\Scalars\AnyScalar::class,
         'OrderByEnum' => \Pepper\GraphQL\Enums\OrderByEnum::class,

@@ -2,27 +2,18 @@
 
 # Pepper
 
----
-
-Pepper is subject to change anything wihtout any prior notice at this stage of development.
-
-## Version support
-
-PHP: 7.1.3 or higher
-
-Laravel: 5.6 or higher
+Pepper is a Laravel package that can expose GraphQL endpoint for your defined models with zero configuration.
 
 ## Table of contents
 
 - [Pepper](#pepper)
-  - [Version support](#version-support)
-  - [Installation](#installation)
   - [Table of contents](#table-of-contents)
   - [Introducation](#introducation)
-    - [Installation](#installation-1)
-    - [Supported databases](#supported-databases)
+    - [Version support](#version-support)
+  - [Installation](#installation)
   - [Background](#background)
   - [Commands](#commands)
+    - [Generate Pepper GraphQL classes](#generate-pepper-graphql-classes)
   - [API](#api)
     - [Query](#query)
       - [`query` syntax](#query-syntax)
@@ -49,6 +40,7 @@ Laravel: 5.6 or higher
   - [Authorization](#authorization)
     - [Override authorize](#override-authorize)
     - [override authorization message](#override-authorization-message)
+  - [Authentication](#authentication)
   - [Privacy](#privacy)
   - [Customization](#customization)
     - [Override `count` method](#override-count-method)
@@ -67,7 +59,13 @@ Laravel: 5.6 or higher
 Pepper is an auto generative GraphQL based on [Laravel wrapper for Facebook's GraphQL](https://github.com/rebing/graphql-laravel).
 The goal is simplify and fasten development of GraphQL based APIs.
 
-### Installation
+### Version support
+
+PHP: 7.1.3 or higher
+
+Laravel: 5.6 or higher
+
+## Installation
 
 You can install using [composer](https://getcomposer.org/) from [Packagist](https://packagist.org/packages/pepperlabs/pepper).
 
@@ -97,6 +95,16 @@ we are supporting MySQL, PostgreSQL, SQLite and SQL Server. Although most of the
 ## Commands
 
 [Table of contents](#table-of-contents)
+
+### Generate Pepper GraphQL classes
+
+Run following command to generate Pepper GraphQL class for interactively:
+
+```bash
+php artisan pepper:grind
+```
+
+or supply `--all` option to generate for all models.
 
 ## API
 
@@ -599,6 +607,78 @@ Available operations are:
 - ByPkQuery
 - AggregateQuery
 - Query
+
+## Authentication
+
+[Table of contents](#table-of-contents)
+
+Authentication is done using JWT utilizing [tymondesigns/jwt-auth](https://github.com/tymondesigns/jwt-auth) package.
+
+1. update `.env` file to include `JWT_SECRET` secret ([learn more](https://jwt-auth.readthedocs.io/en/develop/laravel-installation/)):
+
+```bash
+php artisan jwt:secret
+```
+
+2. Update you `User` model:
+
+```php
+<?php
+
+namespace App;
+
+use Tymon\JWTAuth\Contracts\JWTSubject;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+class User extends Authenticatable implements JWTSubject
+{
+    use Notifiable;
+
+    // Rest omitted for brevity
+
+    /**
+     * Get the identifier that will be stored in the subject claim of the JWT.
+     *
+     * @return mixed
+     */
+    public function getJWTIdentifier()
+    {
+        return $this->getKey();
+    }
+
+    /**
+     * Return a key value array, containing any custom claims to be added to the JWT.
+     *
+     * @return array
+     */
+    public function getJWTCustomClaims()
+    {
+        return [];
+    }
+}
+```
+
+3. Configure Auth guard
+
+in `config/auth.php` make sure to set:
+
+```php
+'defaults' => [
+    'guard' => 'api',
+    'passwords' => 'users',
+],
+
+...
+
+'guards' => [
+    'api' => [
+        'driver' => 'jwt',
+        'provider' => 'users',
+    ],
+],
+```
+
 
 ## Privacy
 
