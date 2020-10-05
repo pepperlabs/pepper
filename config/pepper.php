@@ -58,6 +58,8 @@ return [
             'insert_{{snake}}_one' => \Pepper\GraphQL\Mutations\InsertOneMutation::class,
         ],
         'query' => [
+            'login' => \Pepper\GraphQL\Queries\LoginQuery::class,
+
             '{{snake}}_by_pk' => \Pepper\GraphQL\Queries\ByPkQuery::class,
             '{{snake}}_aggregate' => \Pepper\GraphQL\Queries\AggregateQuery::class,
             '{{snake}}' => \Pepper\GraphQL\Queries\Query::class,
@@ -79,7 +81,11 @@ return [
     |
     */
     'global' => [
+        // Autentication
+        'LoginType' => \Pepper\GraphQL\Types\LoginType::class,
+        // Upload
         'Upload' => \Rebing\GraphQL\Support\UploadType::class,
+        // Common
         'AllUnion' => \Pepper\GraphQL\Unions\AllUnion::class,
         'AnyScalar' => \Pepper\GraphQL\Scalars\AnyScalar::class,
         'OrderByEnum' => \Pepper\GraphQL\Enums\OrderByEnum::class,
