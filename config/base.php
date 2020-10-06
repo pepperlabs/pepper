@@ -100,5 +100,6 @@ return [
     */
     'extra' => [
         'auth' => false,
+        'cache' => true,
     ],
 ];

@@ -6,6 +6,7 @@ use Illuminate\Routing\Router;
 use Illuminate\Support\ServiceProvider;
 use Pepper\Console\HttpMakeCommand;
 use Pepper\Console\PepperGrindCommand;
+use Pepper\Extra\Cache\CacheEventServiceProvider;
 
 class PepperServiceProvider extends ServiceProvider
 {
@@ -30,6 +31,10 @@ class PepperServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->registerPepper();
+
+        if (config('pepper.base.extra.cache')) {
+            $this->app->register(CacheEventServiceProvider::class);
+        }
 
         if ($this->app->runningInConsole()) {
             $this->registerConsole();
