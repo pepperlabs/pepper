@@ -50,8 +50,6 @@ return [
             '{{studly}}Type' => \Pepper\GraphQL\Types\Type::class,
         ],
         'mutation' => [
-            'register' => \Pepper\Extra\Auth\GraphQL\Mutations\RegisterMutation::class,
-
             'update_{{snake}}' => \Pepper\GraphQL\Mutations\UpdateMutation::class,
             'insert_{{snake}}' => \Pepper\GraphQL\Mutations\InsertMutation::class,
             'delete_{{snake}}' => \Pepper\GraphQL\Mutations\DeleteMutation::class,
@@ -60,8 +58,6 @@ return [
             'insert_{{snake}}_one' => \Pepper\GraphQL\Mutations\InsertOneMutation::class,
         ],
         'query' => [
-            'login' => \Pepper\Extra\Auth\GraphQL\Queries\LoginQuery::class,
-
             '{{snake}}_by_pk' => \Pepper\GraphQL\Queries\ByPkQuery::class,
             '{{snake}}_aggregate' => \Pepper\GraphQL\Queries\AggregateQuery::class,
             '{{snake}}' => \Pepper\GraphQL\Queries\Query::class,
@@ -83,8 +79,6 @@ return [
     |
     */
     'global' => [
-        // Autentication
-        'JWTType' => \Pepper\Extra\Auth\GraphQL\Types\JWTType::class,
         // Upload
         'Upload' => \Rebing\GraphQL\Support\UploadType::class,
         // Common
@@ -92,5 +86,20 @@ return [
         'AnyScalar' => \Pepper\GraphQL\Scalars\AnyScalar::class,
         'OrderByEnum' => \Pepper\GraphQL\Enums\OrderByEnum::class,
         'ConditionInput' => \Pepper\GraphQL\Inputs\ConditionInput::class,
+    ],
+
+    /*
+    |-----------------------------------------------------------------------
+    | Extra optional features
+    |-----------------------------------------------------------------------
+    |
+    | These Extra are those features that are completely optional and you can
+    | them to add extra features to your application or you can implement
+    | them yourself if you see they do not fit your app requirements.
+    |
+    */
+    'extra' => [
+        'auth' => false,
+        'cache' => true,
     ],
 ];

@@ -7,6 +7,7 @@ use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Pepper\Extra\Cache\Cache;
 use Pepper\Supports\AggregateSupport;
 use Pepper\Supports\InputSupport;
 use Pepper\Supports\MutationSupport;
@@ -69,7 +70,7 @@ abstract class GraphQL
      */
     private function defaultModel(): string
     {
-        return config('pepper.namespace.models').'\\'.$this->studly();
+        return config('pepper.base.namespace.models').'\\'.$this->studly();
     }
 
     /**
@@ -161,12 +162,16 @@ abstract class GraphQL
      */
     private function columns(): array
     {
-        $model = $this->model();
-        $table = $model->getTable();
+        return Cache::get('pepper:'.$this->name().':__columns', function () {
+            $model = $this->model();
+            $table = $model->getTable();
 
-        return $model->getConnection()
-            ->getSchemaBuilder()
-            ->getColumnListing($table);
+            $columns = $model->getConnection()
+                ->getSchemaBuilder()
+                ->getColumnListing($table);
+
+            return $columns;
+        });
     }
 
     /**
@@ -278,9 +283,9 @@ abstract class GraphQL
         // Expected defaults
         $related = get_class($this->model()->$method()->getRelated());
         $basename = class_basename($related);
-        $relatedGraphQLClass = config('pepper.namespace.root').'\Http\Pepper\\'.$basename;
+        $relatedGraphQLClass = config('pepper.base.namespace.root').'\Http\Pepper\\'.$basename;
 
-        if (file_exists(app('path')."/Http/Pepper/{$basename}.php") && class_exists(config('pepper.namespace.root').'\Http\Pepper\\'.$basename)) {
+        if (file_exists(app('path')."/Http/Pepper/{$basename}.php") && class_exists(config('pepper.base.namespace.root').'\Http\Pepper\\'.$basename)) {
             return $relatedGraphQLClass;
         } else {
             return false;
@@ -317,7 +322,7 @@ abstract class GraphQL
     {
         $classes = [];
 
-        foreach (ClassFinder::getClassesInNamespace(config('pepper.namespace.root').'\Http\Pepper\\', 2) as $class) {
+        foreach (ClassFinder::getClassesInNamespace(config('pepper.base.namespace.root').'\Http\Pepper\\', 2) as $class) {
             $classes[] = $class;
         }
 
@@ -465,8 +470,8 @@ abstract class GraphQL
      */
     protected function generateName(string $name): string
     {
-        $studly = config('pepper.available.type.{{studly}}'.$name, false);
-        $snake = config('pepper.available.type.{{snake}}'.$name, false);
+        $studly = config('pepper.base.available.type.{{studly}}'.$name, false);
+        $snake = config('pepper.base.available.type.{{snake}}'.$name, false);
         if (
             Str::endsWith($name, 'Type') && $studly ||
             Str::endsWith($name, 'Mutation') && $studly ||
@@ -494,8 +499,8 @@ abstract class GraphQL
      */
     protected function generateDescription(string $name): string
     {
-        $studly = config('pepper.available.type.{{studly}}'.$name, false);
-        $snake = config('pepper.available.type.{{snake}}'.$name, false);
+        $studly = config('pepper.base.available.type.{{studly}}'.$name, false);
+        $snake = config('pepper.base.available.type.{{snake}}'.$name, false);
         if (
             Str::endsWith($name, 'Type') && $studly ||
             Str::endsWith($name, 'Mutation') && $studly ||

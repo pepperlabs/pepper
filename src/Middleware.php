@@ -15,7 +15,7 @@ class Middleware
     private function getPepperClasses(): array
     {
         $classes = [];
-        $peppers = config('pepper.namespace.root').'\Http\Pepper';
+        $peppers = config('pepper.base.namespace.root').'\Http\Pepper';
         foreach (ClassFinder::getClassesInNamespace($peppers) as $class) {
             $classes[] = $class;
         }
@@ -36,7 +36,7 @@ class Middleware
     {
         /**
          * Replace studly and snake cases with the token provided in the config
-         * file. these names can be changed in the config('pepper.available').
+         * file. these names can be changed in the config('pepper.base.available').
          */
         $instance = new $pepper;
         $key = str_replace('{{studly}}', $instance->studly(), $key);
@@ -89,14 +89,21 @@ class Middleware
      */
     public function handle($request, Closure $next)
     {
+        $global = config('pepper.base.global');
+        $available = config('pepper.base.available');
+        if (config('pepper.base.extra.auth')) {
+            $global = array_merge_recursive(config('pepper.auth.global'), $global);
+            $available = array_merge_recursive(config('pepper.auth.available'), $available);
+        }
+
         // register global classes
-        foreach (config('pepper.global') as $key => $value) {
+        foreach ($global as $key => $value) {
             config(['graphql.types.'.$key => $value]);
         }
 
         // register generated classes
         foreach ($this->getPepperClasses() as $pepper) {
-            foreach (config('pepper.available') as $type => $types) {
+            foreach ($available as $type => $types) {
                 foreach ($types as $key => $parent) {
                     $this->registerPepperGraphQLClass($parent, $pepper, $type, $key);
                 }

@@ -34,7 +34,7 @@ class Query extends GraphQLQuery
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return $this->instance->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        return $this->instance->query($root, $args, $context, $resolveInfo, $getSelectFields);
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
