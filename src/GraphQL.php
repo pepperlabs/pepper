@@ -5,9 +5,9 @@ namespace Pepper;
 use BadMethodCallException;
 use HaydenPierce\ClassFinder\ClassFinder;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Str;
+use Pepper\Extra\Cache\Cache;
 use Pepper\Supports\AggregateSupport;
 use Pepper\Supports\InputSupport;
 use Pepper\Supports\MutationSupport;
@@ -162,20 +162,16 @@ abstract class GraphQL
      */
     private function columns(): array
     {
-        $key = 'pepper:'.$this->name().':columns';
-        if (config('pepper.base.extra.cache') && Cache::has($key)) {
-            return Cache::get($key);
-        } else {
+        return Cache::get('pepper:'.$this->name().':__columns', function () {
             $model = $this->model();
             $table = $model->getTable();
 
             $columns = $model->getConnection()
                 ->getSchemaBuilder()
                 ->getColumnListing($table);
-            Cache::forever($key, $columns);
 
             return $columns;
-        }
+        });
     }
 
     /**
