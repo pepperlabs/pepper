@@ -11,6 +11,7 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
   - [Introducation](#introducation)
     - [Version support](#version-support)
   - [Installation](#installation)
+    - [Supported databases](#supported-databases)
   - [Background](#background)
   - [Commands](#commands)
     - [Generate Pepper GraphQL classes](#generate-pepper-graphql-classes)
@@ -83,7 +84,7 @@ Add `pepper` middleware to graphql config file.
 
 ### Supported databases
 
-As it uses Laravel Eloquent only, it would support SQLite, MySQL, PostgreSQL and, SQLServer
+As it uses Laravel Eloquent only, it would support SQLite, MySQL, PostgreSQL and, SQLServer.
 
 ## Background
 

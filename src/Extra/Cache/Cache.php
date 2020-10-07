@@ -4,6 +4,7 @@ namespace Pepper\Extra\Cache;
 
 use Closure;
 use Illuminate\Support\Facades\Cache as LaravelCache;
+use Opis\Closure\SerializableClosure;
 
 class Cache
 {
@@ -19,6 +20,21 @@ class Cache
                 LaravelCache::put($key, $value, $ttl);
             }
             return $value;
+        }
+    }
+
+    public static function serialize($key, Closure $func, $ttl = null)
+    {
+        if (config('pepper.base.extra.cache') && LaravelCache::has($key)) {
+            return LaravelCache::get($key)->getClosure();
+        } else {
+            $wrapper = new SerializableClosure($func);
+            if (is_null($ttl)) {
+                LaravelCache::forever($key, $wrapper);
+            } else {
+                LaravelCache::put($key, $wrapper, $ttl);
+            }
+            return $wrapper->getClosure();
         }
     }
 }

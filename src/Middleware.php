@@ -4,6 +4,7 @@ namespace Pepper;
 
 use Closure;
 use HaydenPierce\ClassFinder\ClassFinder;
+use Pepper\Extra\Cache\Cache;
 
 class Middleware
 {
@@ -16,7 +17,10 @@ class Middleware
     {
         $classes = [];
         $peppers = config('pepper.base.namespace.root').'\Http\Pepper';
-        foreach (ClassFinder::getClassesInNamespace($peppers) as $class) {
+        $classesInNamespace = Cache::get('pepper:__classes:__list', function () use ($peppers) {
+            return ClassFinder::getClassesInNamespace($peppers);
+        });
+        foreach ($classesInNamespace as $class) {
             $classes[] = $class;
         }
 
@@ -38,9 +42,20 @@ class Middleware
          * Replace studly and snake cases with the token provided in the config
          * file. these names can be changed in the config('pepper.base.available').
          */
-        $instance = new $pepper;
-        $key = str_replace('{{studly}}', $instance->studly(), $key);
-        $key = str_replace('{{snake}}', $instance->snake(), $key);
+        $key = Cache::get('pepper:__class:'.$pepper.':'.$key, function () use ($pepper, $key) {
+            $instance = new $pepper;
+            $key = str_replace('{{studly}}', $instance->studly(), $key);
+            $key = str_replace('{{snake}}', $instance->snake(), $key);
+            return $key;
+        });
+
+        if (
+            config()->has('graphql.schemas.default.query.'.$key) ||
+            config()->has('graphql.schemas.default.mutation.'.$key) ||
+            config()->has('graphql.types.'.$key)
+        ) {
+            return;
+        }
 
         /**
          * Create a new anonymous class for the given parent and pepper and then
@@ -75,8 +90,8 @@ class Middleware
          * Finally we have to tell the alias how instantiate. IoC would bind the
          * pepper and parent to it.
          */
-        app()->singleton($alias, function () use ($graphql, $pepper, $parent) {
-            return  new $graphql($pepper, $parent);
+        app()->singletonIf($alias, function () use ($graphql, $pepper, $parent) {
+            return new $graphql($pepper, $parent);
         });
     }
 
@@ -95,7 +110,6 @@ class Middleware
             $global = array_merge_recursive(config('pepper.auth.global'), $global);
             $available = array_merge_recursive(config('pepper.auth.available'), $available);
         }
-
         // register global classes
         foreach ($global as $key => $value) {
             config(['graphql.types.'.$key => $value]);
