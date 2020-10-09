@@ -99,7 +99,7 @@ abstract class GraphQL
         try {
             return new ReflectionClass($this->modelClass());
         } catch (ReflectionException $e) {
-            throw new ModelNotFoundException("Trying to get {$this->modelClass()} failed. please check pepper.namespace.models config to be correct and if you have defined model in GraphQL class, make sure {$this->modelClass()} model exists.");
+            throw new ModelNotFoundException("Trying to get {$this->modelClass()} failed. please check pepper.base.namespace.models config to be correct and if you have defined model in GraphQL class, make sure {$this->modelClass()} model exists.");
         }
     }
 
@@ -254,7 +254,7 @@ abstract class GraphQL
         try {
             return new ReflectionClass($this->modelClass());
         } catch (ReflectionException $e) {
-            throw new ClassNotFoundException("Trying to get {$this->relatedModelClass($method)} failed. please check pepper.namespace.root config to be correct and if GraphQL class exists.", $this->relatedModelClass($method));
+            throw new ClassNotFoundException("Trying to get {$this->relatedModelClass($method)} failed. please check pepper.base.namespace.root config to be correct and if GraphQL class exists.", $this->relatedModelClass($method));
         }
     }
 

@@ -49,23 +49,6 @@ class Middleware
             return $key;
         });
 
-        // if (
-        //     config()->has('graphql.schemas.default.query.'.$key) ||
-        //     config()->has('graphql.schemas.default.mutation.'.$key) ||
-        //     config()->has('graphql.types.'.$key)
-        // ) {
-        //     return;
-        // }
-
-        /**
-         * Create a new anonymous class for the given parent and pepper and then
-         * get its class namespace.
-         */
-        // $graphql = MockGraphQL::graphQL($pepper, $parent);
-        // $graphqlClass = get_class(MockGraphQL::class);
-        // var_dump($graphqlClass);
-        // die();
-
         /**
          * We have to define alias for anonymous classes in order to be able to
          * define multiple classes on the fly using anonymous classes. if not
@@ -96,8 +79,6 @@ class Middleware
             return Cache::get('pepper:__class:__'.$alias, function () use ($pepper, $parent) {
                 return new $parent($pepper);
             });
-            // return new
-            // return new $graphql($pepper, $parent);
         });
     }
 

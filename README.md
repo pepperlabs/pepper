@@ -50,6 +50,10 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
     - [Override `max` method](#override-max-method)
     - [Override `min` method](#override-min-method)
     - [Override `description`](#override-description)
+  - [Authentication](#authentication-1)
+    - [Login](#login)
+    - [Register](#register)
+  - [Optimization](#optimization)
   - [Roadmap](#roadmap)
   - [License](#license)
 
@@ -781,11 +785,61 @@ public function setQueryDescription()
     return 'new desription';
 }
 ```
+
+## Authentication
+
+[Table of contents](#table-of-contents)
+
+set `pepper.base.extra.auth` to `true` in order to enable authentication.
+
+### Login
+
+```graphql
+{
+  login(
+    email: "amirmasoud@pepper.test"
+    password: "12345678"
+  ) {
+    token
+  }
+}
+```
+
+return response would be JWT token if login credentials are valid, otherwise it would be authorization error.
+
+### Register
+
+```graphql
+mutation {
+  register(
+    name: "amirmasoud"
+    email: "amirmasoud@pepper.test"
+    password: "12345678"
+    password_confirmation: "12345678"
+  ) {
+    token
+  }
+}
+```
+
+Return response would be JWT token if no authorization error had been raised.
+
+## Optimization
+
+[Table of contents](#table-of-contents)
+
+By enabling caching you can improve execution time:
+
+1. set `pepper.base.extra.cache` to `true`
+2. set `graphql.lazyload_types` to `true`
+
+
 ## Roadmap
 
 [Table of contents](#table-of-contents)
 
-* JWT Authentication
+* ~~JWT Authentication~~
+* Reset password
 * ~~Validations~~
 * ~~Authorization~~
 * File upload

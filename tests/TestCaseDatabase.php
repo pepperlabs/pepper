@@ -35,7 +35,7 @@ abstract class TestCaseDatabase extends TestCase
         if (file_exists(config_path('pepper.php'))) {
             $config = new \Illuminate\Config\Repository(include config_path('pepper.php'));
             config(['pepper' => $config->all()]);
-            config(['pepper.namespace.models' => 'Tests\Support\Models']);
+            config(['pepper.base.namespace.models' => 'Tests\Support\Models']);
         }
     }
 
