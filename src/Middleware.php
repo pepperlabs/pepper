@@ -61,8 +61,10 @@ class Middleware
          * Create a new anonymous class for the given parent and pepper and then
          * get its class namespace.
          */
-        $graphql = MockGraphQL::graphQL($pepper, $parent);
-        $graphqlClass = get_class($graphql);
+        // $graphql = MockGraphQL::graphQL($pepper, $parent);
+        // $graphqlClass = get_class(MockGraphQL::class);
+        // var_dump($graphqlClass);
+        // die();
 
         /**
          * We have to define alias for anonymous classes in order to be able to
@@ -71,7 +73,7 @@ class Middleware
          */
         $alias = $parent.'@'.$pepper.'@'.$type.'@'.$key;
         if (! class_exists($alias)) {
-            class_alias($graphqlClass, $alias);
+            class_alias(MockGraphQL::class, $alias);
         }
 
         /**
@@ -90,8 +92,10 @@ class Middleware
          * Finally we have to tell the alias how instantiate. IoC would bind the
          * pepper and parent to it.
          */
-        app()->singletonIf($alias, function () use ($graphql, $pepper, $parent) {
-            return new $graphql($pepper, $parent);
+        app()->singletonIf($alias, function () use ($pepper, $parent) {
+            return new $parent;
+            // return new
+            // return new $graphql($pepper, $parent);
         });
     }
 
