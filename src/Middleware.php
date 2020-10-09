@@ -49,13 +49,13 @@ class Middleware
             return $key;
         });
 
-        if (
-            config()->has('graphql.schemas.default.query.'.$key) ||
-            config()->has('graphql.schemas.default.mutation.'.$key) ||
-            config()->has('graphql.types.'.$key)
-        ) {
-            return;
-        }
+        // if (
+        //     config()->has('graphql.schemas.default.query.'.$key) ||
+        //     config()->has('graphql.schemas.default.mutation.'.$key) ||
+        //     config()->has('graphql.types.'.$key)
+        // ) {
+        //     return;
+        // }
 
         /**
          * Create a new anonymous class for the given parent and pepper and then
@@ -92,8 +92,10 @@ class Middleware
          * Finally we have to tell the alias how instantiate. IoC would bind the
          * pepper and parent to it.
          */
-        app()->singletonIf($alias, function () use ($pepper, $parent) {
-            return new $parent;
+        app()->singletonIf($alias, function () use ($alias, $pepper, $parent) {
+            return Cache::get('pepper:__class:__'.$alias, function () use ($pepper, $parent) {
+                return new $parent($pepper);
+            });
             // return new
             // return new $graphql($pepper, $parent);
         });
