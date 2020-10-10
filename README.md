@@ -2,7 +2,7 @@
 
 # Pepper
 
-Pepper is a Laravel package that can expose GraphQL endpoint for your defined models with zero configuration.
+Pepper is a Laravel package that can expose GraphQL endpoint for your defined models with minimun configuration.
 
 ## Table of contents
 
