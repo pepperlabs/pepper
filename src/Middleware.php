@@ -76,7 +76,7 @@ class Middleware
          * Finally we have to tell the alias how instantiate. IoC would bind the
          * pepper and parent to it.
          */
-        app()->singletonIf($alias, function () use ($alias, $pepper, $parent) {
+        app()->singleton($alias, function () use ($alias, $pepper, $parent) {
             return Cache::get('pepper:__class:__'.$alias, function () use ($pepper, $parent) {
                 return new $parent($pepper);
             });
