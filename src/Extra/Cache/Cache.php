@@ -19,6 +19,7 @@ class Cache
             } else {
                 LaravelCache::put($key, $value, $ttl);
             }
+
             return $value;
         }
     }
@@ -34,6 +35,7 @@ class Cache
             } else {
                 LaravelCache::put($key, $wrapper, $ttl);
             }
+
             return $wrapper->getClosure();
         }
     }
