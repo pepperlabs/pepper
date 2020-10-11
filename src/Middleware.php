@@ -46,6 +46,7 @@ class Middleware
             $instance = new $pepper;
             $key = str_replace('{{studly}}', $instance->studly(), $key);
             $key = str_replace('{{snake}}', $instance->snake(), $key);
+
             return $key;
         });
 
