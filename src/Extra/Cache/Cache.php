@@ -10,7 +10,7 @@ class Cache
 {
     public static function get($key, Closure $func, $ttl = null)
     {
-        if (config('pepper.base.extra.cache') && LaravelCache::has($key)) {
+        if ((config('pepper.base.extra.cache') ?? false) && LaravelCache::has($key)) {
             return LaravelCache::get($key);
         } else {
             $value = $func();
