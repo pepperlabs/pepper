@@ -17,7 +17,7 @@ class Middleware
     {
         $classes = [];
         $peppers = config('pepper.namespace.root').'\Http\Pepper';
-        $classesInNamespace = Cache::get('pepper:__classes:__list', function () use ($peppers) {
+        $classesInNamespace = Cache::putOrGet('pepper:__classes:__list', function () use ($peppers) {
             return ClassFinder::getClassesInNamespace($peppers);
         });
         foreach ($classesInNamespace as $class) {
@@ -42,7 +42,7 @@ class Middleware
          * Replace studly and snake cases with the token provided in the config
          * file. these names can be changed in the config('pepper.available').
          */
-        $key = Cache::get('pepper:__class:'.$pepper.':'.$key, function () use ($pepper, $key) {
+        $key = Cache::putOrGet('pepper:__class:'.$pepper.':'.$key, function () use ($pepper, $key) {
             $instance = new $pepper;
             $key = str_replace('{{studly}}', $instance->studly(), $key);
             $key = str_replace('{{snake}}', $instance->snake(), $key);
@@ -77,7 +77,7 @@ class Middleware
          * pepper and parent to it.
          */
         app()->singleton($alias, function () use ($alias, $pepper, $parent) {
-            return Cache::get('pepper:__class:__'.$alias, function () use ($pepper, $parent) {
+            return Cache::putOrGet('pepper:__class:__'.$alias, function () use ($pepper, $parent) {
                 return new $parent($pepper);
             });
         });
@@ -94,7 +94,7 @@ class Middleware
     {
         $global = config('pepper.global');
         $available = config('pepper.available');
-        if (! config('pepper.extra.auth.disabled')) {
+        if (! config('pepper.auth.disabled')) {
             $global = array_merge_recursive(config('pepper.auth.global'), $global);
             $available = array_merge_recursive(config('pepper.auth.available'), $available);
         }

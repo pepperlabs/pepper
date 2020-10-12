@@ -162,7 +162,7 @@ abstract class GraphQL
      */
     private function columns(): array
     {
-        return Cache::get('pepper:'.$this->name().':__columns', function () {
+        return Cache::putOrGet('pepper:'.$this->name().':__columns', function () {
             $model = $this->model();
             $table = $model->getTable();
 

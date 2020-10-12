@@ -31,7 +31,7 @@ class PepperServiceProvider extends ServiceProvider
     {
         $this->registerPepper();
 
-        if (! config('pepper.extra.cache.disabled')) {
+        if (! config('pepper.cache.disabled')) {
             $this->app->register(CacheEventServiceProvider::class);
         }
 

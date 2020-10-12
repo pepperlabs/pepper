@@ -790,7 +790,7 @@ public function setQueryDescription()
 
 [Table of contents](#table-of-contents)
 
-set `pepper.extra.auth.disabled` to `false` in order to enable authentication.
+set `pepper.auth.disabled` to `false` in order to enable authentication.
 
 ### Login
 
@@ -830,7 +830,7 @@ Return response would be JWT token if no authorization error had been raised.
 
 By enabling caching you can improve execution time:
 
-1. set `pepper.extra.cache.disabled` to `false`
+1. set `pepper.cache.disabled` to `false`
 2. set `graphql.lazyload_types` to `true`
 
 
