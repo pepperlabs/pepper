@@ -79,9 +79,7 @@ return [
     |
     */
     'global' => [
-        // Upload
         'Upload' => \Rebing\GraphQL\Support\UploadType::class,
-        // Common
         'AllUnion' => \Pepper\GraphQL\Unions\AllUnion::class,
         'AnyScalar' => \Pepper\GraphQL\Scalars\AnyScalar::class,
         'OrderByEnum' => \Pepper\GraphQL\Enums\OrderByEnum::class,
@@ -99,7 +97,30 @@ return [
     |
     */
     'extra' => [
-        'auth' => false,
-        'cache' => true,
+        // TI
+        'auth' => [
+            'disabled' => true,
+            // default user model to look at
+            'user' => \App\Models\User::class,
+            'available' => [
+                'mutation' => [
+                    'register' => \Pepper\Extra\Auth\GraphQL\Mutations\RegisterMutation::class,
+                ],
+                'query' => [
+                    'login' => \Pepper\Extra\Auth\GraphQL\Queries\LoginQuery::class,
+                ],
+            ],
+
+            'global' => [
+                'JWTType' => \Pepper\Extra\Auth\GraphQL\Types\JWTType::class,
+            ],
+        ],
+        // TI
+        'cache' => [
+            'disabled' => true,
+            'ttl' => 24 * 60 * 60, // 1 day
+            'response' => false,
+            'config' => true,
+        ],
     ],
 ];

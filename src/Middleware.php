@@ -16,7 +16,7 @@ class Middleware
     private function getPepperClasses(): array
     {
         $classes = [];
-        $peppers = config('pepper.base.namespace.root').'\Http\Pepper';
+        $peppers = config('pepper.namespace.root').'\Http\Pepper';
         $classesInNamespace = Cache::get('pepper:__classes:__list', function () use ($peppers) {
             return ClassFinder::getClassesInNamespace($peppers);
         });
@@ -40,7 +40,7 @@ class Middleware
     {
         /**
          * Replace studly and snake cases with the token provided in the config
-         * file. these names can be changed in the config('pepper.base.available').
+         * file. these names can be changed in the config('pepper.available').
          */
         $key = Cache::get('pepper:__class:'.$pepper.':'.$key, function () use ($pepper, $key) {
             $instance = new $pepper;
@@ -92,9 +92,9 @@ class Middleware
      */
     public function handle($request, Closure $next)
     {
-        $global = config('pepper.base.global');
-        $available = config('pepper.base.available');
-        if (config('pepper.base.extra.auth')) {
+        $global = config('pepper.global');
+        $available = config('pepper.available');
+        if (! config('pepper.extra.auth.disabled')) {
             $global = array_merge_recursive(config('pepper.auth.global'), $global);
             $available = array_merge_recursive(config('pepper.auth.available'), $available);
         }

@@ -70,7 +70,7 @@ abstract class GraphQL
      */
     private function defaultModel(): string
     {
-        return config('pepper.base.namespace.models').'\\'.$this->studly();
+        return config('pepper.namespace.models').'\\'.$this->studly();
     }
 
     /**
@@ -99,7 +99,7 @@ abstract class GraphQL
         try {
             return new ReflectionClass($this->modelClass());
         } catch (ReflectionException $e) {
-            throw new ModelNotFoundException("Trying to get {$this->modelClass()} failed. please check pepper.base.namespace.models config to be correct and if you have defined model in GraphQL class, make sure {$this->modelClass()} model exists.");
+            throw new ModelNotFoundException("Trying to get {$this->modelClass()} failed. please check pepper.namespace.models config to be correct and if you have defined model in GraphQL class, make sure {$this->modelClass()} model exists.");
         }
     }
 
@@ -254,7 +254,7 @@ abstract class GraphQL
         try {
             return new ReflectionClass($this->modelClass());
         } catch (ReflectionException $e) {
-            throw new ClassNotFoundException("Trying to get {$this->relatedModelClass($method)} failed. please check pepper.base.namespace.root config to be correct and if GraphQL class exists.", $this->relatedModelClass($method));
+            throw new ClassNotFoundException("Trying to get {$this->relatedModelClass($method)} failed. please check pepper.namespace.root config to be correct and if GraphQL class exists.", $this->relatedModelClass($method));
         }
     }
 
@@ -283,9 +283,9 @@ abstract class GraphQL
         // Expected defaults
         $related = get_class($this->model()->$method()->getRelated());
         $basename = class_basename($related);
-        $relatedGraphQLClass = config('pepper.base.namespace.root').'\Http\Pepper\\'.$basename;
+        $relatedGraphQLClass = config('pepper.namespace.root').'\Http\Pepper\\'.$basename;
 
-        if (file_exists(app('path')."/Http/Pepper/{$basename}.php") && class_exists(config('pepper.base.namespace.root').'\Http\Pepper\\'.$basename)) {
+        if (file_exists(app('path')."/Http/Pepper/{$basename}.php") && class_exists(config('pepper.namespace.root').'\Http\Pepper\\'.$basename)) {
             return $relatedGraphQLClass;
         } else {
             return false;
@@ -322,7 +322,7 @@ abstract class GraphQL
     {
         $classes = [];
 
-        foreach (ClassFinder::getClassesInNamespace(config('pepper.base.namespace.root').'\Http\Pepper\\', 2) as $class) {
+        foreach (ClassFinder::getClassesInNamespace(config('pepper.namespace.root').'\Http\Pepper\\', 2) as $class) {
             $classes[] = $class;
         }
 
@@ -470,8 +470,8 @@ abstract class GraphQL
      */
     protected function generateName(string $name): string
     {
-        $studly = config('pepper.base.available.type.{{studly}}'.$name, false);
-        $snake = config('pepper.base.available.type.{{snake}}'.$name, false);
+        $studly = config('pepper.available.type.{{studly}}'.$name, false);
+        $snake = config('pepper.available.type.{{snake}}'.$name, false);
         if (
             Str::endsWith($name, 'Type') && $studly ||
             Str::endsWith($name, 'Mutation') && $studly ||
@@ -499,8 +499,8 @@ abstract class GraphQL
      */
     protected function generateDescription(string $name): string
     {
-        $studly = config('pepper.base.available.type.{{studly}}'.$name, false);
-        $snake = config('pepper.base.available.type.{{snake}}'.$name, false);
+        $studly = config('pepper.available.type.{{studly}}'.$name, false);
+        $snake = config('pepper.available.type.{{snake}}'.$name, false);
         if (
             Str::endsWith($name, 'Type') && $studly ||
             Str::endsWith($name, 'Mutation') && $studly ||

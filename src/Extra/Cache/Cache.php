@@ -10,7 +10,7 @@ class Cache
 {
     public static function get($key, Closure $func, $ttl = null)
     {
-        if ((config('pepper.base.extra.cache') ?? false) && LaravelCache::has($key)) {
+        if (! config('pepper.extra.cache.disabled') && LaravelCache::has($key)) {
             return LaravelCache::get($key);
         } else {
             $value = $func();
@@ -26,7 +26,7 @@ class Cache
 
     public static function serialize($key, Closure $func, $ttl = null)
     {
-        if (config('pepper.base.extra.cache') && LaravelCache::has($key)) {
+        if (! config('pepper.extra.cache.disabled') && LaravelCache::has($key)) {
             return LaravelCache::get($key)->getClosure();
         } else {
             $wrapper = new SerializableClosure($func);
