@@ -237,7 +237,7 @@ trait QuerySupport
     {
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
             ->get();
-        // return Cache::get(
+        // return Cache::putOrGet(
         //     'pepper:'.$this->name().':'.md5(serialize($getSelectFields())),
         //     function () use ($root, $args, $context, $resolveInfo, $getSelectFields) {
         //         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
@@ -259,7 +259,7 @@ trait QuerySupport
 
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
             ->first();
-        // return Cache::get(
+        // return Cache::putOrGet(
         //     'pepper:'.$this->name().':'.md5(serialize($getSelectFields())),
         //     function () use ($root, $args, $context, $resolveInfo, $getSelectFields) {
         //         $pk = $this->model()->getKeyName();

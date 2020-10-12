@@ -32,14 +32,10 @@ abstract class TestCaseDatabase extends TestCase
             config(['graphql' => $config->all()]);
         }
 
-        if (file_exists(config_path('pepper/base.php'))) {
-            $base = new \Illuminate\Config\Repository(include config_path('pepper/base.php'));
-            config(['pepper.base' => $base->all()]);
-            $auth = new \Illuminate\Config\Repository(include config_path('pepper/auth.php'));
-            config(['pepper.auth' => $auth->all()]);
-            $cache = new \Illuminate\Config\Repository(include config_path('pepper/cache.php'));
-            config(['pepper.cache' => $cache->all()]);
-            config(['pepper.base.namespace.models' => 'Tests\Support\Models']);
+        if (file_exists(config_path('pepper.php'))) {
+            $base = new \Illuminate\Config\Repository(include config_path('pepper.php'));
+            config(['pepper' => $base->all()]);
+            config(['pepper.namespace.models' => 'Tests\Support\Models']);
         }
     }
 

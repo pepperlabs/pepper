@@ -12,8 +12,12 @@ class JWTType extends GraphQLType
     protected $attributes = [
         'name' => 'JWTType',
         'description' => 'Login type',
-        'model' => \App\User::class,
     ];
+
+    public function __construct()
+    {
+        $this->attributes['model'] = config('pepper.auth.model');
+    }
 
     public function fields(): array
     {

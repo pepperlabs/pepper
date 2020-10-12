@@ -17,6 +17,14 @@ class LoginQuery extends Query
         'description' => 'login query',
     ];
 
+    protected $instance;
+
+    public function __construct()
+    {
+        $pepper = config('pepper.namespace.root').'\Http\Pepper\\'.class_basename(config('pepper.auth.model'));
+        $this->instance = new $pepper;
+    }
+
     public function type(): Type
     {
         return GraphQL::type('JWTType');

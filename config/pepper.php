@@ -79,9 +79,7 @@ return [
     |
     */
     'global' => [
-        // Upload
         'Upload' => \Rebing\GraphQL\Support\UploadType::class,
-        // Common
         'AllUnion' => \Pepper\GraphQL\Unions\AllUnion::class,
         'AnyScalar' => \Pepper\GraphQL\Scalars\AnyScalar::class,
         'OrderByEnum' => \Pepper\GraphQL\Enums\OrderByEnum::class,
@@ -97,9 +95,32 @@ return [
     | them to add extra features to your application or you can implement
     | them yourself if you see they do not fit your app requirements.
     |
+    | 1. Auth
+    | 2. Cache
+    |
     */
-    'extra' => [
-        'auth' => false,
-        'cache' => true,
+    'auth' => [
+        'disabled' => true,
+        // default user model to look at
+        'model' => \App\Models\User::class,
+        'available' => [
+            'mutation' => [
+                'register' => \Pepper\Extra\Auth\GraphQL\Mutations\RegisterMutation::class,
+            ],
+            'query' => [
+                'login' => \Pepper\Extra\Auth\GraphQL\Queries\LoginQuery::class,
+            ],
+        ],
+
+        'global' => [
+            'JWTType' => \Pepper\Extra\Auth\GraphQL\Types\JWTType::class,
+        ],
+    ],
+
+    'cache' => [
+        'disabled' => false,
+        'ttl' => 24 * 60 * 60, // 1 day
+        'response' => false,
+        'config' => true,
     ],
 ];
