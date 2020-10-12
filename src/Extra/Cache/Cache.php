@@ -27,7 +27,11 @@ class Cache
         $response = false,
         $serialize = false
     ) {
-        if (! config('pepper.cache.disabled') && LaravelCache::has($key)) {
+        if (config('pepper.cache.disabled')) {
+            return $func();
+        }
+
+        if (LaravelCache::has($key)) {
             return self::get($key, $serialize);
         } else {
             return self::put($key, $func, $ttl, $config, $response, $serialize);

@@ -790,7 +790,10 @@ public function setQueryDescription()
 
 [Table of contents](#table-of-contents)
 
-set `pepper.auth.disabled` to `false` in order to enable authentication.
+1. set `pepper.auth.disabled` to `false` in order to enable authentication.
+2. There should be a pepper class correspond to your defined user model. for
+example if you have defined `App\Models\User::class` as your user model, you
+must have `App\Pepper\User::class` class.
 
 ### Login
 

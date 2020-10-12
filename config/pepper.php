@@ -102,7 +102,7 @@ return [
     'auth' => [
         'disabled' => true,
         // default user model to look at
-        'user' => \App\Models\User::class,
+        'model' => \App\Models\User::class,
         'available' => [
             'mutation' => [
                 'register' => \Pepper\Extra\Auth\GraphQL\Mutations\RegisterMutation::class,
@@ -118,7 +118,7 @@ return [
     ],
 
     'cache' => [
-        'disabled' => true,
+        'disabled' => false,
         'ttl' => 24 * 60 * 60, // 1 day
         'response' => false,
         'config' => true,
