@@ -8,6 +8,17 @@ use Opis\Closure\SerializableClosure;
 
 class Cache
 {
+    /**
+     * put or get the cache value.
+     *
+     * @param  string  $key
+     * @param  Closure  $func
+     * @param  null|int  $ttl
+     * @param  bool  $config
+     * @param  bool  $response
+     * @param  bool  $serialize
+     * @return mixed
+     */
     public static function putOrGet(
         $key,
         Closure $func,
@@ -23,8 +34,27 @@ class Cache
         }
     }
 
-    protected static function put($key, $func, $ttl, $config, $response, $serialize)
-    {
+    /**
+     * Put new key into the cache, considering time to live, whether it should
+     * cache config or response values and whether it the value is serilizable
+     * or not.
+     *
+     * @param  string  $key
+     * @param  Closure  $func
+     * @param  null|int  $ttl
+     * @param  bool  $config
+     * @param  bool  $response
+     * @param  bool  $serialize
+     * @return mixed
+     */
+    protected static function put(
+        string $key,
+        Closure $func,
+        $ttl,
+        bool $config,
+        bool $response,
+        bool $serialize
+    ) {
         // If the value set not to be cached.
         if (
             ! config('pepper.cache.config') && $config ||
@@ -43,7 +73,14 @@ class Cache
         return $serialize ? $value->getClosure() : $value;
     }
 
-    protected static function get($key, $serialize)
+    /**
+     * Get cache value considering if its serialized or not.
+     *
+     * @param  string  $key
+     * @param  bool  $serialize
+     * @return mixed
+     */
+    protected static function get(string $key, bool $serialize)
     {
         $cacheValue = LaravelCache::get($key);
         if ($serialize) {
