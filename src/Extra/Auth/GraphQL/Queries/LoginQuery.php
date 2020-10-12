@@ -21,8 +21,8 @@ class LoginQuery extends Query
 
     public function __construct()
     {
-        dd(config('pepper.auth.model'));
-        $this->instance = new FUCK;
+        $pepper = config('pepper.namespace.root').'\Http\Pepper\\'.class_basename(config('pepper.auth.model'));
+        $this->instance = new $pepper;
     }
 
     public function type(): Type
