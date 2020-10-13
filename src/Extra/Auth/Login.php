@@ -11,11 +11,26 @@ class Login
      *
      * @return array
      */
-    public static function getArgs(): array
+    public static function getArgs(...$fields): array
     {
         return [
-            'email' => ['name' => 'email', 'type' => Type::string()],
+            self::getUsernameField($fields[0]) => ['name' => self::getUsernameField($fields[0]), 'type' => Type::string()],
             'password' => ['name' => 'password', 'type' => Type::string()],
         ];
+    }
+
+    /**
+     * Return the default field for username.
+     *
+     * @return string
+     */
+    public static function getUsernameField($instance): string
+    {
+        return $instance->overrideMethod(
+            'setLoginUsernameField',
+            function () {
+                return 'email';
+            }
+        );
     }
 }

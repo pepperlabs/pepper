@@ -35,7 +35,8 @@ class LoginQuery extends Query
     {
         return $this->instance->overrideMethod(
             'setLoginArgs',
-            [Login::class, 'getArgs']
+            [Login::class, 'getArgs'],
+            $this->instance
         );
     }
 

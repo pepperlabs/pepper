@@ -53,6 +53,7 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
   - [Authentication](#authentication-1)
     - [Login](#login)
       - [Override login args](#override-login-args)
+      - [Set username for login](#set-username-for-login)
     - [Register](#register)
   - [Optimization](#optimization)
   - [Roadmap](#roadmap)
@@ -834,7 +835,28 @@ class User extends GraphQL
         ];
     }
 }
+```
 
+#### Set username for login
+
+The default args for login are `email` and `password`, however, you can change
+username by defining a method called `setLoginUsernameField` in your pepper
+class which corresponds to `User::class` class:
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+
+class User extends GraphQL
+{
+    public function setLoginUsernameField(): string
+    {
+        return 'username';
+    }
+}
 ```
 
 ### Register
