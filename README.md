@@ -52,6 +52,8 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
     - [Override `description`](#override-description)
   - [Authentication](#authentication-1)
     - [Login](#login)
+      - [Override login args](#override-login-args)
+      - [Set username for login](#set-username-for-login)
     - [Register](#register)
   - [Optimization](#optimization)
   - [Roadmap](#roadmap)
@@ -809,6 +811,53 @@ must have `App\Pepper\User::class` class.
 ```
 
 return response would be JWT token if login credentials are valid, otherwise it would be authorization error.
+
+#### Override login args
+
+Add new method called `setLoginArgs` to the defined `User::class` class:
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+use GraphQL\Type\Definition\Type;
+
+class User extends GraphQL
+{
+    public function setLoginArgs(): array
+    {
+        return [
+            'email' => ['name' => 'email', 'type' => Type::string()],
+            'password' => ['name' => 'password', 'type' => Type::string()],
+            'other_field' => ['other_field' => 'name', 'type' => Type::string()],
+        ];
+    }
+}
+```
+
+#### Set username for login
+
+The default args for login are `email` and `password`, however, you can change
+username by defining a method called `setLoginUsernameField` in your pepper
+class which corresponds to `User::class` class:
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+
+class User extends GraphQL
+{
+    public function setLoginUsernameField(): string
+    {
+        return 'username';
+    }
+}
+```
 
 ### Register
 
