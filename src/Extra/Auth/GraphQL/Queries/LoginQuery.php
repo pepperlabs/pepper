@@ -7,6 +7,7 @@ namespace Pepper\Extra\Auth\GraphQL\Queries;
 use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
+use Pepper\Extra\Auth\Login;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Query;
 
@@ -32,10 +33,10 @@ class LoginQuery extends Query
 
     public function args(): array
     {
-        return [
-            'email' => ['name' => 'email', 'type' => Type::string()],
-            'password' => ['name' => 'password', 'type' => Type::string()],
-        ];
+        return $this->instance->overrideMethod(
+            'setLoginArgs',
+            [Login::class, 'getArgs']
+        );
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
