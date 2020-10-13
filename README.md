@@ -843,6 +843,7 @@ By enabling caching you can improve execution time:
 
 * ~~JWT Authentication~~
 * Reset password
+* 2 factor authentication
 * ~~Validations~~
 * ~~Authorization~~
 * File upload
