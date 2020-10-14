@@ -8,7 +8,7 @@ use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Auth\Events\Registered;
-use Illuminate\Support\Facades\Hash;
+use Pepper\Extra\Auth\Register;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 use Rebing\GraphQL\Support\Mutation;
 
@@ -19,6 +19,17 @@ class RegisterMutation extends Mutation
         'description' => 'register mutation',
     ];
 
+    protected $instance;
+
+    protected $user;
+
+    public function __construct()
+    {
+        $pepper = config('pepper.namespace.root').'\Http\Pepper\\'.class_basename(config('pepper.auth.model'));
+        $this->instance = new $pepper;
+        $this->user = config('pepper.auth.model');
+    }
+
     public function type(): Type
     {
         return GraphQL::type('JWTType');
@@ -26,21 +37,20 @@ class RegisterMutation extends Mutation
 
     public function args(): array
     {
-        return [
-            'name' => ['name' => 'name', 'type' => Type::string()],
-            'email' => ['name' => 'email', 'type' => Type::string()],
-            'password' => ['name' => 'password', 'type' => Type::string()],
-            'password_confirmation' => ['name' => 'password_confirmation', 'type' => Type::string()],
-        ];
+        return $this->instance->overrideMethod(
+            'setRegisterArgs',
+            [Register::class, 'getArgs']
+        );
     }
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        $user = \App\User::create([
-            'name' => $args['name'],
-            'email' => $args['email'],
-            'password' => Hash::make($args['password']),
-        ]);
+        $user = $this->instance->overrideMethod(
+            'setRegisterResolve',
+            [Register::class, 'getResolve'],
+            $args,
+            $this->user
+        );
 
         event(new Registered($user));
 
@@ -49,20 +59,31 @@ class RegisterMutation extends Mutation
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
     {
-        return true;
+        return $this->instance->overrideMethod(
+            'setRegisterAuthorize',
+            [Register::class, 'getAuthorize'],
+            $root,
+            $args,
+            $ctx,
+            $resolveInfo,
+            $getSelectFields
+        );
     }
 
     public function getAuthorizationMessage(): string
     {
-        return 'Validation error';
+        return $this->instance->overrideMethod(
+            'setRegisterAuthorizationMessage',
+            [Register::class, 'getAuthorizationMessage'],
+        );
     }
 
     protected function rules(array $args = []): array
     {
-        return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'confirmed'],
-        ];
+        return $this->instance->overrideMethod(
+            'setRegisterRules',
+            [Register::class, 'getRules'],
+            $args,
+        );
     }
 }

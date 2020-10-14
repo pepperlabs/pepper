@@ -55,6 +55,11 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
       - [Override login args](#override-login-args)
       - [Set username for login](#set-username-for-login)
     - [Register](#register)
+    - [Override register args](#override-register-args)
+      - [Override resolve method](#override-resolve-method)
+      - [Override authorize method](#override-authorize-method)
+      - [Override authorization message method](#override-authorization-message-method)
+      - [Override rules method](#override-rules-method)
   - [Optimization](#optimization)
   - [Roadmap](#roadmap)
   - [License](#license)
@@ -875,6 +880,125 @@ mutation {
 ```
 
 Return response would be JWT token if no authorization error had been raised.
+
+### Override register args
+
+Add `setRegisterArgs` method in Pepper `User` class:
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+use GraphQL\Type\Definition\Type;
+
+class User extends GraphQL
+{
+    public function setRegisterArgs(): string
+    {
+        return [
+            'name' => ['name' => 'name', 'type' => Type::string()],
+            'email' => ['name' => 'email', 'type' => Type::string()],
+            'password' => ['name' => 'password', 'type' => Type::string()],
+            'password_confirmation' => ['name' => 'password_confirmation', 'type' => Type::string()],
+        ];
+    }
+}
+```
+
+#### Override resolve method
+
+Add `setRegisterResolve` method in Pepper `User` class. `$args` and `$user` arguments
+are available. the return of this method should be user class instance.
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+use Illuminate\Support\Facades\Hash;
+
+class User extends GraphQL
+{
+    public function setRegisterResolve($args, $user)
+    {
+        return $user::create([
+            'name' => $args['name'],
+            'email' => $args['email'],
+            'password' => Hash::make($args['password']),
+        ]);
+    }
+}
+```
+
+#### Override authorize method
+
+Add `setRegisterAuthorize` method in Pepper `User` class. the return of this
+method must be boolean.
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+
+class User extends GraphQL
+{
+    public static function setRegisterAuthorize($root, $args, $ctx, $resolveInfo, $getSelectFields)
+    {
+        return true;
+    }
+}
+```
+
+#### Override authorization message method
+
+Add `setRegisterAuthorizationMessage` method in Pepper `User` class. the return
+of this method must be string.
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+
+class User extends GraphQL
+{
+    public static function setRegisterAuthorizationMessage()
+    {
+        return 'Validation error';
+    }
+}
+```
+
+#### Override rules method
+
+Add `setRegisterRules` method in Pepper `User` class. the return of this method
+must be array.
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+
+class User extends GraphQL
+{
+    public static function setRegisterRules()
+    {
+        return [
+            'name' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password' => ['required', 'string', 'confirmed'],
+        ];
+    }
+}
+```
 
 ## Optimization
 
