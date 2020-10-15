@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\Hash;
 class Register
 {
     /**
-     * Default login args.
+     * Register args.
      *
      * @return array
      */
@@ -22,7 +22,14 @@ class Register
         ];
     }
 
-    public static function getResolve($args, $user)
+    /**
+     * Resolve register user.
+     *
+     * @param  array  $args
+     * @param  mixed  $user
+     * @return mixed
+     */
+    public static function getResolve(array $args, $user)
     {
         return $user::create([
             'name' => $args['name'],
@@ -31,17 +38,37 @@ class Register
         ]);
     }
 
-    public static function getAuthorize($root, $args, $ctx, $resolveInfo, $getSelectFields)
+    /**
+     * Authorize register request.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder|null  $root
+     * @param  array  $args
+     * @param  object  $context
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
+     * @param  Closure  $getSelectFields
+     * @return bool
+     */
+    public static function getAuthorize($root, $args, $ctx, $resolveInfo, $getSelectFields): bool
     {
         return true;
     }
 
-    public static function getAuthorizationMessage()
+    /**
+     * Authorization message.
+     *
+     * @return string
+     */
+    public static function getAuthorizationMessage(): string
     {
-        return 'Validation error';
+        return 'validation error';
     }
 
-    public static function getRules()
+    /**
+     * Register validation rules.
+     *
+     * @return array
+     */
+    public static function getRules(): array
     {
         return [
             'name' => ['required', 'string', 'max:255'],
