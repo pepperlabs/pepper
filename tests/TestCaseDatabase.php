@@ -6,13 +6,10 @@ namespace Tests;
 
 use Pepper\PepperServiceProvider;
 use Rebing\GraphQL\GraphQLServiceProvider;
-use Tests\Support\Traits\SqlAssertionTrait;
 use Tymon\JWTAuth\Providers\LaravelServiceProvider as JWTServiceProvider;
 
 abstract class TestCaseDatabase extends TestCase
 {
-    use SqlAssertionTrait;
-
     protected function setUp(): void
     {
         parent::setUp();
@@ -62,13 +59,7 @@ abstract class TestCaseDatabase extends TestCase
 
     protected function setUpTraits()
     {
-        $uses = parent::setUpTraits();
-
-        if (isset($uses[SqlAssertionTrait::class])) {
-            $this->setupSqlAssertionTrait();
-        }
-
-        return $uses;
+        return parent::setUpTraits();
     }
 
     protected function getEnvironmentSetUp($app)
