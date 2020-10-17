@@ -4,7 +4,10 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Pepper\PepperServiceProvider;
+use Rebing\GraphQL\GraphQLServiceProvider;
 use Tests\Support\Traits\SqlAssertionTrait;
+use Tymon\JWTAuth\Providers\LaravelServiceProvider as JWTServiceProvider;
 
 abstract class TestCaseDatabase extends TestCase
 {
@@ -39,6 +42,24 @@ abstract class TestCaseDatabase extends TestCase
         }
     }
 
+    protected function getPackageProviders($app): array
+    {
+        $providers = [
+            GraphQLServiceProvider::class,
+            JWTServiceProvider::class,
+            PepperServiceProvider::class,
+        ];
+
+        return $providers;
+    }
+
+    protected function getPackageAliases($app): array
+    {
+        return [
+            'GraphQL' => GraphQL::class,
+        ];
+    }
+
     protected function setUpTraits()
     {
         $uses = parent::setUpTraits();
@@ -61,8 +82,5 @@ abstract class TestCaseDatabase extends TestCase
             'prefix' => '',
         ]);
         $app['config']->set('graphql.schemas.default.middleware', 'pepper');
-
-        // $this->artisan('vendor:publish', ['--provider' => 'Rebing\GraphQL\GraphQLServiceProvider']);
-        // $this->artisan('vendor:publish', ['--provider' => 'Pepper\PepperServiceProvider']);
     }
 }
