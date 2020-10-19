@@ -74,7 +74,7 @@ jobs:
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Run Tests
-        run: vendor/bin/phpunit --log-junit "log-junit.xml"
+        run: ./bin/test_sqlite.sh
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
