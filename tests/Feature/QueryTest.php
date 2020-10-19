@@ -7,7 +7,13 @@ use Tests\TestCaseDatabase;
 
 class QueryTest extends TestCaseDatabase
 {
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_query_by_pk()
     {
         $post = factory(Post::class)->create([
@@ -39,7 +45,13 @@ class QueryTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_query_by_pk_not_found()
     {
         $graphql = '
@@ -64,7 +76,13 @@ class QueryTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_query()
     {
         $post_1 = factory(Post::class)->create([
@@ -114,7 +132,13 @@ class QueryTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_query_not_found()
     {
         $graphql = '
@@ -139,7 +163,13 @@ class QueryTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_query_aggregate()
     {
         $post_1 = factory(Post::class)->create([

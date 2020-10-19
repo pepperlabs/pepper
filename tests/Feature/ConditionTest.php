@@ -46,7 +46,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function not_equal_simple_query()
     {
         $post = factory(Post::class)->create([
@@ -79,7 +85,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function greater_than_simple_query()
     {
         $post = factory(Post::class)->create([
@@ -112,7 +124,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function less_than_simple_query()
     {
         $post = factory(Post::class)->create([
@@ -145,7 +163,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function greater_than_equal_simple_query()
     {
         $post = factory(Post::class)->create([
@@ -178,7 +202,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function less_than_equal_simple_query()
     {
         $post = factory(Post::class)->create([
@@ -211,7 +241,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function where_in_simple_query()
     {
         $post = factory(Post::class)->create([
@@ -244,7 +280,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function where_not_in_simple_query()
     {
         $post = factory(Post::class)->create([
@@ -277,7 +319,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function like_simple_query()
     {
         $post = factory(Post::class)->create([
@@ -310,7 +358,13 @@ class ConditionTest extends TestCaseDatabase
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function not_like_simple_query()
     {
         $post = factory(Post::class)->create([

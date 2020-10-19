@@ -7,7 +7,13 @@ use Tests\TestCaseDatabase;
 
 class MutationTest extends TestCaseDatabase
 {
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_update_by_pk()
     {
         $user = factory(User::class)->create([
@@ -47,7 +53,13 @@ GQL;
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_update()
     {
         $user = factory(User::class)->create([
@@ -89,7 +101,13 @@ GQL;
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_insert_one()
     {
         $graphql = <<<'GQL'
@@ -122,7 +140,13 @@ GQL;
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_insert()
     {
         $graphql = <<<'GQL'
@@ -159,7 +183,13 @@ GQL;
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_delete_by_pk()
     {
         $user = factory(User::class)->create([
@@ -194,7 +224,13 @@ GQL;
         $this->assertEquals($expectedResult, $response->json());
     }
 
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function simple_delete()
     {
         $user_1 = factory(User::class)->create([

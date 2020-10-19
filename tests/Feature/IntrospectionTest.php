@@ -6,7 +6,13 @@ use Tests\TestCaseDatabase;
 
 class IntrospectionTest extends TestCaseDatabase
 {
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function introspection_status_ok()
     {
         $introspection = new \GraphQL\Type\Introspection;
