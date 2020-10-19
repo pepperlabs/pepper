@@ -66,12 +66,17 @@ abstract class TestCaseDatabase extends TestCase
     {
         parent::getEnvironmentSetUp($app);
 
-        $app['config']->set('database.default', 'sqlite');
-        $app['config']->set('database.connections.sqlite', [
-            'driver' => 'sqlite',
-            'database' => ':memory:',
-            'prefix' => '',
-        ]);
+        $driver = env('DATABASE_DRIVER', 'sqlite');
+
+        if ($driver == 'sqlite') {
+            $app['config']->set('database.default', $driver);
+            $app['config']->set('database.connections.sqlite', [
+                'driver' => $driver,
+                'database' => env('DATABASE_HOST', ':memory:'),
+                'prefix' => env('DATABASE_PREFIX', ''),
+            ]);
+        }
+
         $app['config']->set('graphql.schemas.default.middleware', 'pepper');
     }
 }

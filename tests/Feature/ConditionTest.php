@@ -7,7 +7,13 @@ use Tests\TestCaseDatabase;
 
 class ConditionTest extends TestCaseDatabase
 {
-    /** @test */
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
     public function equal_simple_query()
     {
         $post = factory(Post::class)->create([
