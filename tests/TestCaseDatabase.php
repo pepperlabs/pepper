@@ -81,10 +81,23 @@ abstract class TestCaseDatabase extends TestCase
             $app['config']->set('database.default', $driver);
             $app['config']->set('database.connections.mysql', [
                 'driver' => $driver,
-                'host' => env('DB_HOST', 'host.docker.internal'),
+                'host' => env('DB_HOST', '127.0.0.1'),
                 'database' => env('DB_DATABASE', 'pepper'),
                 'prefix' => env('DB_PREFIX', ''),
                 'port' => env('DB_PORT', '3306'),
+                'username' => env('DB_USERNAME', 'root'),
+                'password' => env('DB_PASSWORD', ''),
+            ]);
+        }
+
+        if ($driver == 'pgsql') {
+            $app['config']->set('database.default', $driver);
+            $app['config']->set('database.connections.pgsql', [
+                'driver' => $driver,
+                'host' => env('DB_HOST', '127.0.0.1'),
+                'database' => env('DB_DATABASE', 'pepper'),
+                'prefix' => env('DB_PREFIX', ''),
+                'port' => env('DB_PORT', '5432'),
                 'username' => env('DB_USERNAME', 'root'),
                 'password' => env('DB_PASSWORD', ''),
             ]);

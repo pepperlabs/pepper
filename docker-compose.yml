@@ -13,14 +13,32 @@ services:
     networks:
       - pepper-network
 
+  postgres:
+    image: postgres:13-alpine
+    container_name: pepper_pgsql
+    environment:
+      POSTGRES_USER: "root"
+      POSTGRES_PASSWORD: ""
+      POSTGRES_DB: "pepper"
+      POSTGRES_HOST_AUTH_METHOD: "trust"
+    ports:
+      - "5432:5432"
+    restart: always
+    networks:
+      - pepper-network
+
   pepper:
     image: lorisleiva/laravel-docker:7.4
     container_name: pepper
     command: tail -f /dev/null
+    restart: always
     volumes:
       - .:/var/www
     networks:
       - pepper-network
+    depends_on:
+      - mysql
+      - postgres
 
 networks:
   pepper-network:
