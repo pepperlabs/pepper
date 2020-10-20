@@ -65,4 +65,9 @@ class EverythingTable extends Migration
             // computed
         });
     }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('everythings');
+    }
 }

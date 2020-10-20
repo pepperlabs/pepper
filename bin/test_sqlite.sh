@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-DATABASE_DRIVER='sqlite' \
-DATABASE_PREFIX='' \
-DATABASE_HOST=':memory:' \
-./vendor/bin/phpunit --group sqlite --log-junit "log-junit.xml"
+eval "docker-compose exec \
+        --env DB_DRIVER='sqlite' \
+        --env DB_PREFIX='' \
+        --env DB_DATABASE=':memory:' \
+    pepper ./vendor/bin/phpunit \
+        --group sqlite \
+        --log-junit 'log-junit.xml' \
+        $@"

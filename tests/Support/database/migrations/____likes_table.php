@@ -18,4 +18,9 @@ class LikesTable extends Migration
             $table->timestamps();
         });
     }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('likes');
+    }
 }

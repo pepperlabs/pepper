@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Tests;
 
+use Illuminate\Foundation\Testing\RefreshDatabase;
 use Pepper\PepperServiceProvider;
 use Rebing\GraphQL\GraphQLServiceProvider;
 use Tymon\JWTAuth\Providers\LaravelServiceProvider as JWTServiceProvider;
 
 abstract class TestCaseDatabase extends TestCase
 {
+    use RefreshDatabase;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -17,8 +20,6 @@ abstract class TestCaseDatabase extends TestCase
         $this->loadMigrationsFrom(__DIR__.'/Support/database/migrations');
         $this->withFactories(__DIR__.'/Support/database/factories');
 
-        // This takes care of refreshing the database between tests
-        // as we are using the in-memory SQLite db we do not need RefreshDatabase
         $this->artisan('migrate');
 
         $this->artisan('pepper:grind', [
@@ -65,15 +66,27 @@ abstract class TestCaseDatabase extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         parent::getEnvironmentSetUp($app);
-
-        $driver = env('DATABASE_DRIVER', 'sqlite');
+        $driver = env('DB_DRIVER', 'sqlite');
 
         if ($driver == 'sqlite') {
             $app['config']->set('database.default', $driver);
             $app['config']->set('database.connections.sqlite', [
                 'driver' => $driver,
-                'database' => env('DATABASE_HOST', ':memory:'),
-                'prefix' => env('DATABASE_PREFIX', ''),
+                'database' => env('DB_DATABASE', ':memory:'),
+                'prefix' => env('DB_PREFIX', ''),
+            ]);
+        }
+
+        if ($driver == 'mysql') {
+            $app['config']->set('database.default', $driver);
+            $app['config']->set('database.connections.mysql', [
+                'driver' => $driver,
+                'host' => env('DB_HOST', 'host.docker.internal'),
+                'database' => env('DB_DATABASE', 'pepper'),
+                'prefix' => env('DB_PREFIX', ''),
+                'port' => env('DB_PORT', '3306'),
+                'username' => env('DB_USERNAME', 'root'),
+                'password' => env('DB_PASSWORD', ''),
             ]);
         }
 

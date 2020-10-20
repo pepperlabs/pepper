@@ -15,8 +15,13 @@ class CommentsTable extends Migration
             $table->integer('post_id');
             $table->string('title');
             $table->string('body')->nullable();
-            $table->boolean('flag')->default('false');
+            $table->boolean('flag')->default(false);
             $table->timestamps();
         });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('comments');
     }
 }

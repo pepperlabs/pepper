@@ -1,0 +1,27 @@
+version: "3"
+services:
+  mysql:
+    image: mysql:5.7
+    container_name: pepper_mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+      MYSQL_ROOT_PASSWORD: ""
+      MYSQL_DATABASE: "pepper"
+    ports:
+      - "3306:3306"
+    restart: always
+    networks:
+      - pepper-network
+
+  pepper:
+    image: lorisleiva/laravel-docker:7.4
+    container_name: pepper
+    command: tail -f /dev/null
+    volumes:
+      - .:/var/www
+    networks:
+      - pepper-network
+
+networks:
+  pepper-network:
+    driver: bridge
