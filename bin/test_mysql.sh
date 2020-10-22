@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-eval "docker-compose exec \
+eval "docker-compose exec -T \
         --env DB_DRIVER='mysql' \
         --env DB_PREFIX='' \
         --env DB_HOST='mysql' \
