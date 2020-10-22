@@ -396,4 +396,76 @@ class ConditionTest extends TestCaseDatabase
         $response->assertOk();
         $this->assertEquals($expectedResult, $response->json());
     }
+
+    /**
+     * @group pgsql
+     * @test
+     */
+    public function ilike_simple_query()
+    {
+        $post = factory(Post::class)->create([
+            'title' => 'TITLE',
+        ]);
+
+        $graphql = '{
+                post (where: {title: {_ilike: "titl%"}}) {
+                    id
+                    title
+                }
+            }';
+
+        $response = $this->call('GET', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'post' => [
+                    [
+                        'id' => "$post->id",
+                        'title' => 'TITLE',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /**
+     * @group pgsql
+     * @test
+     */
+    public function not_ilike_simple_query()
+    {
+        $post = factory(Post::class)->create([
+            'title' => 'TITLE',
+        ]);
+
+        $graphql = '{
+                post (where: {title: {_nilike: "subj%"}}) {
+                    id
+                    title
+                }
+            }';
+
+        $response = $this->call('GET', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'post' => [
+                    [
+                        'id' => "$post->id",
+                        'title' => 'TITLE',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
 }
