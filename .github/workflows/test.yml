@@ -69,7 +69,7 @@ jobs:
           composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --no-progress
 
       - name: Run Tests
-        run: ./bin/test.sh
+        run: ./bin/test_pgsql.sh
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
