@@ -104,5 +104,7 @@ abstract class TestCaseDatabase extends TestCase
         }
 
         $app['config']->set('graphql.schemas.default.middleware', 'pepper');
+
+        $this->clearCache();
     }
 }
