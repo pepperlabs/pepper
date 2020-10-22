@@ -397,23 +397,23 @@ query {
 
 [Table of contents](#table-of-contents)
 
-| Operator    | Equivalent       |
-| :---------- | :--------------- |
-| `_eq`       | `=`              |
-| `_neq`      | `<>`,`!=`        |
-| `_gt`       | `>`              |
-| `_lt`       | `<`              |
-| `_gte`      | `>=`             |
-| `_lte`      | `<=`             |
-| `_in`       | `IN`             |
-| `_nin`      | `NOT IN`         |
-| `_like`     | `LIKE`           |
-| `_nlike`    | `NOT LIKE`       |
-| `_ilike`    | `ILIKE`          |
-| `nilike`    | `NOT ILIKE`      |
-| `_similar`  | `SIMILAR TO`     |
-| `_nsimilar` | `NOT SIMILAR TO` |
-| `_is_null`  | `IS NULL`        |
+| Operator    | Equivalent       | Note            |
+| :---------- | :--------------- | :-------------- |
+| `_eq`       | `=`              |                 |
+| `_neq`      | `<>`,`!=`        |                 |
+| `_gt`       | `>`              |                 |
+| `_lt`       | `<`              |                 |
+| `_gte`      | `>=`             |                 |
+| `_lte`      | `<=`             |                 |
+| `_in`       | `IN`             |                 |
+| `_nin`      | `NOT IN`         |                 |
+| `_like`     | `LIKE`           |                 |
+| `_nlike`    | `NOT LIKE`       |                 |
+| `_ilike`    | `ILIKE`          | PostgreSQL only |
+| `nilike`    | `NOT ILIKE`      | PostgreSQL only |
+| `_similar`  | `SIMILAR TO`     |                 |
+| `_nsimilar` | `NOT SIMILAR TO` |                 |
+| `_is_null`  | `IS NULL`        |                 |
 
 > :warning: JSON operators are not yet supported.
 

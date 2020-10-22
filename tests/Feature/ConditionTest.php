@@ -468,4 +468,82 @@ class ConditionTest extends TestCaseDatabase
         $response->assertOk();
         $this->assertEquals($expectedResult, $response->json());
     }
+
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
+    public function is_null_true_simple_query()
+    {
+        $post = factory(Post::class)->create([
+            'title' => 'TITLE',
+        ]);
+
+        $graphql = '{
+                post (where: {published_at: {_is_null: true}}) {
+                    id
+                    title
+                }
+            }';
+
+        $response = $this->call('GET', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'post' => [
+                    [
+                        'id' => "$post->id",
+                        'title' => 'TITLE',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
+    public function is_null_false_simple_query()
+    {
+        $post = factory(Post::class)->create([
+            'title' => 'TITLE',
+        ]);
+
+        $graphql = '{
+                post (where: {body: {_is_null: false}}) {
+                    id
+                    title
+                }
+            }';
+
+        $response = $this->call('GET', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'post' => [
+                    [
+                        'id' => "$post->id",
+                        'title' => 'TITLE',
+                    ],
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
 }
