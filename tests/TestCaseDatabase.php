@@ -100,7 +100,6 @@ abstract class TestCaseDatabase extends TestCase
                 'port' => env('DB_PORT', '5432'),
                 'username' => env('DB_USERNAME', 'root'),
                 'password' => env('DB_PASSWORD', ''),
-                'charset' => 'utf8mb4',
             ]);
         }
 
