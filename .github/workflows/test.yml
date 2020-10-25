@@ -75,7 +75,7 @@ jobs:
         run: docker ps
 
       - name: Run Tests
-        run: ./bin/test_pgsql.sh
+        run: ./bin/test_sqlite.sh
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
