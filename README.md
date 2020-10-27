@@ -11,6 +11,7 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
   - [Introducation](#introducation)
     - [Version support](#version-support)
   - [Installation](#installation)
+    - [Optimization](#optimization)
     - [Supported databases](#supported-databases)
   - [Background](#background)
   - [Commands](#commands)
@@ -120,6 +121,13 @@ class Comment extends Model
     }
 }
 ```
+
+### Optimization
+
+By enabling caching you can improve execution time:
+
+1. set `pepper.cache.disabled` to `false`
+2. set `graphql.lazyload_types` to `true`
 
 ### Supported databases
 
