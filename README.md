@@ -726,6 +726,19 @@ in `config/auth.php` make sure to set:
 ],
 ```
 
+4. Enable authentication query and mutation in `config/pepper.php`:
+
+```php
+
+...
+
+'auth' => [
+    'disabled' => false,
+
+    ...
+],
+```
+
 
 ## Privacy
 
