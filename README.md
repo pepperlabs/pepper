@@ -51,17 +51,16 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
     - [Override `max` method](#override-max-method)
     - [Override `min` method](#override-min-method)
     - [Override `description`](#override-description)
-  - [Authentication](#authentication-1)
-    - [Login](#login)
-      - [Override login args](#override-login-args)
-      - [Set username for login](#set-username-for-login)
-    - [Register](#register)
-    - [Override register args](#override-register-args)
-      - [Override resolve method](#override-resolve-method)
-      - [Override authorize method](#override-authorize-method)
-      - [Override authorization message method](#override-authorization-message-method)
-      - [Override rules method](#override-rules-method)
-  - [Optimization](#optimization)
+    - [Customizing Authentication](#customizing-authentication)
+      - [Login](#login)
+        - [Override login args](#override-login-args)
+        - [Set username for login](#set-username-for-login)
+      - [Register](#register)
+      - [Override register args](#override-register-args)
+        - [Override resolve method](#override-resolve-method)
+        - [Override authorize method](#override-authorize-method)
+        - [Override authorization message method](#override-authorization-message-method)
+        - [Override rules method](#override-rules-method)
   - [Roadmap](#roadmap)
   - [License](#license)
 
@@ -829,7 +828,7 @@ public function setQueryDescription()
 }
 ```
 
-## Authentication
+### Customizing Authentication
 
 [Table of contents](#table-of-contents)
 
@@ -838,7 +837,7 @@ public function setQueryDescription()
 example if you have defined `App\Models\User::class` as your user model, you
 must have `App\Pepper\User::class` class.
 
-### Login
+#### Login
 
 ```graphql
 {
@@ -853,7 +852,7 @@ must have `App\Pepper\User::class` class.
 
 return response would be JWT token if login credentials are valid, otherwise it would be authorization error.
 
-#### Override login args
+##### Override login args
 
 Add new method called `setLoginArgs` to the defined `User::class` class:
 
@@ -878,7 +877,7 @@ class User extends GraphQL
 }
 ```
 
-#### Set username for login
+##### Set username for login
 
 The default args for login are `email` and `password`, however, you can change
 username by defining a method called `setLoginUsernameField` in your pepper
@@ -900,7 +899,7 @@ class User extends GraphQL
 }
 ```
 
-### Register
+#### Register
 
 ```graphql
 mutation {
@@ -917,7 +916,7 @@ mutation {
 
 Return response would be JWT token if no authorization error had been raised.
 
-### Override register args
+#### Override register args
 
 Add `setRegisterArgs` method in Pepper `User` class:
 
@@ -943,7 +942,7 @@ class User extends GraphQL
 }
 ```
 
-#### Override resolve method
+##### Override resolve method
 
 Add `setRegisterResolve` method in Pepper `User` class. `$args` and `$user` arguments
 are available. the return of this method should be user class instance.
@@ -969,7 +968,7 @@ class User extends GraphQL
 }
 ```
 
-#### Override authorize method
+##### Override authorize method
 
 Add `setRegisterAuthorize` method in Pepper `User` class. the return of this
 method must be boolean.
@@ -990,7 +989,7 @@ class User extends GraphQL
 }
 ```
 
-#### Override authorization message method
+##### Override authorization message method
 
 Add `setRegisterAuthorizationMessage` method in Pepper `User` class. the return
 of this method must be string.
@@ -1011,7 +1010,7 @@ class User extends GraphQL
 }
 ```
 
-#### Override rules method
+##### Override rules method
 
 Add `setRegisterRules` method in Pepper `User` class. the return of this method
 must be array.
@@ -1035,16 +1034,6 @@ class User extends GraphQL
     }
 }
 ```
-
-## Optimization
-
-[Table of contents](#table-of-contents)
-
-By enabling caching you can improve execution time:
-
-1. set `pepper.cache.disabled` to `false`
-2. set `graphql.lazyload_types` to `true`
-
 
 ## Roadmap
 
