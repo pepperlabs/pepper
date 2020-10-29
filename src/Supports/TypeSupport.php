@@ -35,7 +35,11 @@ trait TypeSupport
         foreach ($this->fieldsArray(false) as $attribute) {
             $fields[$attribute] = [
                 'name' => $attribute,
-                'type' => $this->callGraphQLType($attribute),
+                'type' => $this->overrideMethod(
+                    'set'.Str::studly($attribute).'Type',
+                    [$this, 'callGraphQLType'],
+                    $attribute
+                ),
                 'privacy' => function (array $args) use ($attribute): bool {
                     $method = 'get'.Str::studly($attribute).'Privacy';
 

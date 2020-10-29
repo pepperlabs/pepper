@@ -45,6 +45,7 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
   - [Authentication](#authentication)
   - [Privacy](#privacy)
   - [Customization](#customization)
+    - [Change field type](#change-field-type)
     - [Override `count` method](#override-count-method)
     - [Override `avg` method](#override-avg-method)
     - [Override `sum` method](#override-sum-method)
@@ -756,6 +757,29 @@ public function setEmailPrivacy($args)
 ## Customization
 
 [Table of contents](#table-of-contents)
+
+### Change field type
+
+In the respective Pepper class add a method with following format: `set[FieldName]Type`
+
+For example if we want to change `ID` column type on `User` model, we could add following method to our User Pepper class:
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+use GraphQL\Type\Definition\Type;
+
+class User extends GraphQL
+{
+    public function setIdType()
+    {
+        return Type::string();
+    }
+}
+```
 
 ### Override `count` method
 
