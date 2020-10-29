@@ -84,11 +84,12 @@ trait MutationSupport
      */
     public function getDeleteByPkMutationFields(): array
     {
-        // @todo replace ID
+        $pk = $this->model()->getKeyName();
+
         return [
-            'id' => [
-                'name' => 'id',
-                'type' => $this->callGraphQLType('id'),
+            $pk => [
+                'name' => $pk,
+                'type' => $this->callGraphQLType($pk),
             ],
         ];
     }
