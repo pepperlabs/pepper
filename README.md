@@ -1,5 +1,7 @@
 ![Test](https://github.com/pepperlabs/pepper/workflows/Test/badge.svg?branch=master)
 
+[Online Docs](https://pepperlabs.github.io/docs/)
+
 # Pepper
 
 Pepper is a Laravel package that can expose GraphQL endpoint for your defined models with minimun configuration.
