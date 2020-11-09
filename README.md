@@ -44,6 +44,10 @@ Pepper is a Laravel package that can expose GraphQL endpoint for your defined mo
     - [override authorization message](#override-authorization-message)
   - [Authentication](#authentication)
   - [Privacy](#privacy)
+  - [Accessors & Mutators](#accessors--mutators)
+    - [Defining An Accessor](#defining-an-accessor)
+    - [Defining A Mutator](#defining-a-mutator)
+  - [Upload file](#upload-file)
   - [Customization](#customization)
     - [Change field type](#change-field-type)
     - [Override `count` method](#override-count-method)
@@ -751,6 +755,37 @@ You can define privacy for individual fields as follow, `set[FieldName]Privacy` 
 public function setEmailPrivacy($args)
 {
     return false;
+}
+```
+
+## Accessors & Mutators
+
+[Table of contents](#table-of-contents)
+
+### Defining An Accessor
+
+### Defining A Mutator
+
+## Upload file
+
+[Table of contents](#table-of-contents)
+
+1. Change field type to Upload type:
+
+```php
+<?php
+
+namespace App\Http\Pepper;
+
+use Pepper\GraphQL;
+use Rebing\GraphQL\Support\Facades\GraphQL as ParentGraphQL;
+
+class User extends GraphQL
+{
+    public function setExampleType()
+    {
+        return ParentGraphQL::type('Upload');
+    }
 }
 ```
 
