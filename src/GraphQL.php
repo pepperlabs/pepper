@@ -459,7 +459,13 @@ abstract class GraphQL
      */
     public function callGraphQLType(string $field)
     {
-        return call_user_func('\GraphQL\Type\Definition\Type::'.$this->getFieldType($field));
+        $type = $this->getFieldType($field);
+
+        if ($type == 'Upload') {
+            return \Rebing\GraphQL\Support\Facades\GraphQL::type('Upload');
+        }
+
+        return call_user_func('\GraphQL\Type\Definition\Type::'.$type);
     }
 
     /**

@@ -34,15 +34,7 @@ class InsertOneMutation extends Mutation
 
     public function resolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
-        return $this->instance->overrideMethod(
-            'resolveMutationInsertOne',
-            [$this, 'resolveMutationInsertOne'],
-            $root,
-            $args,
-            $context,
-            $resolveInfo,
-            $getSelectFields
-        );
+        return $this->instance->resolveMutationInsertOne($root, $args, $context, $resolveInfo, $getSelectFields);
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
