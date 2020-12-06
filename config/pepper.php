@@ -29,7 +29,7 @@ return [
         |
         */
 
-        'models' => 'App',
+        'models' => 'App\Models',
     ],
 
     /*
