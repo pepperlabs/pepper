@@ -6,7 +6,6 @@ use Closure;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Str;
-use Pepper\Extra\Cache\Cache;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait QuerySupport
@@ -237,14 +236,6 @@ trait QuerySupport
     {
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
             ->get();
-        // return Cache::putOrGet(
-        //     'pepper:'.$this->name().':'.md5(serialize($getSelectFields())),
-        //     function () use ($root, $args, $context, $resolveInfo, $getSelectFields) {
-        //         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
-        //             ->get();
-        //     },
-        //     config('pepper.cache.ttl')
-        // );
     }
 
     /**
@@ -259,16 +250,5 @@ trait QuerySupport
 
         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
             ->first();
-        // return Cache::putOrGet(
-        //     'pepper:'.$this->name().':'.md5(serialize($getSelectFields())),
-        //     function () use ($root, $args, $context, $resolveInfo, $getSelectFields) {
-        //         $pk = $this->model()->getKeyName();
-        //         $root = $this->modelClass()::where($pk, $args[$pk]);
-
-        //         return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
-        //             ->first();
-        //     },
-        //     config('pepper.cache.ttl')
-        // );
     }
 }

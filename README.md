@@ -1,8 +1,6 @@
 ![Test](https://github.com/pepperlabs/pepper/workflows/Test/badge.svg?branch=master)
 
-[Online Docs](https://pepperlabs.github.io/docs/)
-
-# Pepper
+[Read the Documentation](https://pepperlabs.github.io/docs/)
 
 Pepper is an automatic GraphQL exposing Laravel package. It uses your application defined models to auto define properties and relations. It supports Query and Mutation out of the box.
 
@@ -21,8 +19,6 @@ Laravel: 5.6 or higher
 ## Supported databases
 
 As it uses Laravel Eloquent only, it would support SQLite, MySQL, PostgreSQL and, SQLServer.
-
-## Security Vulnerabilities
 
 If you discover a security vulnerability within Pepper, please send an e-mail to Amirmasoud Sheydaei via [amirmasoud.sheydaei@gmail.com](mailto:amirmasoud.sheydaei@gmail.com). All security vulnerabilities will be promptly addressed.
 
