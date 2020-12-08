@@ -14,6 +14,7 @@ class PostsTable extends Migration
             $table->increments('id');
             $table->string('title');
             $table->string('body')->nullable();
+            $table->string('upload')->nullable();
             $table->integer('user_id')->nullable();
             $table->text('properties')->nullable();
             $table->boolean('flag')->default(false);

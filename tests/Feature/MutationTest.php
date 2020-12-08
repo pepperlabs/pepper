@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\Support\Models\User;
 use Tests\TestCaseDatabase;
 
@@ -274,6 +276,49 @@ GQL;
         ];
 
         $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
+    }
+
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
+    public function upload()
+    {
+        Storage::fake('posts');
+        $file = UploadedFile::fake()->image('cover.jpg');
+        // dd($file->tempFile);
+        $graphql = <<<'GQL'
+mutation($cover: Upload!) {
+    insert_post(
+        objects: [{ cover: $cover }]
+    ) {
+        id
+    }
+}
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+            'variables' => [
+                'cover' => $file->tempFile,
+            ],
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'insert_post' => [
+                    [
+                        'id' => 1,
+                    ],
+                ],
+            ],
+        ];
+
+        $response->dump();
         $this->assertEquals($expectedResult, $response->json());
     }
 }

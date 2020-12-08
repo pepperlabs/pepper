@@ -33,6 +33,12 @@ class Post extends Model
         'properties' => 'array',
     ];
 
+    protected $fillable = [
+        'title',
+        'cover',
+        'content',
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -53,5 +59,10 @@ class Post extends Model
         $publishedAt = $this->published_at;
 
         return $publishedAt !== null;
+    }
+
+    public function setCoverAttribute($file)
+    {
+        $this->attributes['cover'] = $file->store('posts');
     }
 }
