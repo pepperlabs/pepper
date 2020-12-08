@@ -3,7 +3,6 @@
 namespace Tests\Feature;
 
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
 use Tests\Support\Models\User;
 use Tests\TestCaseDatabase;
 
@@ -288,25 +287,40 @@ GQL;
      */
     public function upload()
     {
-        Storage::fake('posts');
-        $file = UploadedFile::fake()->image('cover.jpg');
-        // dd($file->tempFile);
+        $file = UploadedFile::fake()->create('cover.jpg');
+
         $graphql = <<<'GQL'
 mutation($cover: Upload!) {
     insert_post(
-        objects: [{ cover: $cover }]
+        objects: [{ cover: $cover, title: "Upload Sample" }]
     ) {
         id
     }
 }
 GQL;
 
-        $response = $this->call('POST', '/graphql', [
-            'query' => $graphql,
-            'variables' => [
-                'cover' => $file->tempFile,
+        $response = $this->call(
+            'POST',
+            '/graphql',
+            [
+                'operations' => json_encode([
+                    'query' => $graphql,
+                    'variables' => [
+                        'cover' => null,
+                    ],
+                ]),
+                'map' => json_encode([
+                    '0' => ['variables.cover'],
+                ]),
             ],
-        ]);
+            [],
+            [
+                '0' => $file,
+            ],
+            [
+                'CONTENT_TYPE' => 'multipart/form-data',
+            ]
+        );
 
         $expectedResult = [
             'data' => [
@@ -318,7 +332,7 @@ GQL;
             ],
         ];
 
-        $response->dump();
+        $response->assertOk();
         $this->assertEquals($expectedResult, $response->json());
     }
 }

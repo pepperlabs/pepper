@@ -38,6 +38,12 @@ abstract class TestCaseDatabase extends TestCase
             config(['pepper' => $base->all()]);
             config(['pepper.namespace.models' => 'Tests\Support\Models']);
         }
+
+        // Cheesy 😬
+        $content = file_get_contents(__DIR__.'/Support/GraphQL/Post.php');
+        $content = str_replace('Tests\Support\GraphQL', 'App\Http\Pepper', $content);
+        $handle = fopen(__DIR__.'/../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/Post.php', 'r+');
+        fwrite($handle, $content);
     }
 
     protected function getPackageProviders($app): array
