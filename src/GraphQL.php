@@ -400,6 +400,20 @@ abstract class GraphQL
     }
 
     /**
+     * Get optional fields.
+     *
+     * @return array
+     */
+    public function getOptionalFields(): array
+    {
+        if (method_exists($this, 'setOptionalFields')) {
+            return $this->setOptionalFields();
+        } else {
+            return [];
+        }
+    }
+
+    /**
      * Guess field type for GraphQL.
      *
      * @param  string  $field
