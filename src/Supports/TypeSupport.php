@@ -51,7 +51,8 @@ trait TypeSupport
         return array_merge(
             $fields,
             $this->getTypeRelations(),
-            $this->getAggregatedFields()
+            $this->getAggregatedFields(),
+            $this->getOptionalFields()
         );
     }
 
