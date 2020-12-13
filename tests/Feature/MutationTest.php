@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Tests\Support\Models\User;
 use Tests\TestCaseDatabase;
 
@@ -287,6 +288,8 @@ GQL;
      */
     public function upload()
     {
+        Storage::fake('local');
+
         $file = UploadedFile::fake()->create('cover.jpg');
 
         $graphql = <<<'GQL'
@@ -323,18 +326,19 @@ GQL;
             ]
         );
 
-        // $expectedResult = [
-        //     'data' => [
-        //         'insert_post' => [
-        //             [
-        //                 'id' => 1,
-        //                 'cover_url' => '...',
-        //             ],
-        //         ],
-        //     ],
-        // ];
+        $expectedResult = [
+            'data' => [
+                'insert_post' => [
+                    [
+                        'id' => 1,
+                        'cover_url' => 'posts/'.$file->hashName(),
+                    ],
+                ],
+            ],
+        ];
 
         $response->assertOk();
-        // $this->assertEquals($expectedResult, $response->json());
+        Storage::disk('local')->assertExists('posts/'.$file->hashName());
+        $this->assertEquals($expectedResult, $response->json());
     }
 }
