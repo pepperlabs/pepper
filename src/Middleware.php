@@ -92,7 +92,6 @@ class Middleware
      */
     public function handle($request, Closure $next)
     {
-        logger($request->query);
         $global = config('pepper.global');
         $available = config('pepper.available');
         if (! config('pepper.auth.disabled')) {
