@@ -23,7 +23,9 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait TypeSupport
 {
     /**
-     * Generate GraphQL fields with field types.
+     * Merging every available fields for the model by combining the attributes
+     * fields, relations and augmented attributes, aggregate fields and give
+     * the possibility to override any of them by optional fields option.
      *
      * @return array
      */
@@ -57,7 +59,9 @@ trait TypeSupport
     }
 
     /**
-     * Get graphQL query relations.
+     * Loop through all explicitly defined relations and make them ready to be
+     * added to list of type by defining their name, type, available args
+     * and resolver method. Relations are always wrapped in an array.
      *
      * @return array
      */
@@ -68,9 +72,12 @@ trait TypeSupport
             $model = $this->modelRelflection();
             $relationType = $model->getMethod($relation)->getReturnType()->getName();
             $type = '';
-            if ($relationType === BelongsTo::class) {
-                $type = Type::listOf(GraphQL::type($this->getRelatedType($relation)));
-            } elseif (in_array($relationType, [
+
+            // The return of a relation is always a list of the defined type for
+            // related relation. We have explicitly defined the available
+            // supported relation by Laravel to prune any future bug.
+            if (in_array($relationType, [
+                BelongsTo::class,
                 BelongsToMany::class,
                 HasMany::class,
                 HasManyThrough::class,
@@ -102,7 +109,9 @@ trait TypeSupport
     }
 
     /**
-     * Related field type.
+     * Get related field type by passing method name. At this moment we cannot
+     * guess the relation type if it's not explicitly stated by the defined
+     * return type at the end of method implementation in the app model.
      *
      * @param  string  $method
      * @return \GraphQL\Type\Definition\Type
