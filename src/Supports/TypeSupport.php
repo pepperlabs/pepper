@@ -31,6 +31,23 @@ trait TypeSupport
      */
     public function getTypeFields(): array
     {
+        return array_merge(
+            $this->getAttributesFields(),
+            $this->getTypeRelations(),
+            $this->getAggregatedFields(),
+            $this->getOptionalFields()
+        );
+    }
+
+    /**
+     * Get the types of the models attributes fields without relations or any
+     * other fields such aggregation or overriders. Type and privay can be
+     * overrided by calling set[Attribute]Type and set[Attribute]Pricay.
+     *
+     * @return array
+     */
+    public function getAttributesFields(): array
+    {
         $fields = [];
 
         // Only fields without relations
@@ -50,12 +67,7 @@ trait TypeSupport
             ];
         }
 
-        return array_merge(
-            $fields,
-            $this->getTypeRelations(),
-            $this->getAggregatedFields(),
-            $this->getOptionalFields()
-        );
+        return $fields;
     }
 
     /**
