@@ -11,7 +11,9 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait QuerySupport
 {
     /**
-     * Get GraphQL Query resolve.
+     * Make query ready without executing the actual query. Only applies various
+     * conditions and limits defined on the query by combining them and return
+     * the Laravel Illuminate Builder instance for further customization.
      *
      * @param  \Illuminate\Database\Eloquent\Builder|null  $root
      * @param  array  $args
@@ -90,7 +92,9 @@ trait QuerySupport
     }
 
     /**
-     * Run conditions.
+     * Run and execute actual query conditions on the query Builder. It also can
+     * supports nested query conditins by recursively calling query resolver
+     * on the defined nested queries.
      *
      * @param  \Illuminate\Database\Eloquent\Builder  $query
      * @param  string  $operation
@@ -166,7 +170,8 @@ trait QuerySupport
     }
 
     /**
-     * Available query arguments.
+     * Available query arguments can be added to query to modify the results or
+     * paginate them or order them differently.
      *
      * @return array
      */
@@ -190,7 +195,8 @@ trait QuerySupport
     }
 
     /**
-     * Get GraphQL query type.
+     * Get the type of the simple query. The return type would an array of items
+     * as there is no guarantee on uniqueness of the end result of this query.
      *
      * @return \GraphQL\Type\Definition\Type
      */
@@ -200,7 +206,8 @@ trait QuerySupport
     }
 
     /**
-     * Get query by primary key type.
+     * Get the type of the simple query by primary key. The return type would an
+     * item fetching an item via PK would result in single or empty result.
      *
      * @return \GraphQL\Type\Definition\Type
      */
