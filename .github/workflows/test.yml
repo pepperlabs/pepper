@@ -42,9 +42,7 @@ jobs:
           restore-keys: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-
 
       - name: Install Composer dependencies
-        run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update --dev
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
+        run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Wait for container health check
         run: while [ "`docker inspect -f {{.State.Health.Status}} 'pepper_pgsql'`" != "healthy" ]; do     sleep 2; done
