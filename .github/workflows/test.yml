@@ -12,61 +12,42 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        php: [7.1, 7.2, 7.3, 7.4]
-        laravel: [5.6.*, 5.7.*, 5.8.*, 6.*, 7.*, 8.*]
+        php: [7.2, 7.3, 7.4, 8.0]
+        laravel: [7.*, 8.*]
         dependency-version: [prefer-stable]
-        include:
-          - laravel: 5.6.*
-            testbench: 3.6.*
-          - laravel: 5.7.*
-            testbench: 3.7.*
-          - laravel: 5.8.*
-            testbench: 3.8.*
-          - laravel: 6.*
-            testbench: 4.*
-          - laravel: 7.*
-            testbench: 5.*
-          - laravel: 8.*
-            testbench: 6.*
         exclude:
-          - php: 7.1
-            laravel: 8.*
           - php: 7.2
             laravel: 8.*
-          - php: 7.1
-            laravel: 6.*
-          - php: 7.1
-            laravel: 7.*
-          - php: 7.4
-            laravel: 5.6.*
-          - php: 7.4
-            laravel: 5.7.*
-          - php: 7.4
-            laravel: 5.8.*
 
     name: PHP:${{ matrix.php }}-Laravel:${{ matrix.laravel }}(${{ matrix.dependency-version }})
 
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v2
 
-      - name: Build the docker-compose stack
-        run: docker-compose up -d
-
-      - name: Cache dependencies
-        uses: actions/cache@v1
+      - name: Setup PHP, with composer and extensions
+        uses: shivammathur/setup-php@v2
         with:
-          path: ~/.composer/cache/files
+          php-version: ${{ matrix.php }}
+          extensions: dom, curl, libxml, mbstring, zip, pcntl, pdo, sqlite, pdo_sqlite, bcmath, soap, intl, gd, exif, iconv, imagick
+          tools: composer:v2
+          coverage: none
+
+      - name: Get composer cache directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v2
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
           key: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-${{ hashFiles('composer.json') }}
+          restore-keys: dependencies-laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-composer-
 
-      - name: Exclude laravel/legacy-factories
-        if: ${{ matrix.laravel != '8.*' }}
-        run: composer remove laravel/legacy-factories --no-interaction --no-progress --dev --no-update
-
-      - name: Install dependencies
+      - name: Install Composer dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --dev
-          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest --no-progress
+          composer require "laravel/framework:${{ matrix.laravel }}" --no-interaction --no-update --dev
+          composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
       - name: Wait for container health check
         run: while [ "`docker inspect -f {{.State.Health.Status}} 'pepper_pgsql'`" != "healthy" ]; do     sleep 2; done
