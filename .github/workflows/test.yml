@@ -44,14 +44,14 @@ jobs:
       - name: Install Composer dependencies
         run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction --no-suggest
 
-      - name: Wait for container health check
-        run: while [ "`docker inspect -f {{.State.Health.Status}} 'pepper_pgsql'`" != "healthy" ]; do     sleep 2; done
+      # - name: Wait for container health check
+      #   run: while [ "`docker inspect -f {{.State.Health.Status}} 'pepper_pgsql'`" != "healthy" ]; do     sleep 2; done
 
-      - name: PS
-        run: docker ps
+      # - name: PS
+      #   run: docker ps
 
       - name: Run Tests
-        run: ./bin/test_sqlite.sh
+        run: ./vendor/bin/phpunit --group sqlite
 
       - name: Upload Artifacts
         uses: actions/upload-artifact@v2
