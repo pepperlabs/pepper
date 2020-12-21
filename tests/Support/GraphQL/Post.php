@@ -21,6 +21,7 @@ class Post extends GraphQL
                 'selectable' => false,
                 'resolve' => function ($root) {
                     $root->refresh();
+
                     return $root->cover;
                 },
             ],
