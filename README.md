@@ -2,6 +2,12 @@
 
 [Read the Documentation](https://pepperlabs.github.io/docs/)
 
+install via composer:
+
+```bash
+composer require pepperlabs/pepper
+```
+
 Pepper is an automatic GraphQL exposing Laravel package. It uses your application defined models to auto define properties and relations. It supports Query and Mutation out of the box.
 
 features:
@@ -12,9 +18,9 @@ features:
 
 ## Version support
 
-PHP: 7.1.3 or higher
+PHP: 7.3 or higher
 
-Laravel: 5.6 or higher
+Laravel: 7 or higher
 
 ## Supported databases
 
