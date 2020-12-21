@@ -41,7 +41,7 @@ class PepperGrindCommand extends Command
                 true
             );
         } else {
-            $selected = [0];
+            $selected = ['-- select all --'];
         }
 
         $this->createHttp($models, $selected);
