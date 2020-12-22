@@ -3,6 +3,7 @@
 namespace Pepper\Supports;
 
 use Closure;
+use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\ResolveInfo;
 use GraphQL\Type\Definition\Type;
 use Illuminate\Support\Str;
@@ -20,7 +21,7 @@ trait QuerySupport
      * @param  object  $context
      * @param  ResolveInfo  $resolveInfo
      * @param  Closure  $getSelectFields
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Query\Builder|mixed|
      */
     public function getQueryResolve($root, $args, $context, ResolveInfo $resolveInfo, Closure $getSelectFields)
     {
@@ -175,7 +176,7 @@ trait QuerySupport
      *
      * @return array
      */
-    public function getQueryArgs()
+    public function getQueryArgs(): array
     {
         return [
             // Condition
@@ -198,9 +199,9 @@ trait QuerySupport
      * Get the type of the simple query. The return type would an array of items
      * as there is no guarantee on uniqueness of the end result of this query.
      *
-     * @return \GraphQL\Type\Definition\Type
+     * @return \GraphQL\Type\Definition\ListOfType
      */
-    public function getQueryType(): Type
+    public function getQueryType(): ListOfType
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
@@ -217,14 +218,14 @@ trait QuerySupport
     }
 
     /**
-     * Get query by primary key fields.
+     * Get query by primary key of the queried model that can be executed on by
+     * input argument. the return type is an array consist of PK and its type.
      *
      * @return array
      */
     public function getQueryByPkFields(): array
     {
-        $model = $this->model();
-        $pk = $model->getKeyName();
+        $pk = $this->model()->getKeyName();
 
         return [
             $pk => [
@@ -235,9 +236,11 @@ trait QuerySupport
     }
 
     /**
-     * Resolve query by PK.
+     * Run simple query actual query after any modification required to be made
+     * to the query resolver before resolving that particular query builder.
+     * Retune type is an array of the items satisfied by the conditions.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function query($root, $args, $context, $resolveInfo, $getSelectFields)
     {
@@ -246,9 +249,11 @@ trait QuerySupport
     }
 
     /**
-     * Resolve query by PK.
+     * Run query by primary key after any modification required to be made to
+     * the query resolver before resolving that particular query builder.
+     * Return type is the first found element if there is any result.
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return \Illuminate\Database\Eloquent\Model|object|null
      */
     public function queryByPk($root, $args, $context, $resolveInfo, $getSelectFields)
     {
