@@ -7,7 +7,8 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait OrderSupport
 {
     /**
-     * Get GraphQL ordering fields.
+     * Fields that can be ordered by. Here we have an Enum type to cover all
+     * every types without explicitly typing them and defining their types.
      *
      * @return array
      */
