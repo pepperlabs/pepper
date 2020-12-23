@@ -2,33 +2,37 @@
 
 namespace Pepper\Supports;
 
+use GraphQL\Type\Definition\ListOfType;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Facades\GraphQL;
 
 trait MutationSupport
 {
     /**
-     * Get mutation type.
+     * Type of basic mutation by model name. It's going to be a list of the
+     * models.
      *
-     * @return \GraphQL\Type\Definition\Type
+     * @return \GraphQL\Type\Definition\ListOfType
      */
-    public function getMutationType(): Type
+    public function getMutationType(): ListOfType
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
 
     /**
-     * Get delete mutation type.
+     * Type of delete mutation by model name. It's going to be a list of the
+     * models.
      *
-     * @return \GraphQL\Type\Definition\Type
+     * @return \GraphQL\Type\Definition\ListOfType
      */
-    public function getDeleteMutationType(): Type
+    public function getDeleteMutationType(): ListOfType
     {
         return Type::listOf(GraphQL::type($this->getTypeName()));
     }
 
     /**
-     * Get delete by PK mutation type.
+     * As deleted by PK is unique and would be one or none, the type of the
+     * GraphQL mutation type is also single and is not a list of models.
      *
      * @return \GraphQL\Type\Definition\Type
      */
@@ -38,7 +42,8 @@ trait MutationSupport
     }
 
     /**
-     * Get mutation update by PK type.
+     * As updated by PK is unique and would be one or none, the type of the
+     * GraphQL mutation type is also single and is not a list of models.
      *
      * @return \GraphQL\Type\Definition\Type
      */
@@ -48,7 +53,8 @@ trait MutationSupport
     }
 
     /**
-     * Get mutation insert one type.
+     * As insert only one is unique and would be one or none, the type of the
+     * GraphQL mutation type is also single and is not a list of models.
      *
      * @return \GraphQL\Type\Definition\Type
      */
@@ -58,7 +64,9 @@ trait MutationSupport
     }
 
     /**
-     * Get mutation fields.
+     * Get the fields can be used as input for mutation for conditioning on them
+     * and query based on them. Currently it is not available to query on the
+     * relations and only fields can be queried and reterived by Builder.
      *
      * @return array
      */
@@ -78,7 +86,9 @@ trait MutationSupport
     }
 
     /**
-     * Get delete by PK mutation fields.
+     * Get primary key for the delete by primary key GraphQL mutation with its
+     * repective type. currently mixed primary keys are not supported and
+     * only single column primary key is supported.
      *
      * @return array
      */
@@ -95,7 +105,8 @@ trait MutationSupport
     }
 
     /**
-     * Get delete mutation fields.
+     * Get delete GraphQL mutation fields for being quired in input level as
+     * the condition(s) to delete multiple resources from the database(s).
      *
      * @return array
      */
@@ -107,7 +118,9 @@ trait MutationSupport
     }
 
     /**
-     * Update by PK mutation.
+     * Update a single resource identified by the primary key of the model and
+     * and return the updated query as a Builder for handling any post update
+     * query requirments filled by the GraphQL mutation request selections.
      *
      * @param  object  $root
      * @param  array  $args
@@ -129,7 +142,9 @@ trait MutationSupport
     }
 
     /**
-     * Update mutation.
+     * Update multiple resources identified by the conditions of the model and
+     * and return the updated query as a Builder for handling any post update
+     * query requirments filled by the GraphQL mutation request selections.
      *
      * @param  object  $root
      * @param  array  $args
@@ -151,7 +166,7 @@ trait MutationSupport
     }
 
     /**
-     * Delete by PK mutation.
+     * Delete a single resource identified by primary key.
      *
      * @param  object  $root
      * @param  array  $args
