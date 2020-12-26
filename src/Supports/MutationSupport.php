@@ -326,6 +326,9 @@ trait MutationSupport
      */
     public function resolveMutation($root, $args, $context, $resolveInfo, $getSelectFields)
     {
-        return [$root->updateOrCreate(['id' => $args['id'] ?? -1], $args)];
+        $id = $args['id'] ?? -1;
+        $result = $root->updateOrCreate(['id' => $id], $args);
+
+        return [$result];
     }
 }
