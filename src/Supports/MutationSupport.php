@@ -125,7 +125,7 @@ trait MutationSupport
      * @param  object  $root
      * @param  array  $args
      * @param  object  $context
-     * @param  ResolveInfo  $resolveInfo
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @param  Closure  $getSelectFields
      * @return object
      */
@@ -149,7 +149,7 @@ trait MutationSupport
      * @param  object  $root
      * @param  array  $args
      * @param  object  $context
-     * @param  ResolveInfo  $resolveInfo
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @param  Closure  $getSelectFields
      * @return object
      */
@@ -171,7 +171,7 @@ trait MutationSupport
      * @param  object  $root
      * @param  array  $args
      * @param  object  $context
-     * @param  ResolveInfo  $resolveInfo
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @param  Closure  $getSelectFields
      * @return object
      */
@@ -195,7 +195,7 @@ trait MutationSupport
      * @param  object  $root
      * @param  array  $args
      * @param  object  $context
-     * @param  ResolveInfo  $resolveInfo
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @param  Closure  $getSelectFields
      * @return object
      */
@@ -263,7 +263,7 @@ trait MutationSupport
      * @param  object  $root
      * @param  array  $args
      * @param  object  $context
-     * @param  ResolveInfo  $resolveInfo
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @param  Closure  $getSelectFields
      * @return object
      */
@@ -283,7 +283,7 @@ trait MutationSupport
      * @param  object  $root
      * @param  array  $args
      * @param  object  $context
-     * @param  ResolveInfo  $resolveInfo
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @param  Closure  $getSelectFields
      * @return object
      */
@@ -320,7 +320,7 @@ trait MutationSupport
      * @param  object  $root
      * @param  array  $args
      * @param  object  $context
-     * @param  ResolveInfo  $resolveInfo
+     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @param  Closure  $getSelectFields
      * @return object
      */
