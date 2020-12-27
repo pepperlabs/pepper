@@ -313,22 +313,4 @@ trait MutationSupport
             ],
         ];
     }
-
-    /**
-     * Resolve mutation.
-     *
-     * @param  object  $root
-     * @param  array  $args
-     * @param  object  $context
-     * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
-     * @param  Closure  $getSelectFields
-     * @return object
-     */
-    public function resolveMutation($root, $args, $context, $resolveInfo, $getSelectFields)
-    {
-        $id = $args['id'] ?? -1;
-        $result = $root->updateOrCreate(['id' => $id], $args);
-
-        return [$result];
-    }
 }
