@@ -166,7 +166,9 @@ trait MutationSupport
     }
 
     /**
-     * Delete a single resource identified by primary key.
+     * Find a model by Primary Key delete that single model instance if it has
+     * been found. Before deleteing the model, it will get the model query
+     * builder on expected to be deleted model and return it for later.
      *
      * @param  object  $root
      * @param  array  $args
@@ -190,7 +192,9 @@ trait MutationSupport
     }
 
     /**
-     * Delete mutation.
+     * Delete given model(s) after running through query resolver. It will run
+     * `delete` method on the model instance(s) and soft delete can be in
+     * effect and models are not hard deleted in this method.
      *
      * @param  object  $root
      * @param  array  $args
@@ -211,7 +215,9 @@ trait MutationSupport
     }
 
     /**
-     * Get mutation update by PK fields.
+     * Get the `pk_columns` and `_set` fields for the update by PK mutation.
+     * pk_columns is the where condition on the Primary Key and _set is
+     * the new values that the model instance should be updated to.
      *
      * @return array
      */
@@ -230,7 +236,9 @@ trait MutationSupport
     }
 
     /**
-     * Get mutation update fields.
+     * Get the `where` and `_set` fields for the update mutation. where is the
+     * conditions for the models to be updated and _set is the new values for
+     * the model to be updated.
      *
      * @return array
      */
