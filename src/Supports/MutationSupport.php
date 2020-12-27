@@ -243,7 +243,8 @@ trait MutationSupport
     }
 
     /**
-     * Get mutation insert one fields.
+     * Get the `object` fields for adding fields of the model to be inserted
+     * into the dataset under the defined model.
      *
      * @return array
      */
@@ -258,7 +259,9 @@ trait MutationSupport
     }
 
     /**
-     * Resolve mutation insert one.
+     * Resolve inserting a object of model into the database. Here the assumtion
+     * is that, there is an ID column which is the primary key and can be the
+     * returned after a object of the model has been successfully insetered.
      *
      * @param  object  $root
      * @param  array  $args
@@ -278,7 +281,9 @@ trait MutationSupport
     }
 
     /**
-     * Resolve mutation insert.
+     * Resolve inserting objects of model into the database. Here the assumtion
+     * is that, there is an ID column which is the primary key and can be the
+     * returned after objects of the model has been successfully insetered.
      *
      * @param  object  $root
      * @param  array  $args
@@ -290,17 +295,20 @@ trait MutationSupport
     public function resolveMutationInsert($root, $args, $context, $resolveInfo, $getSelectFields)
     {
         $ids = [];
+
         foreach ($args['objects'] as $obj) {
             $ids[] = $this->modelClass()::create($obj)->id;
         }
 
         $root = $this->model()->whereIn('id', $ids);
 
-        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)->get();
+        return $this->getQueryResolve($root, $args, $context, $resolveInfo, $getSelectFields)
+            ->get();
     }
 
     /**
-     * Get mutation insert fields.
+     * Get the `objects` fields for adding a list of fields to be inserted into
+     * the dataset under the defined model.
      *
      * @return array
      */
