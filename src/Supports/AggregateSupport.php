@@ -38,7 +38,7 @@ trait AggregateSupport
     }
 
     /**
-     * Add resolve key to aggregate type.
+     * Pass resolver to the inner function for resolving later.
      *
      * @param  array $fields
      * @return array
@@ -57,8 +57,6 @@ trait AggregateSupport
     }
 
     /**
-     * Get field aggregate relation type.
-     *
      * @param  string $method
      * @return \GraphQL\Type\Definition\Type
      */
@@ -68,8 +66,6 @@ trait AggregateSupport
     }
 
     /**
-     * Get related field aggregate type.
-     *
      * @param  string $attribute
      * @return \GraphQL\Type\Definition\Type
      */
@@ -79,8 +75,6 @@ trait AggregateSupport
     }
 
     /**
-     * Get aggregate fields.
-     *
      * @return array
      */
     public function getAggregatedFields(): array
@@ -104,8 +98,6 @@ trait AggregateSupport
     }
 
     /**
-     * Get result aggregate fields.
-     *
      * @return array
      */
     public function getResultAggregateFields(): array
@@ -124,8 +116,6 @@ trait AggregateSupport
     }
 
     /**
-     * Resolve count function aggregate.
-     *
      * @param  \Illuminate\Database\Eloquent\Builder|null  $root
      * @param  array  $args
      * @param  object  $context
@@ -142,8 +132,6 @@ trait AggregateSupport
     }
 
     /**
-     * Resolve sum function aggregate.
-     *
      * @param  \Illuminate\Database\Eloquent\Builder|null  $root
      * @param  array  $args
      * @param  object  $context
@@ -166,7 +154,8 @@ trait AggregateSupport
     }
 
     /**
-     * Get framgmen type.
+     * For now, aggregations are resolved via fragments. Here for each
+     * aggregation we find the correct fragment.
      *
      * @param  \GraphQL\Type\Definition\ResolveInfo  $resolveInfo
      * @return string
@@ -189,8 +178,6 @@ trait AggregateSupport
     }
 
     /**
-     * Resolve avg function aggregate.
-     *
      * @param  \Illuminate\Database\Eloquent\Builder|null  $root
      * @param  array  $args
      * @param  object  $context
@@ -213,8 +200,6 @@ trait AggregateSupport
     }
 
     /**
-     * Resolve max function aggregate.
-     *
      * @param  \Illuminate\Database\Eloquent\Builder|null  $root
      * @param  array  $args
      * @param  object  $context
@@ -237,8 +222,6 @@ trait AggregateSupport
     }
 
     /**
-     * Resolve min function aggregate.
-     *
      * @param  \Illuminate\Database\Eloquent\Builder|null  $root
      * @param  array  $args
      * @param  object  $context
@@ -261,8 +244,6 @@ trait AggregateSupport
     }
 
     /**
-     * Get available aggregators.
-     *
      * @return array
      */
     public function getAvailableAggregators(): array
@@ -307,8 +288,6 @@ trait AggregateSupport
     }
 
     /**
-     * Get query aggregate type.
-     *
      * @return \GraphQL\Type\Definition\Type
      */
     public function getQueryAggregateType(): Type
@@ -317,8 +296,6 @@ trait AggregateSupport
     }
 
     /**
-     * Resolve aggregae query.
-     *
      * @param  \Illuminate\Database\Eloquent\Builder|null  $root
      * @param  array  $args
      * @param  object  $context
