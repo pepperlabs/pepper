@@ -10,7 +10,9 @@ use Rebing\GraphQL\Support\Facades\GraphQL;
 trait AggregateSupport
 {
     /**
-     * Get field aggregate type fields.
+     * The aggregated field will divide returned json into two fields of nodes
+     * which contain actual data - if any - and aggregate field which
+     * contains the aggregation data over the data.
      *
      * @param  bool $resolvable
      * @return array
