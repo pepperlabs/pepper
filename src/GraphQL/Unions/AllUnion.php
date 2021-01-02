@@ -29,6 +29,7 @@ class AllUnion extends UnionType
 
     public function resolveType($root)
     {
+        // A special type to detect fragment type on aggregated type.
         $type = array_key_exists('__Union_Type', $root)
             ? $root['__Union_Type']
             : $this->types[0];
