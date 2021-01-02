@@ -14,6 +14,7 @@ class FieldAggregateType extends GraphQLType
 
     public function __construct($pepper)
     {
+        // Dynamic definition of common attributes.
         $this->instance = new $pepper;
         $this->attributes['name'] = $this->instance->getFieldAggregateTypeName();
         $this->attributes['description'] = $this->instance->getFieldAggregateTypeDescription();

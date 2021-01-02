@@ -11,6 +11,9 @@ use GraphQL\Type\Definition\ScalarType;
 use GraphQL\Type\Definition\Type;
 use Rebing\GraphQL\Support\Contracts\TypeConvertible;
 
+/**
+ * Primary is used for conditional input where type of input might vary.
+ */
 class AnyScalar extends ScalarType implements TypeConvertible
 {
     /**
