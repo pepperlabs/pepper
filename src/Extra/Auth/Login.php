@@ -7,8 +7,6 @@ use GraphQL\Type\Definition\Type;
 class Login
 {
     /**
-     * Default login args.
-     *
      * @return array
      */
     public static function getArgs(...$fields): array
@@ -20,8 +18,6 @@ class Login
     }
 
     /**
-     * Return the default field for username.
-     *
      * @return string
      */
     public static function getUsernameField($instance): string

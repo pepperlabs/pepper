@@ -23,8 +23,6 @@ class Register
     }
 
     /**
-     * Resolve register user.
-     *
      * @param  array  $args
      * @param  mixed  $user
      * @return mixed
@@ -39,8 +37,6 @@ class Register
     }
 
     /**
-     * Authorize register request.
-     *
      * @param  \Illuminate\Database\Eloquent\Builder|null  $root
      * @param  array  $args
      * @param  object  $context
@@ -54,8 +50,6 @@ class Register
     }
 
     /**
-     * Authorization message.
-     *
      * @return string
      */
     public static function getAuthorizationMessage(): string
@@ -64,8 +58,6 @@ class Register
     }
 
     /**
-     * Register validation rules.
-     *
      * @return array
      */
     public static function getRules(): array
