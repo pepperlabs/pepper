@@ -9,8 +9,6 @@ use Opis\Closure\SerializableClosure;
 class Cache
 {
     /**
-     * put or get the cache value.
-     *
      * @param  string  $key
      * @param  Closure  $func
      * @param  null|int  $ttl
@@ -59,7 +57,6 @@ class Cache
         bool $response,
         bool $serialize
     ) {
-        // If the value set not to be cached.
         if (
             ! config('pepper.cache.config') && $config ||
             ! config('pepper.cache.response') && $response
