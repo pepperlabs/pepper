@@ -13,34 +13,34 @@ class AuthTest extends TestCaseDatabase
      * @group sqlsrv
      * @test
      */
-    public function login()
+    public function register()
     {
-        $post = factory(Post::class)->create([
-            'title' => 'Title of the post',
-        ]);
-
-        $graphql = "
-        {
-            post_by_pk(id: $post->id) {
-                id
-                title
+        $graphql = <<<'GQL'
+            mutation {
+                register(
+                name: "Amirmasoud"
+                email: "amirmasoud@pepper.fake"
+                password: "123456789"
+                password_confirmation: "123456789"
+                ) {
+                    token
+                }
             }
-        }";
+GQL;
 
-        $response = $this->call('GET', '/graphql', [
+        $response = $this->call('POST', '/graphql', [
             'query' => $graphql,
         ]);
 
         $expectedResult = [
             'data' => [
-                'post_by_pk' => [
-                    'id' => "$post->id",
-                    'title' => 'Title of the post',
+                'register' => [
+                    'token' => "",
                 ],
             ],
         ];
 
-        $response->assertOk();
+        $response->dump();
         $this->assertEquals($expectedResult, $response->json());
     }
 }

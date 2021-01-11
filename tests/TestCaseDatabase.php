@@ -37,6 +37,8 @@ abstract class TestCaseDatabase extends TestCase
             $base = new \Illuminate\Config\Repository(include config_path('pepper.php'));
             config(['pepper' => $base->all()]);
             config(['pepper.namespace.models' => 'Tests\Support\Models']);
+            config(['pepper.auth.disabled' => false]);
+            config(['pepper.auth.model' => 'Tests\Support\Models\User']);
         }
 
         // Cheesy 😬
