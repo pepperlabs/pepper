@@ -41,10 +41,23 @@ abstract class TestCaseDatabase extends TestCase
             config(['pepper.auth.model' => 'Tests\Support\Models\User']);
         }
 
+        $this->copyPepperClass('Post');
+        $this->copyModel('User');
+    }
+
+    protected function copyPepperClass($model) {
         // Cheesy 😬
-        $content = file_get_contents(__DIR__.'/Support/GraphQL/Post.php');
+        $content = file_get_contents(__DIR__."/Support/GraphQL/{$model}.php");
         $content = str_replace('Tests\Support\GraphQL', 'App\Http\Pepper', $content);
-        $handle = fopen(__DIR__.'/../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/Post.php', 'r+');
+        $handle = fopen(__DIR__."/../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/{$model}.php", 'r+');
+        fwrite($handle, $content);
+    }
+
+    protected function copyModel($model) {
+        // Cheesy 😬
+        $content = file_get_contents(__DIR__."/Support/Models/{$model}.php");
+        $content = str_replace('Tests\Support\Models', 'App\Models', $content);
+        $handle = fopen(__DIR__."/../vendor/orchestra/testbench-core/laravel/app/Models/{$model}.php", 'r+');
         fwrite($handle, $content);
     }
 
