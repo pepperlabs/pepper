@@ -32,15 +32,14 @@ GQL;
             'query' => $graphql,
         ]);
 
-        $expectedResult = [
-            'data' => [
-                'register' => [
-                    'token' => "",
+        $response
+            ->assertOk()
+            ->assertJsonStructure([
+                'data' => [
+                    'register' => [
+                        'token'
+                    ]
                 ],
-            ],
-        ];
-
-        $response->dump();
-        $this->assertEquals($expectedResult, $response->json());
+            ]);
     }
 }

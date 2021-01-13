@@ -1,12 +1,11 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Tests\Support\Models;
 
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
 
 /**
  * @property int $id
@@ -16,7 +15,9 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
  */
 class User extends Authenticatable implements JWTSubject
 {
-    protected $fillable = ['name'];
+    use Notifiable;
+
+    protected $fillable = ['name', 'email', 'password'];
 
     public function posts(): HasMany
     {
