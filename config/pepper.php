@@ -109,6 +109,7 @@ return [
             'mutation' => [
                 'register' => \Pepper\Extra\Auth\GraphQL\Mutations\RegisterMutation::class,
                 'forgot_password' => \Pepper\Extra\Auth\GraphQL\Mutations\ForgotPasswordMutation::class,
+                'reset_password' => \Pepper\Extra\Auth\GraphQL\Mutations\ResetPasswordMutation::class,
             ],
             'query' => [
                 'login' => \Pepper\Extra\Auth\GraphQL\Queries\LoginQuery::class,
@@ -118,6 +119,7 @@ return [
         'global' => [
             'JWTType' => \Pepper\Extra\Auth\GraphQL\Types\JWTType::class,
             'ForgotPasswordStatusType' => \Pepper\Extra\Auth\GraphQL\Types\ForgotPasswordStatusType::class,
+            'ResetPasswordStatusType' => \Pepper\Extra\Auth\GraphQL\Types\ResetPasswordStatusType::class,
         ],
         'password_reset' => '/password/reset'
     ],

@@ -4,7 +4,7 @@ namespace Pepper\Extra\Auth;
 
 use GraphQL\Type\Definition\Type;
 
-class ForgotPassword
+class ResetPassword
 {
     /**
      * Register args.
@@ -15,6 +15,9 @@ class ForgotPassword
     {
         return [
             'email' => ['name' => 'email', 'type' => Type::string()],
+            'token' => ['name' => 'token', 'type' => Type::string()],
+            'password' => ['name' => 'password', 'type' => Type::string()],
+            'password_confirmation' => ['name' => 'password_confirmation', 'type' => Type::string()],
         ];
     }
 
@@ -45,7 +48,9 @@ class ForgotPassword
     public static function getRules(): array
     {
         return [
+            'token' => ['required'],
             'email' => ['required', 'email'],
+            'email' => ['required', 'min:8', 'confirmed'],
         ];
     }
 }
