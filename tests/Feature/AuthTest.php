@@ -2,10 +2,7 @@
 
 namespace Tests\Feature;
 
-use GraphQL\Error\Error;
 use Illuminate\Auth\Notifications\ResetPassword;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Notification;
 use Tests\Support\Models\User;
 use Tests\TestCaseDatabase;
@@ -93,6 +90,7 @@ GQL;
      * @test
      */
     public function forgot_password_success(){
+        Notification::fake();
         $this->createNewUser();
 
         $graphql = '
@@ -128,6 +126,7 @@ GQL;
      * @test
      */
     public function forgot_password_fail(){
+        Notification::fake();
         $this->createNewUser();
 
         $graphql = '
@@ -165,7 +164,6 @@ GQL;
      * @test
      */
     public function reset_password_success(){
-        Mail::fake();
         Notification::fake();
 
         $this->createNewUser();
