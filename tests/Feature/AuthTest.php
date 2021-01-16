@@ -42,7 +42,7 @@ GQL;
                 'data' => [
                     'register' => [
                         'token',
-                    ]
+                    ],
                 ],
             ]);
     }
@@ -78,7 +78,7 @@ GQL;
                 'data' => [
                     'login' => [
                         'token',
-                    ]
+                    ],
                 ],
             ]);
     }
@@ -191,6 +191,7 @@ GQL;
             $user,
             function (ResetPassword $notification, $channels) use (&$resetToken) {
                 $resetToken = $notification->token;
+
                 return true;
             }
         );

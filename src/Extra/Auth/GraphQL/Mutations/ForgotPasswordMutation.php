@@ -59,6 +59,7 @@ class ForgotPasswordMutation extends Mutation
                         $notifiable->getEmailForPasswordReset(),
                     );
                 });
+
                 return $user->notify(new ResetPassword($token));
             }
         );
