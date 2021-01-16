@@ -3,6 +3,11 @@
 namespace Tests\Feature;
 
 use GraphQL\Error\Error;
+use Illuminate\Auth\Notifications\ResetPassword;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Notification;
+use Tests\Support\Models\User;
 use Tests\TestCaseDatabase;
 
 class AuthTest extends TestCaseDatabase
@@ -134,8 +139,6 @@ GQL;
             }
         }';
 
-        // $this->expectException(Error::class);
-
         $response = $this->call('POST', '/graphql', [
             'query' => $graphql,
         ]);
@@ -152,5 +155,70 @@ GQL;
                     'forgot_password'
                 ],
             ]);
+    }
+
+    /**
+     * @group sqlite
+     * @group mysql
+     * @group pgsql
+     * @group sqlsrv
+     * @test
+     */
+    public function reset_password_success(){
+        Mail::fake();
+        Notification::fake();
+
+        $this->createNewUser();
+
+        $graphql = '
+        mutation {
+            forgot_password(
+                email: "amirmasoud@pepper.fake"
+            ) {
+                status
+            }
+        }';
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $user = User::first();
+        $resetToken = '';
+        Notification::assertSentTo(
+            $user,
+            function (ResetPassword $notification, $channels) use (&$resetToken) {
+                $resetToken = $notification->token;
+                return true;
+            }
+        );
+
+        $graphql = <<<GQL
+        mutation {
+            reset_password(
+                email: "amirmasoud@pepper.fake"
+                token: "$resetToken"
+                password: "1234567890"
+                password_confirmation: "1234567890"
+            ) {
+                status
+            }
+        }
+GQL;
+
+        $response = $this->call('POST', '/graphql', [
+            'query' => $graphql,
+        ]);
+
+        $expectedResult = [
+            'data' => [
+                'reset_password' => [
+                    'status' => 'Your password has been reset!',
+                ],
+            ],
+        ];
+
+        $response->assertOk();
+        $this->assertEquals($expectedResult, $response->json());
     }
 }
