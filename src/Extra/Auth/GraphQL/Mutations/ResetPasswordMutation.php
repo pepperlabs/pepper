@@ -67,9 +67,11 @@ class ResetPasswordMutation extends Mutation
             }
         );
 
-        return $status == Password::PASSWORD_RESET
-                    ? ['status' => __($status)]
-                    : throw new Error(__($status));
+        if ($status === Password::PASSWORD_RESET) {
+            return ['status' => __($status)];
+        } else {
+            throw new Error(__($status));
+        }
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool

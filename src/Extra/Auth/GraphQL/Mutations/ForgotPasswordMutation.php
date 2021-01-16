@@ -63,9 +63,11 @@ class ForgotPasswordMutation extends Mutation
             }
         );
 
-        return $status === Password::RESET_LINK_SENT
-            ? ['status' => __($status)]
-            : throw new Error(__($status));
+        if ($status === Password::RESET_LINK_SENT) {
+            return ['status' => __($status)];
+        } else {
+            throw new Error(__($status));
+        }
     }
 
     public function authorize($root, array $args, $ctx, ResolveInfo $resolveInfo = null, Closure $getSelectFields = null): bool
