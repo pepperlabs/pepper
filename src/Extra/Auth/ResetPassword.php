@@ -50,7 +50,7 @@ class ResetPassword
         return [
             'token' => ['required'],
             'email' => ['required', 'email'],
-            'email' => ['required', 'min:8', 'confirmed'],
+            'password' => ['required', 'min:8', 'confirmed'],
         ];
     }
 }
