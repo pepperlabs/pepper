@@ -121,7 +121,7 @@ return [
             'ForgotPasswordStatusType' => \Pepper\Extra\Auth\GraphQL\Types\ForgotPasswordStatusType::class,
             'ResetPasswordStatusType' => \Pepper\Extra\Auth\GraphQL\Types\ResetPasswordStatusType::class,
         ],
-        'password_reset' => '/password/reset'
+        'password_reset' => '/password/reset',
     ],
 
     'cache' => [

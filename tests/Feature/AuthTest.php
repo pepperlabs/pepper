@@ -41,7 +41,7 @@ GQL;
             ->assertJsonStructure([
                 'data' => [
                     'register' => [
-                        'token'
+                        'token',
                     ]
                 ],
             ]);
@@ -54,7 +54,8 @@ GQL;
      * @group sqlsrv
      * @test
      */
-    public function login(){
+    public function login()
+    {
         $this->createNewUser();
 
         $graphql = '
@@ -76,7 +77,7 @@ GQL;
             ->assertJsonStructure([
                 'data' => [
                     'login' => [
-                        'token'
+                        'token',
                     ]
                 ],
             ]);
@@ -89,7 +90,8 @@ GQL;
      * @group sqlsrv
      * @test
      */
-    public function forgot_password_success(){
+    public function forgot_password_success()
+    {
         Notification::fake();
         $this->createNewUser();
 
@@ -125,7 +127,8 @@ GQL;
      * @group sqlsrv
      * @test
      */
-    public function forgot_password_fail(){
+    public function forgot_password_fail()
+    {
         Notification::fake();
         $this->createNewUser();
 
@@ -151,7 +154,7 @@ GQL;
                     ],
                 ],
                 'data' => [
-                    'forgot_password'
+                    'forgot_password',
                 ],
             ]);
     }
@@ -163,7 +166,8 @@ GQL;
      * @group sqlsrv
      * @test
      */
-    public function reset_password_success(){
+    public function reset_password_success()
+    {
         Notification::fake();
 
         $this->createNewUser();

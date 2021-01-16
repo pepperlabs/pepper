@@ -49,7 +49,8 @@ abstract class TestCaseDatabase extends TestCase
         $this->copyPepperClass('Post');
     }
 
-    protected function copyPepperClass($model) {
+    protected function copyPepperClass($model)
+    {
         // Cheesy 😬
         $content = file_get_contents(__DIR__."/Support/GraphQL/{$model}.php");
         $content = str_replace('Tests\Support\GraphQL', 'App\Http\Pepper', $content);

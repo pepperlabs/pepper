@@ -52,7 +52,7 @@ class ForgotPasswordMutation extends Mutation
             function ($user, $token) {
                 ResetPassword::createUrlUsing(function ($notifiable, $token) {
                     return sprintf(
-                        "%s/%s/?token=%s&email=%s",
+                        '%s/%s/?token=%s&email=%s',
                         config('pepper.frontend_url'),
                         config('pepper.auth.password_reset'),
                         $token,
