@@ -18,9 +18,9 @@ features:
 
 ## Version support
 
-PHP: 7.3 or higher
+PHP: 7.3, 7.4, 8.0
 
-Laravel: 7 or higher
+Laravel: 7.x and 8.x
 
 ## Supported databases
 
