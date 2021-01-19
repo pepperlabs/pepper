@@ -24,7 +24,7 @@ Laravel: 7.x and 8.x
 
 ## Supported databases
 
-As it uses Laravel Eloquent only, it would support SQLite, MySQL, PostgreSQL and, SQLServer.
+As it uses Laravel Eloquent only, it can support all supported Laravel ORM such as: SQLite, MySQL, PostgreSQL and, SQLServer.
 
 If you discover a security vulnerability within Pepper, please send an e-mail to Amirmasoud Sheydaei via [amirmasoud.sheydaei@gmail.com](mailto:amirmasoud.sheydaei@gmail.com). All security vulnerabilities will be promptly addressed.
 
