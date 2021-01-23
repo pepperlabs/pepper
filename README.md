@@ -13,7 +13,7 @@ Pepper is an automatic GraphQL exposing Laravel package. It uses your applicatio
 features:
 
 - Customizable validation, authentication, and authorization
-- Optional JWT support for protecting routes
+- Optional JWT support for protecting routes including login, register, forget password and reset password
 - Support all Laravel Eloquent databases (SQLite, MySQL, PostgreSQL, SQLServer)
 
 ## Version support
