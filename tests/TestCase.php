@@ -22,9 +22,6 @@ class TestCase extends BaseTestCase
         $app['config']->set('app.debug', true);
     }
 
-    /**
-     * Clears Laravel Cache.
-     */
     protected function clearCache()
     {
         $commands = ['clear-compiled', 'cache:clear', 'view:clear', 'config:clear', 'route:clear'];
