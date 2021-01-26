@@ -16,9 +16,11 @@ features:
 - Optional JWT support for protecting routes including login, register, forget password and reset password
 - Support all Laravel Eloquent databases (SQLite, MySQL, PostgreSQL, SQLServer)
 
+> Please note that this repo is still  a work in progress project.
+
 ## Version support
 
-PHP: 7.3, 7.4, 8.0
+PHP: 7.3, 7.4, and 8.0
 
 Laravel: 7.x and 8.x
 
