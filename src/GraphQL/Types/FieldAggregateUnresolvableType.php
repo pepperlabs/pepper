@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Pepper\GraphQL\Types;
 
 use Rebing\GraphQL\Support\Type as GraphQLType;

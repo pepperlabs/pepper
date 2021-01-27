@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Pepper\GraphQL\Enums;
 
 use Rebing\GraphQL\Support\EnumType;

@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Pepper\Console;
 
 use Illuminate\Console\GeneratorCommand;

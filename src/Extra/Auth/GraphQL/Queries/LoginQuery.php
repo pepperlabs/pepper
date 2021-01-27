@@ -1,7 +1,5 @@
 <?php
 
-declare(strict_types=1);
-
 namespace Pepper\Extra\Auth\GraphQL\Queries;
 
 use Closure;
