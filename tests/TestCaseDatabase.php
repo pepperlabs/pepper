@@ -49,7 +49,6 @@ abstract class TestCaseDatabase extends TestCase
 
     protected function copyPepperClass($model)
     {
-        // Cheesy 😬
         $content = file_get_contents(__DIR__."/Support/GraphQL/{$model}.php");
         $content = str_replace('Tests\Support\GraphQL', 'App\Http\Pepper', $content);
         $handle = fopen(__DIR__."/../vendor/orchestra/testbench-core/laravel/app/Http/Pepper/{$model}.php", 'r+');
