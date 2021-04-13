@@ -1,6 +1,10 @@
 ![Test](https://github.com/pepperlabs/pepper/workflows/Test/badge.svg?branch=master)
 
-[Read the Documentation](https://pepperlabs.github.io/docs/)
+<a href="https://pepperlabs.github.io/docs/">
+    <p align="center">
+        <img src="https://raw.githubusercontent.com/pepperlabs/docs/master/static/read-the-documentation-button.png" />
+    </p>
+</a>
 
 install via composer:
 
