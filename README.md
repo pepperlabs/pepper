@@ -6,7 +6,7 @@
     </p>
 </a>
 
-install via composer:
+Install via composer:
 
 ```bash
 composer require pepperlabs/pepper
@@ -20,7 +20,7 @@ features:
 - Optional JWT support for protecting routes including login, register, forget password and reset password
 - Support all Laravel Eloquent databases (SQLite, MySQL, PostgreSQL, SQLServer)
 
-> Please note that this repo is still  a work in progress project.
+> Please note that this repo is still a work-in-progress project.
 
 ## Version support
 
