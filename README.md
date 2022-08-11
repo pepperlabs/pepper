@@ -40,8 +40,24 @@ If you discover a security vulnerability within Pepper, please send an e-mail to
 
 Run PHPStan:
 
+_analyse_
 ```bash
-vendor/bin/phpstan analyse src tests
+composer analyse
+```
+
+_test_
+```bash
+composer test
+```
+
+_test-coverage_
+```bash
+composer test-coverage
+```
+
+_format_
+```bash
+composer format
 ```
 
 ## License

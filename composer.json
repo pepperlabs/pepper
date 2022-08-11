@@ -53,7 +53,10 @@
         }
     },
     "scripts": {
-        "tests": "phpunit --colors=always --verbose"
+        "analyse": "vendor/bin/phpstan analyse",
+        "test": "vendor/bin/pest",
+        "test-coverage": "vendor/bin/pest --coverage",
+        "format": "vendor/bin/pint"
     },
     "minimum-stability": "dev",
     "prefer-stable": true,
