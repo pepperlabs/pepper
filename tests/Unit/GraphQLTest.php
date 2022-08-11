@@ -13,8 +13,11 @@ use Tests\TestCaseDatabase;
 class GraphQLTest extends TestCaseDatabase
 {
     private $test_1;
+
     private $test_2;
+
     private $post;
+
     private $comment;
 
     protected function setUp(): void

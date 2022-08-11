@@ -69,8 +69,8 @@ class PepperGrindCommand extends Command
     /**
      * Create required classes for the given model.
      *
-     * @param  array $models
-     * @param  array $selected
+     * @param  array  $models
+     * @param  array  $selected
      * @return void
      */
     private function createHttp(array $models, array $selected): void
@@ -91,7 +91,7 @@ class PepperGrindCommand extends Command
     /**
      * Initilize GraphQL endpoint required classes.
      *
-     * @param  string $model
+     * @param  string  $model
      * @return void
      */
     private function initModelHttp(string $model): void
@@ -109,6 +109,7 @@ class PepperGrindCommand extends Command
      * Ensure GraphQL config file exists, otherwise we would publish a new one.
      *
      * @todo refactor to trait
+     *
      * @return void
      */
     private function ensureGraphQLConfigExists(): void

@@ -27,8 +27,7 @@ class AnyScalar extends ScalarType implements TypeConvertible
     /**
      * Serializes an internal value to include in a response.
      *
-     * @param mixed $value
-     *
+     * @param  mixed  $value
      * @return mixed
      *
      * @throws Error
@@ -43,8 +42,7 @@ class AnyScalar extends ScalarType implements TypeConvertible
      *
      * In the case of an invalid value this method must throw an Exception
      *
-     * @param mixed $value
-     *
+     * @param  mixed  $value
      * @return mixed
      *
      * @throws Error
@@ -59,9 +57,8 @@ class AnyScalar extends ScalarType implements TypeConvertible
      *
      * In the case of an invalid node or value this method must throw an Exception
      *
-     * @param Node $valueNode
-     * @param mixed[]|null $variables
-     *
+     * @param  Node  $valueNode
+     * @param  mixed[]|null  $variables
      * @return mixed
      *
      * @throws Exception

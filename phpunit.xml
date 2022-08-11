@@ -19,10 +19,7 @@
         </whitelist>
     </filter>
     <php>
-        <env name="JWT_SECRET" value="XcDuhSu6bhGUJDQVHpJzLa3ODz5B0D1DkjKfveo6mijCO2Y2KaQSwFmuhUwVanhW"/>
         <env name="APP_KEY" value="base64:WBr9zzKao+slOfb15GW39VZi55EFU6YrHyZiVh0V3Es="/>
-
-        <env name="APP_KEY" value="AckfSECXIvnK5r28GVIWUAxmbBSjTsmF"/>
         <env name="APP_NAME" value="Pepper"/>
         <env name="APP_DEBUG" value="true"/>
         <env name="APP_ENV" value="testing"/>
@@ -30,6 +27,6 @@
         <env name="SESSION_DRIVER" value="array"/>
         <env name="QUEUE_DRIVER" value="sync"/>
         <env name="MAIL_MAILER" value="log" />
-        <env name="MAIL_FROM_ADDRESS" value="phpunit@pepper.fake" />
+        <env name="MAIL_FROM_ADDRESS" value="webmail@pepper.test" />
     </php>
 </phpunit>

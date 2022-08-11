@@ -92,6 +92,7 @@ abstract class GraphQL
      * to access the dynamic model of the GraphQL class.
      *
      * @return ReflectionClass
+     *
      * @throws ReflectionException
      */
     public function modelRelflection(): ReflectionClass
@@ -274,6 +275,7 @@ abstract class GraphQL
      *
      * @param  string  $method
      * @return string
+     *
      * @throws ClassNotFoundException
      */
     private function relatedGraphQLClass(string $method)
@@ -543,7 +545,7 @@ abstract class GraphQL
     /**
      * Generate authorize.
      *
-     * @param  mixed ...$params
+     * @param  mixed  ...$params
      * @return bool
      */
     public function generateAuthorize(...$params): bool

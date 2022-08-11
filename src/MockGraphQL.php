@@ -81,7 +81,8 @@ class MockGraphQL
      */
     public static function graphQL(string $pepper, string $parent): MockGraphQL
     {
-        return new class($pepper, $parent) extends MockGraphQL {
+        return new class($pepper, $parent) extends MockGraphQL
+        {
         };
     }
 }

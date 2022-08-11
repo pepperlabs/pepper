@@ -14,7 +14,7 @@ trait AggregateSupport
      * which contain actual data - if any - and aggregate field which
      * contains the aggregation data over the data.
      *
-     * @param  bool $resolvable
+     * @param  bool  $resolvable
      * @return array
      */
     public function getFieldAggregateTypeFields(bool $resolvable = true): array
@@ -40,7 +40,7 @@ trait AggregateSupport
     /**
      * Pass resolver to the inner function for resolving later.
      *
-     * @param  array $fields
+     * @param  array  $fields
      * @return array
      */
     private function setFieldAggregateTypeResolve(array $fields): array
@@ -57,7 +57,7 @@ trait AggregateSupport
     }
 
     /**
-     * @param  string $method
+     * @param  string  $method
      * @return \GraphQL\Type\Definition\Type
      */
     private function getFieldAggregateRelationType($method): Type
@@ -66,7 +66,7 @@ trait AggregateSupport
     }
 
     /**
-     * @param  string $attribute
+     * @param  string  $attribute
      * @return \GraphQL\Type\Definition\Type
      */
     public function getRelatedFieldAggregateType(string $attribute): Type
