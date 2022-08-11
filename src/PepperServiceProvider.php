@@ -3,9 +3,9 @@
 namespace Pepper;
 
 use Illuminate\Routing\Router;
+use Illuminate\Support\ServiceProvider;
 use Pepper\Console\HttpMakeCommand;
 use Pepper\Console\PepperGrindCommand;
-use Illuminate\Support\ServiceProvider;
 use Pepper\Extra\Cache\CacheEventServiceProvider;
 
 class PepperServiceProvider extends ServiceProvider

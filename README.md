@@ -24,15 +24,25 @@ features:
 
 ## Version support
 
-PHP: 7.3, 7.4, and 8.0
+PHP: 8.1
 
-Laravel: 7.x and 8.x
+Laravel: 9.x
 
 ## Supported databases
 
 As it uses Laravel Eloquent only, it can support all supported Laravel ORM such as: SQLite, MySQL, PostgreSQL and, SQLServer.
 
 If you discover a security vulnerability within Pepper, please send an e-mail to Amirmasoud Sheydaei via [amirmasoud.sheydaei@gmail.com](mailto:amirmasoud.sheydaei@gmail.com). All security vulnerabilities will be promptly addressed.
+
+## Contributing
+
+### Testing
+
+Run PHPStan:
+
+```bash
+vendor/bin/phpstan analyse src tests
+```
 
 ## License
 
