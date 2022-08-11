@@ -10,13 +10,15 @@
     ],
     "require": {
         "php": "^8.1",
-        "illuminate/support": "^v9.24.0",
-        "doctrine/dbal": "^3.4.0",
-        "rebing/graphql-laravel": "^8.3.0"
+        "illuminate/support": "^v9.24",
+        "doctrine/dbal": "^3.4",
+        "rebing/graphql-laravel": "^8.3",
+        "illuminate/routing": "^9.24"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.21",
-        "laravel/pint": "^1.1"
+        "laravel/pint": "^1.1",
+        "brianium/paratest": "^6.6"
     },
     "autoload": {
         "psr-4": {

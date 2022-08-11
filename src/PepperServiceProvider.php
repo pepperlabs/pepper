@@ -3,18 +3,13 @@
 namespace Pepper;
 
 use Illuminate\Routing\Router;
-use Illuminate\Support\ServiceProvider;
 use Pepper\Console\HttpMakeCommand;
 use Pepper\Console\PepperGrindCommand;
+use Illuminate\Support\ServiceProvider;
 use Pepper\Extra\Cache\CacheEventServiceProvider;
 
 class PepperServiceProvider extends ServiceProvider
 {
-    /**
-     * Boot package.
-     *
-     * @return void
-     */
     public function boot(): void
     {
         $this->publishes([__DIR__.'/../config/pepper.php' => config_path('pepper.php')], 'config');
@@ -22,11 +17,6 @@ class PepperServiceProvider extends ServiceProvider
         $this->registerMiddleware('pepper', Middleware::class);
     }
 
-    /**
-     * Register package and its commands.
-     *
-     * @return void
-     */
     public function register(): void
     {
         $this->registerPepper();
