@@ -13,13 +13,23 @@
         "illuminate/support": "^v9.24",
         "doctrine/dbal": "^3.4",
         "rebing/graphql-laravel": "^8.3",
-        "illuminate/routing": "^9.24"
+        "illuminate/routing": "^9.24",
+        "illuminate/contracts": "^9.24"
     },
     "require-dev": {
         "phpunit/phpunit": "^9.5.21",
         "laravel/pint": "^1.1",
         "brianium/paratest": "^6.6",
-        "phpstan/phpstan": "^1.8"
+        "phpstan/phpstan": "^1.8",
+        "nunomaduro/collision": "^6.0",
+        "nunomaduro/larastan": "^2.0.1",
+        "orchestra/testbench": "^7.0",
+        "pestphp/pest": "^1.21",
+        "pestphp/pest-plugin-laravel": "^1.1",
+        "phpstan/extension-installer": "^1.1",
+        "phpstan/phpstan-deprecation-rules": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "spatie/laravel-ray": "^1.26"
     },
     "autoload": {
         "psr-4": {
@@ -46,5 +56,11 @@
         "tests": "phpunit --colors=always --verbose"
     },
     "minimum-stability": "dev",
-    "prefer-stable": true
+    "prefer-stable": true,
+    "config": {
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "phpstan/extension-installer": true
+        }
+    }
 }
